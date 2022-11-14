@@ -72,7 +72,6 @@ in let
   framework = import ./modules/framework.nix {
     inherit
       inputs
-      apps
       lib
       dlib
       pkgs
@@ -94,7 +93,6 @@ in let
   callPackageDreamArgs =
     pkgs
     // {
-      inherit apps;
       inherit callPackageDream;
       inherit config;
       inherit configFile;
@@ -122,9 +120,6 @@ in let
     ) (callPackageDreamArgs // fargs);
 
   utils = callPackageDream ./utils {};
-
-  # apps for CLI and installation
-  apps = callPackageDream ./apps {};
 
   # updater modules to find newest package versions
   updaters = callPackageDream ./updaters {};
@@ -609,21 +604,12 @@ in let
       };
 
     projectOutputs = l.map outputsForProject translatedProjects;
-
-    mergedOutputs = let
-      isNotDrvAttrs = val:
-        l.isAttrs val && (val.type or "") != "derivation";
-      recursiveUpdateUntilDrv =
-        l.recursiveUpdateUntil
-        (_: l: r: !(isNotDrvAttrs l && isNotDrvAttrs r));
-    in
-      l.foldl' recursiveUpdateUntilDrv {} projectOutputs;
   in
-    mergedOutputs;
+    dlib.mergeFlakes projectOutputs;
 
   generateImpureResolveScript = {
     source,
-    impureDiscoveredProjects,
+    impureProjects,
   }: let
     impureResolveScriptsList =
       l.listToAttrs
@@ -635,7 +621,7 @@ in let
             "Name: ${project.name}; Subsystem: ${project.subsystem or "?"}; relPath: ${project.relPath}"
             (utils.makeTranslateScript {inherit project source;})
         )
-        impureDiscoveredProjects
+        impureProjects
       );
 
     resolveImpureScript =
@@ -658,7 +644,7 @@ in let
     source ? throw "pass a 'source' to 'makeOutputs'",
     discoveredProjects ?
       framework.functions.discoverers.discoverProjects {
-        inherit projects settings source;
+        inherit settings source;
       },
     pname ? null,
     projects ? {},
@@ -667,20 +653,40 @@ in let
     sourceOverrides ? old: {},
     inject ? {},
   }: let
-    impureDiscoveredProjects =
+    # if projects are defined manually, ignore discoveredProjects
+    finalProjects =
+      if projects != {}
+      then let
+        projectsList = l.attrValues projects;
+      in
+        # skip discovery and just add required attributes to project list
+        l.forEach projectsList
+        (proj:
+          proj
+          // {
+            relPath = proj.relPath or "";
+            translator = proj.translator or (l.head proj.translators);
+            dreamLockPath =
+              framework.functions.discoverers.getDreamLockPath
+              proj
+              (l.head projectsList);
+          })
+      else discoveredProjects;
+
+    impureProjects =
       l.filter
       (proj:
         framework.translators."${proj.translator}".type
         == "impure")
-      discoveredProjects;
+      finalProjects;
 
     resolveImpureScript = generateImpureResolveScript {
-      inherit impureDiscoveredProjects source;
+      inherit impureProjects source;
     };
 
     translatedProjects = translateProjects {
+      discoveredProjects = finalProjects;
       inherit
-        discoveredProjects
         pname
         settings
         source
@@ -716,7 +722,7 @@ in let
               or by resolving all impure projects by running the `resolveImpure` package
             '';
           })
-        impureDiscoveredProjects);
+        impureProjects);
   in
     realizedProjects
     // {
@@ -733,7 +739,6 @@ in let
     };
 in {
   inherit
-    apps
     callPackageDream
     dream2nixWithExternals
     framework

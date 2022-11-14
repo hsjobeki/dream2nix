@@ -174,7 +174,7 @@
 
     docsCli = forAllSystems (
       system: pkgs:
-        pkgs.callPackage ./src/apps/docs {
+        pkgs.callPackage ./src/utils/view-docs {
           dream2nixDocsSrc = "${self}/docs/src";
         }
     );
@@ -194,10 +194,15 @@
     # kept for compat
     lib2 = d2n-lib;
 
+    flakeModuleBeta = {
+      imports = [./src/modules/flake-parts];
+      dream2nix.lib = d2n-lib;
+    };
+
     # all apps including cli, install, etc.
     apps = forAllSystems (
       system: pkgs:
-        dream2nixFor."${system}".apps.flakeApps
+        dream2nixFor."${system}".framework.flakeApps
         // {
           tests-unit.type = "app";
           tests-unit.program =

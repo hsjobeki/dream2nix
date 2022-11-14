@@ -3,17 +3,17 @@
   dlib,
   dream2nixInterface,
   pkgs,
-  apps,
   callPackageDream,
   utils,
+  framework,
   ...
-} @ topArgs: let
+}: let
   l = lib // builtins;
 in rec {
   generatePackagesFromLocksTree = {
     source ? throw "pass source",
+    builder ? null,
     tree ? dlib.prepareSourceTree {inherit source;},
-    settings ? [],
     inject ? {},
     packageOverrides ? {},
     sourceOverrides ? {},
@@ -45,6 +45,7 @@ in rec {
           inject
           packageOverrides
           sourceOverrides
+          builder
           ;
       })
       .packages;
@@ -56,13 +57,11 @@ in rec {
   makeOutputsForIndexes = {
     source,
     indexes,
-    settings ? [],
     inject ? {},
     packageOverrides ? {},
     sourceOverrides ? {},
   }: let
     l = lib // builtins;
-    indexNames = l.map (index: index.name) indexes;
 
     mkApp = script: {
       type = "app";
@@ -77,7 +76,7 @@ in rec {
         inputJson="$(${pkgs.coreutils}/bin/mktemp)"
         echo '${l.toJSON inputFinal}' > $inputJson
         mkdir -p $(dirname ${inputFinal.outputFile})
-        ${apps.index}/bin/index ${input.indexer} $inputJson
+        ${framework.apps.index}/bin/index ${input.indexer} $inputJson
       '';
     in
       mkApp script;
@@ -86,7 +85,7 @@ in rec {
       mkApp (
         pkgs.writers.writeBash "translate-${name}" ''
           set -e
-          ${apps.translate-index}/bin/translate-index \
+          ${framework.apps.translate-index}/bin/translate-index \
             ${name}/index.json ${name}/locks
         ''
       );
@@ -130,12 +129,12 @@ in rec {
     translateApps = l.listToAttrs (
       l.map
       (
-        name:
+        index:
           l.nameValuePair
-          "translate-${name}"
-          (mkTranslateApp name)
+          "translate-${index.name}"
+          (mkTranslateApp index.name)
       )
-      indexNames
+      indexes
     );
 
     indexApps = l.listToAttrs (
@@ -205,16 +204,16 @@ in rec {
         ''
       );
 
-    mkIndexOutputs = name: let
-      src = "${toString source}/${name}/locks";
+    mkIndexOutputs = index: let
+      src = "${toString source}/${index.name}/locks";
     in
       if l.pathExists src
       then
         l.removeAttrs
         (generatePackagesFromLocksTree {
           source = src;
+          builder = index.builder or null;
           inherit
-            settings
             inject
             packageOverrides
             sourceOverrides
@@ -227,7 +226,7 @@ in rec {
       l.foldl'
       (acc: el: acc // el)
       {}
-      (l.map mkIndexOutputs indexNames);
+      (l.map mkIndexOutputs indexes);
 
     outputs = {
       packages = allPackages;
