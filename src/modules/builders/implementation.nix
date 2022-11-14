@@ -3,6 +3,7 @@
   defaults = {
     rust = "build-rust-package";
     nodejs = "granular-nodejs";
+    deno = "granular-deno";
     python = "simple-python";
     php = "granular-php";
     haskell = "simple-haskell";

@@ -22,8 +22,8 @@ The goal of this project is to create a standardized, generic, modular framework
 
 The intention is to integrate many existing 2nix converters into this framework, thereby improving many of the previously named aspects and providing a unified UX for all 2nix solutions.
 
+### Modularity
 
-### Modularity:
 The following phases which are generic to basically all existing 2nix solutions:
   - parsing project metadata
   - resolving/locking dependencies (not always required)
