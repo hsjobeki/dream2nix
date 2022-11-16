@@ -1,0 +1,11 @@
+[tool.poetry]
+name = "dream2nix"
+version = "0.1.0"
+description = ""
+authors = ["hsjobeki <hsjobeki@gmail.com>"]
+readme = "README.md"
+
+
+[tool.poetry.dependencies]
+python = "^3.10"
+mypy = "^0.990"

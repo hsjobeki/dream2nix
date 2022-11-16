@@ -109,17 +109,38 @@ in
         electronAppDir = "src";
 
         preBuild = {outputs, ...}: ''
-          # link dependencies of subpackage
-          ln -s \
-            ${outputs.subPackages.edex-ui-subpackage.packages.edex-ui-subpackage}/lib/node_modules/edex-ui-subpackage/node_modules \
-            ./src/node_modules
+          # function to resolve symlinks to copies
+            symlinksToCopies() {
+              local dir="$1"
 
-          # transform symlinked subpackage 'node-pty' to copies,
-          # in order to allow re-building
-          mv src/node_modules src/node_modules.bac
-          mkdir src/node_modules
-          cp -r src/node_modules.bac/* src/node_modules/
-          symlinksToCopies ./src/node_modules/node-pty
+              echo "transforming symlinks to copies..."
+              for f in $(find -L "$dir" -xtype l); do
+                if [ -f $f ]; then
+                  continue
+                fi
+                echo "copying $f"
+                chmod +wx $(dirname "$f")
+                mv "$f" "$f.bak"
+                mkdir "$f"
+                if [ -n "$(ls -A "$f.bak/")" ]; then
+                  cp -r "$f.bak"/* "$f/"
+                  chmod -R +w $f
+                fi
+                rm "$f.bak"
+              done
+            }
+
+            # link dependencies of subpackage
+            ln -s \
+              ${outputs.subPackages.edex-ui-subpackage.packages.edex-ui-subpackage}/lib/node_modules/edex-ui-subpackage/node_modules \
+              ./src/node_modules
+
+            # transform symlinked subpackage 'node-pty' to copies,
+            # in order to allow re-building
+            mv src/node_modules src/node_modules.bac
+            mkdir src/node_modules
+            cp -r src/node_modules.bac/* src/node_modules/
+            symlinksToCopies ./src/node_modules/node-pty
         '';
       };
     };
@@ -738,26 +759,6 @@ in
               in "${pkg}/lib/node_modules/${pname}/node_modules")
               outputs.subPackages))}
 
-          symlinksToCopies() {
-            local dir="$1"
-
-            echo "transforming symlinks to copies..."
-            for f in $(find -L "$dir" -xtype l); do
-              if [ -f $f ]; then
-                continue
-              fi
-              echo "copying $f"
-              chmod +wx $(dirname "$f")
-              mv "$f" "$f.bak"
-              mkdir "$f"
-              if [ -n "$(ls -A "$f.bak/")" ]; then
-                cp -r "$f.bak"/* "$f/"
-                chmod -R +w $f
-              fi
-              rm "$f.bak"
-            done
-          }
-
           for dir in $(ls -d */); do
             if [ -f $dir/package.json ]; then
               echo "installing sub-package $dir"
@@ -777,9 +778,14 @@ in
     # TODO: confirm this is actually working
     typescript = {
       preserve-symlinks = {
-        postPatch = ''
-          find -name '*.js' -exec \
-            ${ensureFileModified} {} sed -i "s/options.preserveSymlinks/true/g; s/compilerOptions.preserveSymlinks/true/g" {} \;
+        postInstall = ''
+          # ls -la $(realpath ./bin)
+          # makeWrapper \
+          #   $(realpath ./bin/tsc) \
+          #   $out/bin/tsc \
+          #   --add-flags " --preserveSymlinks"
+          # ls -la $out/bin
+
         '';
       };
     };

@@ -14,18 +14,19 @@
       python3
       runCommandLocal
       stdenv
+      bash
       ;
   in
     {
       # Funcs
       # AttrSet -> Bool) -> AttrSet -> [x]
-      getCyclicDependencies, # name: version: -> [ {name=; version=; } ]
+      # getCyclicDependencies, # name: version: -> [ {name=; version=; } ]
       getDependencies, # name: version: -> [ {name=; version=; } ]
       getSource, # name: version: -> store-path
       # Attributes
       subsystemAttrs, # attrset
       defaultPackageName, # string
-      defaultPackageVersion, # string
+      # defaultPackageVersion, # string
       packages, # list
       # attrset of pname -> versions,
       # where versions is a list of version strings
@@ -41,11 +42,14 @@
       b = builtins;
       l = lib // builtins;
 
+      # get nodejsversion from subsystemAttrs (user may have given custom value)
       nodejsVersion = subsystemAttrs.nodejsVersion;
 
+      # function that checks if the building package is the root package, that the user wanted to build in the first place.
       isMainPackage = name: version:
         (args.packages."${name}" or null) == version;
 
+      # get the nodejs runtime from pkgs
       nodejs =
         if args ? nodejs
         then b.toString args.nodejs
@@ -53,12 +57,19 @@
           pkgs."nodejs-${nodejsVersion}_x"
           or (throw "Could not find nodejs version '${nodejsVersion}' in pkgs");
 
+      # extract nodejs archive and move all node binarys to $out
       nodeSources = runCommandLocal "node-sources" {} ''
         tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
         mv node-* $out
       '';
 
+      # {
+      #
+      # }
+      #
+      #
       allPackages =
+        # key: value: -> newValue
         lib.mapAttrs
         (name: versions:
           lib.genAttrs
@@ -140,25 +151,6 @@
         fi
       '';
 
-      # Only executed for electron based packages.
-      # Creates an executable script under /bin starting the electron app
-      electron-wrap =
-        if pkgs.stdenv.isLinux
-        then ''
-          mkdir -p $out/bin
-          makeWrapper \
-            $electronDist/electron \
-            $out/bin/$(basename "$packageName") \
-            --add-flags "$(realpath $electronAppDir)"
-        ''
-        else ''
-          mkdir -p $out/bin
-          makeWrapper \
-            $electronDist/Electron.app/Contents/MacOS/Electron \
-            $out/bin/$(basename "$packageName") \
-            --add-flags "$(realpath $electronAppDir)"
-        '';
-
       # Generates a derivation for a specific package name + version
       makePackage = name: version: let
         pname = lib.replaceStrings ["@" "/"] ["__at__" "__slash__"] name;
@@ -216,7 +208,12 @@
 
           packageName = name;
 
+          # sanitized name
           inherit pname;
+
+          installPhase = import ./installPhase.nix {
+            inherit lib pkgs;
+          };
 
           meta = let
             meta = subsystemAttrs.meta;
@@ -227,7 +224,6 @@
             };
 
           passthru.dependencies = passthruDeps;
-
           passthru.devShell = import ./devShell.nix {
             inherit
               mkShell
@@ -236,7 +232,6 @@
               pkg
               ;
           };
-
           /*
           For top-level packages install dependencies as full copies, as this
           reduces errors with build tooling that doesn't cope well with
@@ -248,65 +243,24 @@
             else "symlink";
 
           electronAppDir = ".";
-
-          # only run build on the main package
           runBuild = isMainPackage name version;
-
           src = getSource name version;
-
           nativeBuildInputs = [makeWrapper];
-
           buildInputs = [jq nodejs python3];
 
-          # prevents running into ulimits
+          # set env variables
           passAsFile = ["dependenciesJson" "nodeDeps"];
 
-          preConfigurePhases = ["d2nLoadFuncsPhase" "d2nPatchPhase"];
-
-          # can be overridden to define alternative install command
-          # (defaults to 'npm run postinstall')
           buildScript = null;
 
-          # python script to modify some metadata to support installation
-          # (see comments below on d2nPatchPhase)
           fixPackage = "${./fix-package.py}";
 
-          # script to install (symlink or copy) dependencies.
           installDeps = "${./install-deps.py}";
 
-          # python script to link bin entries from package.json
           linkBins = "${./link-bins.py}";
 
-          # costs performance and doesn't seem beneficial in most scenarios
           dontStrip = true;
 
-          # declare some useful shell functions
-          d2nLoadFuncsPhase = ''
-            # function to resolve symlinks to copies
-            symlinksToCopies() {
-              local dir="$1"
-
-              echo "transforming symlinks to copies..."
-              for f in $(find -L "$dir" -xtype l); do
-                if [ -f $f ]; then
-                  continue
-                fi
-                echo "copying $f"
-                chmod +wx $(dirname "$f")
-                mv "$f" "$f.bak"
-                mkdir "$f"
-                if [ -n "$(ls -A "$f.bak/")" ]; then
-                  cp -r "$f.bak"/* "$f/"
-                  chmod -R +w $f
-                fi
-                rm "$f.bak"
-              done
-            }
-          '';
-
-          # TODO: upstream fix to nixpkgs
-          # example which requires this:
-          #   https://registry.npmjs.org/react-window-infinite-loader/-/react-window-infinite-loader-1.0.7.tgz
           unpackCmd =
             if lib.hasSuffix ".tgz" src
             then "tar --delay-directory-restore -xf $src"
@@ -358,17 +312,10 @@
             runHook postUnpack
           '';
 
-          # The python script wich is executed in this phase:
-          #   - ensures that the package is compatible to the current system
-          #   - ensures the main version in package.json matches the expected
-          #   - pins dependency versions in package.json
-          #     (some npm commands might otherwise trigger networking)
-          #   - creates symlinks for executables declared in package.json
-          # Apart from that:
-          #   - Any usage of 'link:' in package.json is replaced with 'file:'
-          #   - If package-lock.json exists, it is deleted, as it might conflict
-          #     with the parent package-lock.json.
-          d2nPatchPhase = ''
+          nodeDepsStr = l.toString nodeDeps;
+          configurePhase = ''
+            runHook preConfigure
+
             # delete package-lock.json as it can lead to conflicts
             rm -f package-lock.json
 
@@ -391,35 +338,26 @@
               exit 1
             fi
 
-            # configure typescript
-            if [ -f ./tsconfig.json ] \
-                && node -e 'require("typescript")' &>/dev/null; then
-              node ${./tsconfig-to-json.js}
-              ${pkgs.jq}/bin/jq ".compilerOptions.preserveSymlinks = true" tsconfig.json \
-                  | ${pkgs.moreutils}/bin/sponge tsconfig.json
-            fi
-          '';
+            # not needed anymore
+            # # configure typescript
+            # if [ -f ./tsconfig.json ] \
+            #     && node -e 'require("typescript")' &>/dev/null; then
+            #   node ./tsconfig-to-json.js
+            #   ${pkgs.jq}/bin/jq ".compilerOptions.preserveSymlinks = true" tsconfig.json \
+            #       | ${pkgs.moreutils}/bin/sponge tsconfig.json
+            # fi
 
-          # - installs dependencies into the node_modules directory
-          # - adds executables of direct node module dependencies to PATH
-          # - adds the current node module to NODE_PATH
-          # - sets HOME=$TMPDIR, as this is required by some npm scripts
-          # TODO: don't install dev dependencies. Load into NODE_PATH instead
-          configurePhase = ''
-            runHook preConfigure
 
             # symlink sub dependencies as well as this imitates npm better
-            python $installDeps
-
+            python ${installDeps}
             echo "Symlinking transitive executables to $nodeModules/.bin"
-            for dep in ${l.toString nodeDeps}; do
+            for dep in ${nodeDepsStr}; do
               binDir=$dep/lib/node_modules/.bin
               if [ -e $binDir ]; then
                 for bin in $(ls $binDir/); do\
                   if [ ! -e $nodeModules/.bin ]; then
                     mkdir -p $nodeModules/.bin
                   fi
-
                   # symlink might have been already created by install-deps.py
                   # if installMethod=copy was selected
                   if [ ! -L $nodeModules/.bin/$bin ]; then
@@ -430,20 +368,14 @@
                 done
               fi
             done
-
             # add bin path entries collected by python script
             export PATH="$PATH:$nodeModules/.bin"
-
             # add dependencies to NODE_PATH
             export NODE_PATH="$NODE_PATH:$nodeModules/$packageName/node_modules"
-
             export HOME=$TMPDIR
-
             runHook postConfigure
           '';
 
-          # Runs the install command which defaults to 'npm run postinstall'.
-          # Allows using custom install command by overriding 'buildScript'.
           buildPhase = ''
             runHook preBuild
 
@@ -476,40 +408,6 @@
             fi
 
             runHook postBuild
-          '';
-
-          # Symlinks executables and manual pages to correct directories
-          installPhase = ''
-            runHook preInstall
-            mkdir -p $out/lib
-            cp -r $nodeModules $out/lib/node_modules
-            nodeModules=$out/lib/node_modules
-            cd "$nodeModules/$packageName"
-
-            echo "Symlinking bin entries from package.json"
-            python $linkBins
-
-            echo "Symlinking manual pages"
-            if [ -d "$nodeModules/$packageName/man" ]
-            then
-              mkdir -p $out/share
-              for dir in "$nodeModules/$packageName/man/"*
-              do
-                mkdir -p $out/share/man/$(basename "$dir")
-                for page in "$dir"/*
-                do
-                    ln -s $page $out/share/man/$(basename "$dir")
-                done
-              done
-            fi
-
-            # wrap electron app
-            if [ -n "$electronHeaders" ]; then
-              echo "Wrapping electron app"
-              ${electron-wrap}
-            fi
-
-            runHook postInstall
           '';
         });
       in
