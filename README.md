@@ -3,8 +3,8 @@
 <p align="center">
   <picture>
     <source width="600" media="(prefers-color-scheme: dark)" srcset="https://gist.githubusercontent.com/DavHau/755fed3774e89c0b9b8953a0a25309fa/raw/e2a12a60ae49aa5eb11b42775abdd1652dbe63c0/dream2nix-01.png">
-    <source width="600" media="(prefers-color-scheme: light)" srcset="https://gist.githubusercontent.com/DavHau/755fed3774e89c0b9b8953a0a25309fa/raw/e2a12a60ae49aa5eb11b42775abdd1652dbe63c0/dream2nix-01.png">
-    <img width="600" alt="dream2nix - A framework for automated nix packaging" src="https://gist.githubusercontent.com/DavHau/755fed3774e89c0b9b8953a0a25309fa/raw/e2a12a60ae49aa5eb11b42775abdd1652dbe63c0/dream2nix-01.png">
+    <source width="600" media="(prefers-color-scheme: light)" srcset="">
+    <img width="600" alt="dream2nix - A framework for automated nix packaging" src="./dream2nix-dark.png">
   </picture>
   <br>
   <a href="https://nix-community.github.io/dream2nix/">Documentation</a> |

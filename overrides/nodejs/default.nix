@@ -779,13 +779,12 @@ in
     typescript = {
       preserve-symlinks = {
         postInstall = ''
-          # ls -la $(realpath ./bin)
-          # makeWrapper \
-          #   $(realpath ./bin/tsc) \
-          #   $out/bin/tsc \
-          #   --add-flags " --preserveSymlinks"
-          # ls -la $out/bin
-
+          realTsc=$(realpath $out/bin/tsc)
+          rm $out/bin/tsc
+          makeWrapper \
+            $realTsc \
+            $out/bin/tsc \
+            --add-flags " --preserveSymlinks"
         '';
       };
     };
