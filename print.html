@@ -136,8 +136,10 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="dream2nix"><a class="header" href="#dream2nix">dream2nix</a></h1>
+<p>Automate reproducible packaging for various language ecosystems</p>
 <p>!!! Warning: dream2nix is unstable software. While simple UX is one of our main focus points, the APIs  are still under development. Do expect changes that will break your setup.</p>
-<p>dream2nix is a framework for automatically converting packages from other build systems to nix.</p>
+<p>This project was funded by <a href="https://nlnet.nl/">NLnet</a>, which is a great way to get your open source project funded. <strong>Applications are still open, you can <a href="https://nlnet.nl/propose">apply today</a></strong>.
+For more information about dream2nix' funding, please refer to the <a href="https://github.com/nix-community/dream2nix#funding">funding section of the readme</a></p>
 <p>dream2nix focuses on the following aspects:</p>
 <ul>
 <li>Modularity</li>
@@ -265,6 +267,7 @@ If you want to support more platforms later, just add more lines to that file.</
       systems = [&quot;x86_64-linux&quot;];         # &lt;- This line.
       config.projectRoot = ./.;
       source = ./.;
+      projects = ./projects.toml;
     };
 }
 </code></pre>
@@ -276,11 +279,10 @@ warning: Git tree '/tmp/my_project' is dirty
 warning: creating lock file '/tmp/my_project/flake.lock'
 warning: Git tree '/tmp/my_project' is dirty
 git+file:///tmp/my_project
-├───packages
-│   └───x86_64-linux
-│       ├───main: package 'main'
-│       └───resolveImpure: package 'resolve'
-└───projectsJson: unknown
+└───packages
+    └───x86_64-linux
+        ├───main: package 'main'
+        └───resolveImpure: package 'resolve'
 </code></pre>
 <p>What we can observe here:</p>
 <ol>
@@ -294,11 +296,10 @@ Our flake.nix imported external libraries. The versions of these libraries have 
 </li>
 <li>
 <pre><code>  git+file:///tmp/my_project
-  ├───packages
-  │   └───x86_64-linux
-  │       ├───main: package 'main'
-  │       └───resolveImpure: package 'resolve'
-  └───projectsJson: unknown
+  └───packages
+      └───x86_64-linux
+          ├───main: package 'main'
+          └───resolveImpure: package 'resolve'
 </code></pre>
 <p>Similar like a .json file defines a structure of data, our flake.nix defines a structure of <code>nix attributes</code> which are things that we can build or run with nix.
 We can see that it contains packages for my current platform <code>x86_64-linux</code>.</p>
@@ -391,6 +392,7 @@ wrote: /tmp/my_project/flake.nix
       systemsFromFile = ./nix_systems;
       config.projectRoot = ./.;
       source = ./.;
+      projects = ./projects.toml;
     };
 }
 </code></pre>
@@ -424,6 +426,7 @@ If you want to support more platforms later, just add more lines to that file.</
       systems = [&quot;x86_64-linux&quot;];         # &lt;- This line.
       config.projectRoot = ./.;
       source = ./.;
+      projects = ./projects.toml;
     };
 }
 </code></pre>
@@ -443,12 +446,11 @@ git+file:///tmp/my_project
 │   └───x86_64-linux
 │       ├───cowsay: development environment 'nix-shell'
 │       └───default: development environment 'nix-shell'
-├───packages
-│   └───x86_64-linux
-│       ├───cowsay: package 'cowsay-1.5.0'
-│       ├───default: package 'cowsay-1.5.0'
-│       └───resolveImpure: package 'resolve'
-└───projectsJson: unknown
+└───packages
+    └───x86_64-linux
+        ├───cowsay: package 'cowsay-1.5.0'
+        ├───default: package 'cowsay-1.5.0'
+        └───resolveImpure: package 'resolve'
 </code></pre>
 <p>We can see that:</p>
 <ol>
@@ -550,12 +552,11 @@ git+file:///tmp/my_project
 │   └───x86_64-linux
 │       ├───cowsay: development environment 'nix-shell'
 │       └───default: development environment 'nix-shell'
-├───packages
-│   └───x86_64-linux
-│       ├───cowsay: package 'cowsay-1.5.0'
-│       ├───default: package 'cowsay-1.5.0'
-│       └───resolveImpure: package 'resolve'
-└───projectsJson: unknown
+└───packages
+    └───x86_64-linux
+        ├───cowsay: package 'cowsay-1.5.0'
+        ├───default: package 'cowsay-1.5.0'
+        └───resolveImpure: package 'resolve'
 </code></pre>
 <p>When we enter the <code>cowsay</code> development shell, we will get <code>node</code> in our
 <code>PATH</code>, together with all the binaries from our dependencies packages.
@@ -605,9 +606,9 @@ supported.)</p>
 <h3 id="cargo-toml-impure"><a class="header" href="#cargo-toml-impure">cargo-toml (impure)</a></h3>
 <p>Translates a <code>Cargo.toml</code> file to a dream2nix lockfile by generating a <code>Cargo.lock</code> file first and then using <code>cargo-lock</code> translator on the generated lockfile.</p>
 <h2 id="builders"><a class="header" href="#builders">Builders</a></h2>
-<h3 id="build-rust-package-pure-default"><a class="header" href="#build-rust-package-pure-default">build-rust-package (pure) (default)</a></h3>
+<h3 id="build-rust-package-pure"><a class="header" href="#build-rust-package-pure">build-rust-package (pure)</a></h3>
 <p>Builds a package using <code>buildRustPackage</code> from <code>nixpkgs</code>.</p>
-<h3 id="crane-ifd"><a class="header" href="#crane-ifd">crane (ifd)</a></h3>
+<h3 id="crane-ifd-default"><a class="header" href="#crane-ifd-default">crane (ifd) (default)</a></h3>
 <p>Builds a package using <a href="https://github.com/ipetkov/crane"><code>crane</code></a>.
 This builder builds two separate derivations, one for dependencies and the other for your crate.
 The dependencies derivation will be named <code>&lt;crate&gt;-deps</code> where <code>&lt;crate&gt;</code> is the name of the crate you are building.</p>
@@ -737,6 +738,18 @@ in
   # ...
 }
 </code></pre>
+<h3 id="specifying-the-stdenv"><a class="header" href="#specifying-the-stdenv">Specifying the <code>stdenv</code></a></h3>
+<p><code>crane</code> supports specifying the <code>stdenv</code> like so:</p>
+<pre><code class="language-nix">{
+  # ...
+  packageOverrides = {
+    # change all derivations' stdenv to clangStdenv
+    &quot;^.*&quot;.set-stdenv.override = old: {stdenv = pkgs.clangStdenv;};
+  };
+  # ...
+}
+</code></pre>
+<p><code>build-rust-package</code> builder does not support specifying the <code>stdenv</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="python-subsystem"><a class="header" href="#python-subsystem">Python subsystem</a></h1>
 <p>This section documents the Python subsystem.</p>
 <h2 id="examples-1"><a class="header" href="#examples-1">Examples</a></h2>
@@ -796,12 +809,7 @@ The downside of this approach is, that this translator cannot be used with a gra
       systems = [&quot;x86_64-linux&quot;];
       config.projectRoot = ./.;
       source = src;
-      settings = [
-        {
-          subsystemInfo.noDev = true;
-          subsystemInfo.nodejs = 18;
-        }
-      ];
+      projects = ./projects.toml;
     })
     // {
       # checks = self.packages;
@@ -863,15 +871,7 @@ Currently we have a builder for haskell and several translators (see table below
       pkgs = dream2nix.inputs.nixpkgs.legacyPackages.x86_64-linux;
       source = src;
       config.projectRoot = ./.;
-      settings = [
-        {
-          # Optionally, override the compiler version
-          subsystemInfo.compiler = {
-            name = &quot;ghc&quot;;
-            version = &quot;8.10.7&quot;;
-          };
-        }
-      ];
+      projects = ./projects.toml;
     })
     // {
       # checks = self.packages;
@@ -910,7 +910,7 @@ Currently we have a builder for haskell and several translators (see table below
       systems = [&quot;x86_64-linux&quot;];
       config.projectRoot = ./.;
       source = src;
-      settings = [];
+      projects = ./projects.toml;
     })
     // {
       # checks = self.packages;
