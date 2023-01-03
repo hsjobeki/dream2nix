@@ -1,6 +1,10 @@
-{config, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   b = builtins;
-  l = config.lib // builtins;
+  l = config.lib;
 
   loadOverridesDirs = overridesDirs: pkgs: let
     loadOverrides = dir:
@@ -47,7 +51,7 @@
     '';
 
   getOverrideFunctionArgs = function: let
-    funcArgs = l.functionArgs function;
+    funcArgs = lib.functionArgs function;
   in
     if funcArgs != {}
     then b.attrNames funcArgs
@@ -139,7 +143,7 @@
           l.mapAttrs
           (funcName: func: getOverrideFunctionArgs func)
           (l.filterAttrs
-            (funcName: func: l.hasPrefix "override" funcName && funcName != "overrideDerivation" && funcName != "overridePythonAttrs")
+            (funcName: func: l.hasPrefix "override" funcName && (! b.elem funcName ["overrideDerivation" "overridePythonAttrs" "overrideRustToolchain"]))
             base_derivation);
 
         getOverrideFuncNameForAttrName = attrName: let

@@ -1,6 +1,6 @@
 {config, ...}: let
   inherit (config) pkgs utils;
-  l = config.lib // builtins;
+  l = config.lib;
 
   generatePackagesFromLocksTree = {
     source ? throw "pass source",
@@ -31,7 +31,7 @@
       );
     dreamLocks = findDreamLocks tree;
     makePackagesForDreamLock = dreamLock:
-      (config.dream2nixInterface.makeOutputsForDreamLock {
+      (config.dream2nix-interface.makeOutputsForDreamLock {
         inherit
           dreamLock
           inject

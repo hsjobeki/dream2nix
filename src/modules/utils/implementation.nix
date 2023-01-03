@@ -2,7 +2,7 @@
 # for now this will have to suffice
 {config, ...}: let
   b = builtins;
-  l = config.lib // builtins;
+  l = config.lib;
 
   inherit
     (config.pkgs)
@@ -148,6 +148,7 @@
           # TODO: translatorArgs
           translatorArgs = {};
           translator = project.translator;
+          config = config.dream2nixConfig;
         },
     } @ args: let
       aggregate = project.aggregate or false;

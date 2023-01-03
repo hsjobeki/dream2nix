@@ -14,6 +14,41 @@
 }: let
   l = lib // builtins;
   isInPackages = name: version: (packages.${name} or null) == version;
+  # a make overridable for rust derivations specifically
+  makeOverridable = f: origArgs: let
+    result = f origArgs;
+
+    # Creates a functor with the same arguments as f
+    copyArgs = g: l.setFunctionArgs g (l.functionArgs f);
+    # Changes the original arguments with (potentially a function that returns) a set of new attributes
+    overrideWith = newArgs:
+      origArgs
+      // (
+        if l.isFunction newArgs
+        then newArgs origArgs
+        else newArgs
+      );
+
+    # Re-call the function but with different arguments
+    overrideArgs = copyArgs (newArgs: makeOverridable f (overrideWith newArgs));
+    # Change the result of the function call by applying g to it
+    overrideResult = g: makeOverridable (copyArgs (args: g (f args))) origArgs;
+  in
+    result.derivation
+    // {
+      override = args:
+        overrideArgs {
+          args =
+            origArgs.args
+            // (
+              if l.isFunction args
+              then args origArgs.args
+              else args
+            );
+        };
+      overrideRustToolchain = f: overrideArgs {toolchain = f origArgs.toolchain;};
+      overrideAttrs = fdrv: overrideResult (x: {derivation = x.derivation.overrideAttrs fdrv;});
+    };
 in rec {
   getMeta = pname: version: let
     meta = subsystemAttrs.meta.${pname}.${version};
@@ -53,42 +88,21 @@ in rec {
   '';
 
   mkBuildWithToolchain = mkBuildFunc: let
-    buildWithToolchain = toolchain: args: let
-      # we pass the actual overrideAttrs function through another attribute
-      # so we can apply it to the actual derivation later
-      overrideDrvFunc = args.overrideDrvFunc or (_: {});
-      cleanedArgs = l.removeAttrs args ["overrideDrvFunc"];
-      _drv = ((mkBuildFunc toolchain) cleanedArgs).overrideAttrs overrideDrvFunc;
-      drv =
-        _drv
-        // {
-          passthru = (_drv.passthru or {}) // {rustToolchain = toolchain;};
-        };
-    in
-      drv
-      // {
-        overrideRustToolchain = f: let
-          newToolchain = toolchain // (f toolchain);
-          # we need to do this since dream2nix overrides
-          # use the passthru to get attr names
-          maybePassthru =
-            l.optionalAttrs
-            (newToolchain ? passthru)
-            {inherit (newToolchain) passthru;};
-        in
-          buildWithToolchain newToolchain (args // maybePassthru);
-        overrideAttrs = f:
-          buildWithToolchain toolchain (
-            args
+    buildWithToolchain = args:
+      makeOverridable
+      (args: {
+        derivation =
+          (mkBuildFunc args.toolchain)
+          (
+            args.args
             // {
-              # we need to apply the old overrideDrvFunc as well here
-              # so that other potential overrideAttr usages aren't lost
-              # (otherwise only one of them would be applied)
-              overrideDrvFunc = prev:
-                ((args.overrideDrvFunc or (_: {})) prev) // (f prev);
+              passthru =
+                (args.args.passthru or {})
+                // {rustToolchain = args.toolchain;};
             }
           );
-      };
+      })
+      args;
   in
     buildWithToolchain;
 

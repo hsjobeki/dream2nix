@@ -11,7 +11,6 @@
   nix,
   pkgs,
   framework,
-  dream2nixWithExternals,
   ...
 }: let
   l = lib // builtins;
@@ -35,6 +34,9 @@
       start_time=$(date +%s)
       cp -r ${examples}/$dir/* .
       chmod -R +w .
+      if [ -n "''${NIX:-}" ]; then
+        PATH="$(dirname $NIX):$PATH"
+      fi
       nix flake lock --override-input dream2nix ${../../.}
       if nix flake show | grep -q resolveImpure; then
         nix run .#resolveImpure --show-trace

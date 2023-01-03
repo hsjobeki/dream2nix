@@ -24,6 +24,7 @@
       inherit systems;
       config.projectRoot = ./.;
       source = src;
+      projects = ./projects.toml;
     };
   in
     dream2nix.lib.dlib.mergeFlakes [
@@ -32,7 +33,8 @@
         devShells = forAllSystems (system: pkgs: (
           l.optionalAttrs
           (d2n-flake ? devShells.${system}.prettier.overrideAttrs)
-          {
+          rec {
+            default = prettier;
             prettier =
               d2n-flake.devShells.${system}.prettier.overrideAttrs
               (old: {

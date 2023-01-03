@@ -55,13 +55,12 @@
         inherit pname version;
 
         src = utils.getRootSource pname version;
-        cargoVendorDir = "./nix-vendor";
-
-        # this is needed because remove-references-to doesn't work on non nix-store paths
-        doNotRemoveReferencesToVendorDir = true;
+        cargoVendorDir = "$TMPDIR/nix-vendor";
+        installCargoArtifactsMode = "use-zstd";
 
         postUnpack = ''
           export CARGO_HOME=$(pwd)/.cargo_home
+          export cargoVendorDir="$TMPDIR/nix-vendor"
         '';
         preConfigure = ''
           ${writeGitVendorEntries}
@@ -86,10 +85,10 @@
           inherit (utils) cargoLock;
           pnameSuffix = depsNameSuffix;
           # Make sure cargo only checks the package we want
-          cargoCheckCommand = "cargo check --release --package ${pname}";
+          cargoCheckCommand = "cargo check \${cargoBuildFlags:-} --profile \${cargoBuildProfile} --package ${pname}";
           dream2nixVendorDir = vendoring.vendoredDependencies;
           preUnpack = ''
-            ${vendoring.copyVendorDir "$dream2nixVendorDir" "$cargoVendorDir"}
+            ${vendoring.copyVendorDir "$dream2nixVendorDir" common.cargoVendorDir}
           '';
           # move the vendored dependencies folder to $out for main derivation to use
           postInstall = ''
@@ -99,7 +98,10 @@
       deps =
         produceDerivation
         "${pname}${depsNameSuffix}"
-        (buildDepsWithToolchain defaultToolchain depsArgs);
+        (buildDepsWithToolchain {
+          toolchain = defaultToolchain;
+          args = depsArgs;
+        });
 
       buildArgs =
         common
@@ -108,7 +110,7 @@
           cargoArtifacts = deps;
           # link the vendor dir we used earlier to the correct place
           preUnpack = ''
-            ${vendoring.copyVendorDir "$cargoArtifacts/nix-vendor" "$cargoVendorDir"}
+            ${vendoring.copyVendorDir "$cargoArtifacts/nix-vendor" common.cargoVendorDir}
           '';
           # write our cargo lock
           # note: we don't do this in buildDepsOnly since
@@ -119,40 +121,52 @@
           '';
           passthru = {dependencies = deps;};
         };
+      build =
+        produceDerivation
+        pname
+        (buildPackageWithToolchain {
+          toolchain = defaultToolchain;
+          args = buildArgs;
+        });
     in
-      produceDerivation
-      pname
-      (buildPackageWithToolchain defaultToolchain buildArgs);
-
-    mkShellForPkg = pkg: let
-      pkgDeps = pkg.passthru.dependencies;
-      depsShell = pkgs.callPackage ../devshell.nix {
-        inherit externals;
-        drv = pkgDeps;
-      };
-      mainShell = pkgs.callPackage ../devshell.nix {
-        inherit externals;
-        drv = pkg;
-      };
-      shell = depsShell.combineWith mainShell;
-    in
-      shell;
+      build;
 
     allPackages =
       l.mapAttrs
       (name: version: {"${version}" = buildPackage name version;})
       args.packages;
 
-    allDevshells =
+    mkShellForDrvs = drvs:
+      pkgs.callPackage ../devshell.nix {
+        name = "devshell";
+        inherit drvs;
+      };
+
+    pkgShells =
       l.mapAttrs
-      (name: version: mkShellForPkg allPackages.${name}.${version})
+      (
+        name: version: let
+          pkg = allPackages.${name}.${version};
+        in
+          mkShellForDrvs [pkg.passthru.dependencies pkg]
+      )
       args.packages;
+
+    allPackagesList = l.flatten (
+      l.mapAttrsToList
+      (
+        name: version: let
+          pkg = allPackages.${name}.${version};
+        in [pkg.passthru.dependencies pkg]
+      )
+      args.packages
+    );
   in {
     packages = allPackages;
     devShells =
-      allDevshells
+      pkgShells
       // {
-        default = allDevshells.${defaultPackageName};
+        default = mkShellForDrvs allPackagesList;
       };
   };
 }

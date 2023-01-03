@@ -39,8 +39,7 @@
       writeGitVendorEntries = vendoring.writeGitVendorEntries "vendored-sources";
 
       cargoBuildFlags = "--package ${pname}";
-    in
-      produceDerivation pname (buildWithToolchain defaultToolchain {
+      buildArgs = {
         inherit pname version src;
 
         meta = utils.getMeta pname version;
@@ -65,29 +64,44 @@
           ${replacePaths}
           ${utils.writeCargoLock}
         '';
-      });
-
-    mkShellForPkg = pkg:
-      pkgs.callPackage ../devshell.nix {
-        inherit externals;
-        drv = pkg;
       };
+    in
+      produceDerivation pname (buildWithToolchain {
+        toolchain = defaultToolchain;
+        args = buildArgs;
+      });
 
     allPackages =
       l.mapAttrs
       (name: version: {"${version}" = buildPackage name version;})
       args.packages;
 
-    allDevshells =
+    mkShellForDrvs = drvs:
+      pkgs.callPackage ../devshell.nix {
+        name = "devshell";
+        inherit drvs;
+      };
+
+    pkgShells =
       l.mapAttrs
-      (name: version: mkShellForPkg allPackages.${name}.${version})
+      (
+        name: version: let
+          pkg = allPackages.${name}.${version};
+        in
+          mkShellForDrvs [pkg]
+      )
+      args.packages;
+
+    allPackagesList =
+      l.mapAttrsToList
+      (name: version: allPackages.${name}.${version})
       args.packages;
   in {
     packages = allPackages;
     devShells =
-      allDevshells
+      pkgShells
       // {
-        default = allDevshells.${defaultPackageName};
+        default = mkShellForDrvs allPackagesList;
       };
   };
 }

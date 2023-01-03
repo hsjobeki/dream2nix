@@ -24,6 +24,11 @@ in {
         default = {
           projectRoot = self;
         };
+        defaultText = lib.literalExpression ''
+          {
+            projectRoot = self;
+          }
+        '';
         description = ''
           The dream2nix config.
         '';
@@ -42,7 +47,7 @@ in {
               '';
             };
             inputs = l.mkOption {
-              type = t.attrsOf t.attrs;
+              type = t.attrsOf (t.submodule ./makeOutputsArgs.nix);
               default = {};
               description = ''
                 A list of inputs to generate outputs from.

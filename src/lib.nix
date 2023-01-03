@@ -12,10 +12,9 @@
   l = lib // builtins;
 
   initDream2nix = config: pkgs:
-    import ./default.nix
-    {
-      loadedConfig = config;
-      inherit inputs pkgs externalPaths externalSources;
+    import ./modules/framework.nix {
+      inherit lib inputs pkgs externalPaths externalSources;
+      dream2nixConfig = config;
     };
 
   loadConfig = config'': let
@@ -54,8 +53,7 @@
       if l.isList pkgsList
       then
         l.listToAttrs
-        (pkgs: l.nameValuePair (makePkgsKey pkgs) pkgs)
-        pkgsList
+        (map (pkgs: l.nameValuePair (makePkgsKey pkgs) pkgs) pkgsList)
       else {"${makePkgsKey pkgsList}" = pkgsList;}
     # only systems is specified
     else
@@ -73,6 +71,28 @@
   }:
     initDream2nix (loadConfig config) pkgs;
 
+  missingProjectsError = source: ''
+    Please pass `projects` to makeFlakeOutputs.
+    `projects` can be:
+      - an attrset
+      - a path to a .toml file (not empty & added to git)
+      - a path to a .json file (not empty & added to git)
+
+    To generate a projects.toml file automatically:
+      1. execute:
+        nix run .#detect-projects ${source} > projects.toml
+
+        or alternatively:
+        nix run github:nix-community/dream2nix#detect-projects ${source} > projects.toml
+
+      2. review the ./projects.toml and edit it if necessary.
+      3. pass `projects = ./projects.toml` to makeFlakeOutputs.
+
+    Alternatively pass `autoProjects = true` to makeFlakeOutputs.
+    This is not recommended as it doesn't allow you to review or filter the list
+      of detected projects.
+  '';
+
   makeFlakeOutputs = {
     source,
     pkgs ? null,
@@ -83,39 +103,54 @@
     pname ? throw "Please pass `pname` to makeFlakeOutputs",
     packageOverrides ? {},
     projects ? {},
+    autoProjects ? false,
     settings ? [],
     sourceOverrides ? oldSources: {},
   } @ args: let
+    config = loadConfig (args.config or {});
+
+    framework = import ./modules/framework.nix {
+      inherit lib externalPaths externalSources inputs;
+      dream2nixConfig = config;
+      pkgs = throw "pkgs is not available before nixpkgs is imported";
+    };
+
     systems =
       if systemsFromFile == null
       then args.systems or []
-      else dlib.systemsFromFile systemsFromFile;
+      else
+        framework.dlib.systemsFromFile {
+          inherit config;
+          file = systemsFromFile;
+        };
+
+    # if projects provided via `.json` or `.toml` file, parse to attrset
+    projects = let
+      givenProjects = args.projects or {};
+    in
+      if autoProjects && args ? projects
+      then throw "Don't pass `projects` to makeFlakeOutputs when `autoProjects = true`"
+      else if l.isPath givenProjects
+      then
+        if l.hasSuffix ".toml" (l.toString givenProjects)
+        then l.fromTOML (l.readFile givenProjects)
+        else l.fromJSON (l.readFile givenProjects)
+      else givenProjects;
 
     allPkgs = makeNixpkgs pkgs systems;
-
-    config = loadConfig (args.config or {});
-    dlib = import ./lib {inherit lib config;};
-
-    framework = import ./modules/framework.nix {
-      inherit lib dlib externalSources inputs;
-      dream2nixConfig = config;
-      dream2nixConfigFile = l.toFile "dream2nix-config.json" (l.toJSON config);
-      pkgs = throw "pkgs is not available before nixpkgs is imported";
-      externals = throw "externals is not available before nixpkgs is imported";
-      dream2nixWithExternals = throw "not available before nixpkgs is imported";
-    };
 
     initD2N = initDream2nix config;
     dream2nixFor = l.mapAttrs (_: pkgs: initD2N pkgs) allPkgs;
 
     discoveredProjects = framework.functions.discoverers.discoverProjects {
       inherit settings;
-      tree = dlib.prepareSourceTree {inherit source;};
+      tree = framework.dlib.prepareSourceTree {inherit source;};
     };
 
     finalProjects =
-      if projects != {}
-      then let
+      if autoProjects == true
+      then discoveredProjects
+      else let
         projectsList = l.attrValues projects;
       in
         # skip discovery and just add required attributes to project list
@@ -129,14 +164,13 @@
               framework.functions.discoverers.getDreamLockPath
               proj
               (l.head projectsList);
-          })
-      else discoveredProjects;
+          });
 
     allBuilderOutputs =
       l.mapAttrs
       (system: pkgs: let
         dream2nix = dream2nixFor."${system}";
-        allOutputs = dream2nix.makeOutputs {
+        allOutputs = dream2nix.dream2nix-interface.makeOutputs {
           discoveredProjects = finalProjects;
           inherit
             source
@@ -148,7 +182,12 @@
             ;
         };
       in
-        allOutputs)
+        framework.dlib.recursiveUpdateUntilDrv
+        allOutputs
+        {
+          apps.detect-projects =
+            dream2nixFor.${system}.flakeApps.detect-projects;
+        })
       allPkgs;
 
     flakifiedOutputsList =
@@ -162,11 +201,24 @@
       {}
       flakifiedOutputsList;
 
-    flakeOutputs =
-      {projectsJson = l.toJSON finalProjects;}
-      // flakeOutputsBuilders;
+    errorFlakeOutputs = l.warn (missingProjectsError source) {
+      apps =
+        l.mapAttrs
+        (system: pkgs: {
+          detect-projects =
+            dream2nixFor.${system}.flakeApps.detect-projects;
+        })
+        allPkgs;
+    };
+
+    finalOutputs =
+      if
+        (args ? projects && l.isPath args.projects && ! l.pathExists args.projects)
+        || (projects == {} && autoProjects == false)
+      then errorFlakeOutputs
+      else flakeOutputsBuilders;
   in
-    flakeOutputs;
+    finalOutputs;
 
   makeFlakeOutputsForIndexes = {
     systems ? [],
@@ -189,7 +241,7 @@
       l.mapAttrs
       (system: pkgs: let
         dream2nix = dream2nixFor."${system}";
-        allOutputs = dream2nix.framework.utils.makeOutputsForIndexes {
+        allOutputs = dream2nix.utils.makeOutputsForIndexes {
           inherit
             source
             indexes
@@ -216,9 +268,6 @@
     flakeOutputs;
 in {
   inherit init makeFlakeOutputs makeFlakeOutputsForIndexes;
-  dlib = import ./lib {
-    inherit lib;
-    config = loadConfig {};
-  };
+  dlib = import ./modules/dlib.nix {inherit lib;};
   riseAndShine = throw "Use makeFlakeOutputs instead of riseAndShine.";
 }
