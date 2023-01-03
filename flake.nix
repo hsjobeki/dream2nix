@@ -26,6 +26,10 @@
     };
 
     ### framework dependencies
+    drv-parts = {
+      url = "github:DavHau/drv-parts";
+    };
+
     # required for builder go/gomod2nix
     gomod2nix = {
       url = "github:tweag/gomod2nix";
@@ -73,6 +77,7 @@
     alejandra,
     devshell,
     flake-parts,
+    drv-parts,
     gomod2nix,
     mach-nix,
     nixpkgs,
@@ -93,6 +98,15 @@
     # Therefore 'externalPaths' contains all relevant files of external projects
     # which dream2nix depends on. Exactly these files will be installed.
     externalPaths = {
+      drv-parts = [
+        "modules/derivation-common/implementation.nix"
+        "modules/derivation-common/default.nix"
+        "modules/derivation-common/interface.nix"
+        "modules/mkDerivation/implementation.nix"
+        "modules/mkDerivation/default.nix"
+        "modules/mkDerivation/interface.nix"
+        "default.nix"
+      ];
       mach-nix = [
         "lib/extractor/default.nix"
         "lib/extractor/distutils.patch"

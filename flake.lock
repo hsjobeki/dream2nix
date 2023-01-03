@@ -71,6 +71,25 @@
         "type": "github"
       }
     },
+    "drv-parts": {
+      "inputs": {
+        "flake-parts": "flake-parts",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1672668994,
+        "narHash": "sha256-9j2IZsqLhGfObSv/cdGBOdxX2awLQ8KEgryyFm8WD8w=",
+        "owner": "DavHau",
+        "repo": "drv-parts",
+        "rev": "0f1365e637b4261b84e6c9940131aa1c70247aad",
+        "type": "github"
+      },
+      "original": {
+        "owner": "DavHau",
+        "repo": "drv-parts",
+        "type": "github"
+      }
+    },
     "fenix": {
       "inputs": {
         "nixpkgs": [
@@ -96,6 +115,24 @@
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
+      },
+      "locked": {
+        "lastModified": 1671322946,
+        "narHash": "sha256-J8Qj+ITV+eti+irTK9Zn2LZVYoIW2g7irPUckU8yZvU=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "3f7172646953bf86dad5953bc45f0edae62ac445",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-parts_2": {
+      "inputs": {
+        "nixpkgs-lib": "nixpkgs-lib_2"
       },
       "locked": {
         "lastModified": 1668450977,
@@ -207,11 +244,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1665580254,
-        "narHash": "sha256-hO61XPkp1Hphl4HGNzj1VvDH5URt7LI6LaY/385Eul4=",
+        "lastModified": 1671200928,
+        "narHash": "sha256-mZfzDyzojwj6I0wyooIjGIn81WtGVnx6+avU5Wv+VKU=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "f634d427b0224a5f531ea5aa10c3960ba6ec5f0f",
+        "rev": "757b82211463dd5ba1475b6851d3731dfe14d377",
         "type": "github"
       },
       "original": {
@@ -236,6 +273,39 @@
         "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
+      }
+    },
+    "nixpkgs-lib_2": {
+      "locked": {
+        "dir": "lib",
+        "lastModified": 1665349835,
+        "narHash": "sha256-UK4urM3iN80UXQ7EaOappDzcisYIuEURFRoGQ/yPkug=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "34c5293a71ffdb2fe054eb5288adc1882c1eb0b1",
+        "type": "github"
+      },
+      "original": {
+        "dir": "lib",
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1665580254,
+        "narHash": "sha256-hO61XPkp1Hphl4HGNzj1VvDH5URt7LI6LaY/385Eul4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "f634d427b0224a5f531ea5aa10c3960ba6ec5f0f",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-unstable",
+        "type": "indirect"
       }
     },
     "poetry2nix": {
@@ -284,13 +354,14 @@
         "all-cabal-json": "all-cabal-json",
         "crane": "crane",
         "devshell": "devshell",
-        "flake-parts": "flake-parts",
+        "drv-parts": "drv-parts",
+        "flake-parts": "flake-parts_2",
         "flake-utils-pre-commit": "flake-utils-pre-commit",
         "ghc-utils": "ghc-utils",
         "gomod2nix": "gomod2nix",
         "mach-nix": "mach-nix",
         "nix-pypi-fetcher": "nix-pypi-fetcher",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_2",
         "poetry2nix": "poetry2nix",
         "pre-commit-hooks": "pre-commit-hooks"
       }

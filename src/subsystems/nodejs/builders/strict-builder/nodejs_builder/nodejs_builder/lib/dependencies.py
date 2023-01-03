@@ -18,7 +18,7 @@ class Dependency:
 
 def get_all_deps(all_deps: dict[str, Any], name: str, version: str) -> list[str]:
     """
-    Returns all dependencies. as flattened list
+    Returns the dependency tree the given package (args: name,version), as flattened list.
     """
 
     def is_found(acc: Any, dep: Dependency, dep_tree: Optional[DepsTree]) -> bool:
@@ -29,7 +29,6 @@ def get_all_deps(all_deps: dict[str, Any], name: str, version: str) -> list[str]
     ) -> Any:
         if acc:
             return acc
-
         if dep.repr() == f"{name}@{version}":
             return dep_tree
         return None

@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  externals,
   ...
 }: {
   type = "pure";
@@ -134,7 +135,7 @@
     # executes
     # type: mkNodeModule :: String -> String -> Derivation
     mkNodeModule = name: version: let
-      pname = lib.replaceStrings ["@" "/"] ["__at__" "__slash__"] (name + "@" + version);
+      pname = lib.replaceStrings ["@" "/"] ["__at__" "__slash__"] name;
 
       # all direct dependencies of current package
       deps = getDependencies name version;
@@ -167,14 +168,25 @@
 
       nmTreeJSON = b.toJSON nodeModulesTree;
 
-      # type: makeDepAttrs :: {
-      #  deps :: { ${String} :: { ${String} :: { deps :: Self, derivation :: Derivation } } },
-      #  dep :: { name :: String, version :: String }
-      #  attributes :: {
-      #    derivation :: Derivation,
-      #    deps :: { ${String} :: { ${String} :: { deps :: Self, derivation :: Derivation } } } }
-      #  }
-      #   -> { ${String} :: { ${String} :: { deps :: Self, derivation :: Derivation } } }
+      # type:
+      #   makeDepAttrs :: {
+      #     deps :: DependencyTree,
+      #     dep :: { name :: String, version :: String }
+      #     attributes :: {
+      #       derivation :: Derivation,
+      #       deps :: DependencyTree,
+      #     }
+      #   }
+      #   -> DependencyTree
+      #
+      #   DependencyTree :: {
+      #     ${name} :: {
+      #       ${version} :: {
+      #         deps :: DependencyTree,
+      #         derivation :: Derivation,
+      #       }
+      #     }
+      #   }
       makeDepAttrs = {
         deps,
         dep,
@@ -212,137 +224,143 @@
       # Type: src :: Derivation
       src = getSource name version;
 
-      # produceDerivation makes the mkDerivation overridable by the dream2nix users
-      pkg = produceDerivation name (
-        with pkgs;
-          stdenv.mkDerivation
-          {
-            inherit pname version src nodeSources;
-            inherit nmTreeJSON depsTreeJSON;
-            passAsFile = ["nmTreeJSON" "depsTreeJSON"];
+      pkg =
+        externals.drv-parts.lib.derivationFromModules {}
+        ({config, ...}: {
+          imports = [
+            externals.drv-parts.modules.mkDerivation
+            (import ./options.nix {inherit lib;})
+          ];
+          inherit (pkgs) stdenv;
+          inherit pname version src nodeSources;
 
-            # needed for some current overrides
-            nativeBuildInputs = [makeWrapper];
+          inherit nmTreeJSON depsTreeJSON;
+          passAsFile = ["nmTreeJSON" "depsTreeJSON"];
 
-            buildInputs = [jq nodejs python3];
-            outputs = ["out" "lib" "deps"];
+          # needed for some current overrides
+          nativeBuildInputs = [pkgs.makeWrapper];
 
-            packageName = pname;
-            name = pname;
+          buildInputs = with pkgs; [jq nodejs python3];
+          outputs = ["out" "lib" "deps"];
 
-            installMethod =
-              if isMainPackage name version
-              then "copy"
-              else "symlink";
+          installMethod =
+            if isMainPackage name version
+            then "copy"
+            else "symlink";
 
-            passthru.devShell = import ./devShell.nix {
-              inherit nodejs pkg pkgs;
-            };
+          # only build the main package
+          # deps only get unpacked, installed, patched, etc
+          isMain = isMainPackage name version;
 
-            unpackCmd =
-              if lib.hasSuffix ".tgz" src
-              then "tar --delay-directory-restore -xf $src"
-              else null;
+          env = {
+            packageName = name;
+            inherit (config) installMethod isMain;
+          };
 
-            preConfigurePhases = ["d2nPatchPhase" "d2nCheckPhase"];
+          passthru.devShell = import ./devShell.nix {
+            inherit nodejs pkg pkgs;
+          };
 
-            unpackPhase = import ./unpackPhase.nix {};
+          unpackCmd =
+            if lib.hasSuffix ".tgz" src
+            then "tar --delay-directory-restore -xf $src"
+            else null;
 
-            # nodejs expects HOME to be set
-            d2nPatchPhase = ''
-              export HOME=$TMPDIR
-            '';
+          preConfigurePhases = ["d2nPatchPhase" "d2nCheckPhase"];
 
-            # pre-checks:
-            # - platform compatibility (os + arch must match)
-            d2nCheckPhase = ''
-              # exit code 3 -> the package is incompatible to the current platform
-              #  -> Let the build succeed, but don't create node_modules
-              ${nodejsBuilder}/bin/d2nCheck  \
-              || \
-              if [ "$?" == "3" ]; then
-                mkdir -p $out
-                mkdir -p $lib
-                mkdir -p $deps
-                echo "Not compatible with system $system" > $lib/error
-                exit 0
-              else
-                exit 1
+          unpackPhase = import ./unpackPhase.nix {};
+
+          # nodejs expects HOME to be set
+          env.d2nPatchPhase = ''
+            export HOME=$TMPDIR
+          '';
+
+          # pre-checks:
+          # - platform compatibility (os + arch must match)
+          env.d2nCheckPhase = ''
+            # exit code 3 -> the package is incompatible to the current platform
+            #  -> Let the build succeed, but don't create node_modules
+            ${nodejsBuilder}/bin/d2nCheck  \
+            || \
+            if [ "$?" == "3" ]; then
+              mkdir -p $out
+              mkdir -p $lib
+              mkdir -p $deps
+              echo "Not compatible with system $system" > $lib/error
+              exit 0
+            else
+              exit 1
+            fi
+          '';
+
+          # create the node_modules folder
+          # - uses symlinks as default
+          # - symlink the .bin
+          # - add PATH to .bin
+          configurePhase = ''
+            runHook preConfigure
+
+            ${nodejsBuilder}/bin/d2nNodeModules
+
+            export PATH="$PATH:node_modules/.bin"
+
+            runHook postConfigure
+          '';
+
+          dontBuild = !(isMainPackage name version);
+          # Build:
+          # npm run build
+          # custom build commands for:
+          # - electron apps
+          # fallback to npm lifecycle hooks, if no build script is present
+          buildPhase = ''
+            runHook preBuild
+
+            if [ "$(jq '.scripts.build' ./package.json)" != "null" ];
+            then
+              echo "running npm run build...."
+              npm run build
+            fi
+
+            runHook postBuild
+          '';
+
+          # copy node_modules
+          # - symlink .bin
+          # - symlink manual pages
+          # - dream2nix copies node_modules folder if it is the top-level package
+          installPhase = ''
+            runHook preInstall
+
+            if [ ! -n "$isMain" ];
+            then
+              if [ "$(jq '.scripts.preinstall' ./package.json)" != "null" ]; then
+                npm --production --offline --nodedir=$nodeSources run preinstall
               fi
-            '';
-
-            # create the node_modules folder
-            # - uses symlinks as default
-            # - symlink the .bin
-            # - add PATH to .bin
-            configurePhase = ''
-              runHook preConfigure
-
-              ${nodejsBuilder}/bin/d2nNodeModules
-
-              export PATH="$PATH:node_modules/.bin"
-
-              runHook postConfigure
-            '';
-
-            # only build the main package
-            # deps only get unpacked, installed, patched, etc
-            dontBuild = ! (isMainPackage name version);
-            isMain = isMainPackage name version;
-            # Build:
-            # npm run build
-            # custom build commands for:
-            # - electron apps
-            # fallback to npm lifecycle hooks, if no build script is present
-            buildPhase = ''
-              runHook preBuild
-
-              if [ "$(jq '.scripts.build' ./package.json)" != "null" ];
-              then
-                echo "running npm run build...."
-                npm run build
+              if [ "$(jq '.scripts.install' ./package.json)" != "null" ]; then
+                npm --production --offline --nodedir=$nodeSources run install
               fi
-
-              runHook postBuild
-            '';
-
-            # copy node_modules
-            # - symlink .bin
-            # - symlink manual pages
-            # - dream2nix copies node_modules folder if it is the top-level package
-            installPhase = ''
-              runHook preInstall
-
-              if [ ! -n "$isMain" ];
-              then
-                if [ "$(jq '.scripts.preinstall' ./package.json)" != "null" ]; then
-                  npm --production --offline --nodedir=$nodeSources run preinstall
-                fi
-                if [ "$(jq '.scripts.install' ./package.json)" != "null" ]; then
-                  npm --production --offline --nodedir=$nodeSources run install
-                fi
-                if [ "$(jq '.scripts.postinstall' ./package.json)" != "null" ]; then
-                  npm --production --offline --nodedir=$nodeSources run postinstall
-                fi
+              if [ "$(jq '.scripts.postinstall' ./package.json)" != "null" ]; then
+                npm --production --offline --nodedir=$nodeSources run postinstall
               fi
+            fi
 
-              # $out
-              # - $out/lib/... -> $lib ...(extracted tgz)
-              # - $out/lib/node_modules -> $deps
-              # - $out/bin
+            # $out
+            # - $out/lib/... -> $lib ...(extracted tgz)
+            # - $out/lib/node_modules -> $deps
+            # - $out/bin
 
-              # $deps
-              # - $deps/node_modules
+            # $deps
+            # - $deps/node_modules
 
-              # $lib
-              # - ... (extracted + install scripts runned)
-              ${nodejsBuilder}/bin/d2nMakeOutputs
+            # $lib
+            # - ... (extracted + install scripts runned)
+            ${nodejsBuilder}/bin/d2nMakeOutputs
 
 
-              runHook postInstall
-            '';
-          }
-      );
+            runHook postInstall
+          '';
+        });
     in
       pkg;
 

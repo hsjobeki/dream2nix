@@ -1,4 +1,8 @@
-{config, ...}: let
+{
+  lib,
+  config,
+  ...
+}: let
   l = config.lib;
   inherit (config) pkgs externalSources;
 in {
@@ -94,6 +98,7 @@ in {
             inherit (otherHooks) removeReferencesToVendoredSourcesHook;
           };
         };
+      drv-parts = import externalSources.drv-parts {inherit lib;};
     };
   };
 }
