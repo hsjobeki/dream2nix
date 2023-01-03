@@ -59,17 +59,16 @@
         mv node-* $out
       '';
 
-      binTestApp = python310Packages.buildPythonApplication {
-        pname = "builder";
-        version = "0.1.0";
-        src = ./bin_tests;
-        format = "pyproject";
-        nativeBuildInputs = with python310Packages; [poetry mypy flake8 black];
-        doCheck = false;
-        meta = {
-          description = "Custom binary tests";
-        };
-      };
+      inherit (import (l.traceVal ../../tests) {inherit python310Packages;}) pyTests;
+
+      # python310Packages.buildPythonApplication {
+      #   pname = "builder";
+      #   version = "0.1.0";
+      #   src = ../../tests/bin_tests;
+      #   format = "pyproject";
+      #   nativeBuildInputs = with python310Packages; [poetry mypy flake8 black];
+      #   doCheck = false;
+      # };
 
       allPackages =
         lib.mapAttrs
@@ -223,6 +222,8 @@
 
             # run python script (see comment above):
             cp package.json package.json.bak
+
+
             python $fixPackage \
             || \
             # exit code 3 -> the package is incompatible to the current platform
@@ -291,7 +292,8 @@
           # because the dont accept any args from [--help --version -h -v] but do actually run
           installCheckExcludes = ["tsserver" "is-ci" "browserslist-lint" "multicast-dns" "tree-kill" "errno" "opener" "json5" "is-docker" "eslint-config-prettier-check" "node-gyp-build" "node-gyp-build-test" "node-which"];
           installCheckPhase = ''
-            ${binTestApp}/bin/d2nCheck
+            echo "installCheckPhase"
+            ${pyTests}/bin/d2nCheck
           '';
         });
       in

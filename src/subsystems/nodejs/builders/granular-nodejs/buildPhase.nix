@@ -59,6 +59,7 @@ in ''
     ${electron-rebuild}
   fi
 
+  echo old builder
   # execute install command
   if [ -n "$buildScript" ]; then
     if [ -f "$buildScript" ]; then
