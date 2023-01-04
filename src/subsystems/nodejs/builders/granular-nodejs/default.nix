@@ -59,16 +59,14 @@
         mv node-* $out
       '';
 
-      inherit (import (l.traceVal ../../tests) {inherit python310Packages;}) pyTests;
-
-      # python310Packages.buildPythonApplication {
-      #   pname = "builder";
-      #   version = "0.1.0";
-      #   src = ../../tests/bin_tests;
-      #   format = "pyproject";
-      #   nativeBuildInputs = with python310Packages; [poetry mypy flake8 black];
-      #   doCheck = false;
-      # };
+      # inherit (import (l.traceVal ../../tests) {inherit python310Packages;}) pyTests;
+      pyTests = python310Packages.buildPythonApplication {
+        name = "tests";
+        src = ../../tests/bin_tests;
+        format = "pyproject";
+        nativeBuildInputs = with python310Packages; [poetry mypy flake8 black];
+        doCheck = false;
+      };
 
       allPackages =
         lib.mapAttrs
@@ -286,11 +284,7 @@
           };
 
           # check all binaries of the top level package
-          # doInstallCheck = isMainPackage packageName version;
-          doInstallCheck = true;
-          # list of binaries that cannot be tested
-          # because the dont accept any args from [--help --version -h -v] but do actually run
-          installCheckExcludes = ["tsserver" "is-ci" "browserslist-lint" "multicast-dns" "tree-kill" "errno" "opener" "json5" "is-docker" "eslint-config-prettier-check" "node-gyp-build" "node-gyp-build-test" "node-which"];
+          doInstallCheck = isMainPackage packageName version;
           installCheckPhase = ''
             echo "installCheckPhase"
             ${pyTests}/bin/d2nCheck

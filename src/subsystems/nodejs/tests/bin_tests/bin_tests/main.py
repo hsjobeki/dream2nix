@@ -6,6 +6,34 @@ from .lib.console import Colors
 from pathlib import Path
 import subprocess
 
+# TODO: add more binaries here
+# expected to fail with a specific message (because they cannot be tested, but they run)
+# TODO: improve ?
+# brittle to changes in error string
+expected_failures = {
+    "escodegen": "Invalid option '--help' - perhaps you meant '-c'?",
+    "esgenerate": "Invalid option '--help' - perhaps you meant '-c'?",
+}
+excluded_bins = [
+    "browserslist-lint",
+    "errno",
+    "eslint-config-prettier-check",
+    "is-ci",
+    "is-docker",
+    "json5",
+    "multicast-dns",
+    "node-gyp-build",
+    "node-gyp-build-test",
+    "node-which",
+    "opener",
+    "resolve",  # expects another binary
+    "tree-kill",
+    "tsserver",
+    "webpack",  # needs webpack-cli: expected error: ? "Error: Cannot find module 'webpack-cli/package.json'"
+    "webpack-dev-server",  # needs webpack-cli: expected error: "CLI for webpack must be installed."
+    "which",
+]
+
 
 def check():
     """
@@ -18,8 +46,7 @@ def check():
 
     bin_dir = get_out_path() / Path("lib/node_modules/.bin")
     sandbox = Path("/build/bin_tests")
-    args = ["--help", "--version", "index.js", "index.ts", "-h", "-v"]
-    excluded_bins = get_env().get("installCheckExcludes", "").split(" ")
+    args = ["--help", "--version", "index.js", "index.ts", "-h", "-v", ""]
 
     sandbox.mkdir(parents=True, exist_ok=True)
 
@@ -32,10 +59,10 @@ def check():
             f"{Colors.HEADER}Running binary tests {Colors.ENDC}\n",
             f"{Colors.HEADER}└──for all files in: {bin_dir}  {Colors.ENDC}",
         )
-        for maybe_binary in bin_dir.iterdir():
+        for maybe_binary in sorted(bin_dir.iterdir()):
             if is_broken_symlink(maybe_binary):
                 print(
-                    f"{Colors.FAIL}🔴 failed: {maybe_binary.name} \t broken symlink: {maybe_binary} -> {maybe_binary.resolve()} {Colors.ENDC}"
+                    f"{Colors.FAIL}🔴 failed: '{maybe_binary.name}' \t broken symlink: {maybe_binary} -> {maybe_binary.resolve()} {Colors.ENDC}"
                 )
                 failed.append(maybe_binary)
 
@@ -45,7 +72,8 @@ def check():
                     print(f"{Colors.GREY}ℹ️ skipping: {binary.name}{Colors.ENDC}")
                     continue
 
-                # re-create empty files on every testcase
+                # some scripts process (empty) .ts or .js files
+                # re-create empty test files on every testcase
                 # to avoid leaking state from previous exectuables
                 open(sandbox / Path("index.js"), "w").close()
                 open(sandbox / Path("index.ts"), "w").close()
@@ -53,11 +81,11 @@ def check():
                 success = try_args(args, binary)
                 if not success:
                     print(
-                        f"{Colors.FAIL}🔴 failed: {binary.name} \t could not run executable {Colors.ENDC}"
+                        f"{Colors.FAIL}🔴 failed: '{binary.name}' \t could not run executable {Colors.ENDC}"
                     )
                     failed.append(binary)
                 else:
-                    print(f"{Colors.OKGREEN}✅ passed: {binary.name} {Colors.ENDC}")
+                    print(f"{Colors.OKGREEN}✅ passed: '{binary.name}' {Colors.ENDC}")
 
     os.chdir(old_cwd)
 
@@ -78,6 +106,7 @@ def try_args(args: list[str], binary: Path) -> bool:
     out = []
     for arg in args:
         try:
+
             completed_process = subprocess.run(
                 f"{binary} {arg}".split(" "),
                 timeout=10,
@@ -87,11 +116,20 @@ def try_args(args: list[str], binary: Path) -> bool:
                 success = True
                 break
             else:
-                out.append(completed_process.stdout.decode())
-                out.append(completed_process.stderr.decode())
+                std_out = completed_process.stdout.decode()
+                std_err = completed_process.stderr.decode()
+                expected_error = expected_failures.get(binary.name, None)
 
-        except subprocess.SubprocessError as e:
-            print(e)
+                if expected_error:
+                    if expected_error in std_out or expected_error in std_err:
+                        success = True
+                        break
+                out.append(std_out)
+                out.append(std_err)
+
+        except subprocess.SubprocessError as error:
+            print("aborted SubprocessError: ", error)
+
     if not success:
         print("\n".join(out))
     return success

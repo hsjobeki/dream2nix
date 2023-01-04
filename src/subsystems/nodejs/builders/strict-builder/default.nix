@@ -54,6 +54,14 @@
       mv node-* $out
     '';
 
+    pyTests = pkgs.python310Packages.buildPythonApplication {
+      name = "tests";
+      src = ../../tests/bin_tests;
+      format = "pyproject";
+      nativeBuildInputs = with pkgs.python310Packages; [poetry mypy flake8 black];
+      doCheck = false;
+    };
+
     # e.g.
     # {
     #   "@babel/core": ["1.0.0","2.0.0"]
@@ -340,6 +348,11 @@
 
 
               runHook postInstall
+            '';
+
+            doInstallCheck = isMainPackage name version;
+            installCheckPhase = ''
+              ${pyTests}/bin/d2nCheck
             '';
           }
       );
