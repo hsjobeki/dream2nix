@@ -19,7 +19,7 @@
 
 # module parts
 /src/lib.nix @DavHau
-/src/
+# ...
 
 # debian subsystem
 
