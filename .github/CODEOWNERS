@@ -12,4 +12,28 @@
 # permissions, you need to list all members of the team with commit access individually.
 
 # This file
-/.github/CODEOWNERS @davHau
+/.github/CODEOWNERS @DavHau
+
+# Everything
+/* @DavHau @yusdacra
+
+# module parts
+/src/lib.nix @DavHau
+/src/
+
+# debian subsystem
+
+# go subsystem
+
+# haskell subsystem
+
+# nodejs subsystem
+/src/subsystems/nodejs/* @hsjobeki
+
+# php subsystem
+
+# python subsystem
+
+# racket subsystem
+
+# rust subsystem
