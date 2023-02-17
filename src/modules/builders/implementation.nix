@@ -3,7 +3,7 @@
   defaults = {
     # TODO: define a priority in each builder and remove the defaults here.
     rust = "crane";
-    nodejs = "granular-nodejs";
+    nodejs = "strict-builder";
     python = "simple-python";
     php = "granular-php";
     haskell = "simple-haskell";
