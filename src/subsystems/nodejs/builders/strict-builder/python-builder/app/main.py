@@ -30,8 +30,8 @@ def d2nNodeModules():
     - on packages with scripts that could need them
     """
     package_json = get_package_json()
-    if is_main_package() or has_scripts(package_json):
-        create_node_modules()
+    # if is_main_package() or has_scripts(package_json):
+    create_node_modules()
 
 
 def makeOutputs():

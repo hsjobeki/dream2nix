@@ -1,7 +1,7 @@
 {
   lib,
   getDependencies,
-  deps,
+  # deps,
   allPackages,
 }: let
   # l = lib // builtins;
@@ -42,7 +42,26 @@
   #
   # type: depsTree :: DependencyTree
   # (see insertDependencyAttrs for declaration)
-  depsTree = let
+  # depsTree = let
+  #   getDeps = tree: (b.foldl'
+  #     (
+  #       dependencyTree: dep:
+  #         insertDependencyAttrs {
+  #           inherit dependencyTree dep;
+  #           dependencyAttrs = {
+  #             deps = getDeps (getDependencies dep.name dep.version);
+  #             derivation = allPackages.${dep.name}.${dep.version}.lib;
+  #           };
+  #         }
+  #     )
+  #     {}
+  #     tree);
+  # in (getDeps deps);
+
+  /*
+  type: { name :: String, version :: String } -> DependencyTree
+  */
+  getDepsTree = root: let
     getDeps = tree: (b.foldl'
       (
         dependencyTree: dep:
@@ -56,7 +75,7 @@
       )
       {}
       tree);
-  in (getDeps deps);
+  in (getDeps root);
 in {
-  inherit depsTree;
+  inherit getDepsTree;
 }

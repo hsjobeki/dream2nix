@@ -1,0 +1,81 @@
+{
+  "all": [
+    {
+      "derivation": "/nix/store/slakn7i7x4yc9zydj7xvf7z6agiw5iv7-__at__hsjobeki__slash__c-1.0.0-lib",
+      "directDependencies": [],
+      "name": "@hsjobeki/c",
+      "nodePath": "/node_modules",
+      "path": [
+        { "name": "@hsjobeki/a", "version": "1.1.2" },
+        { "name": "@hsjobeki/b", "version": "1.0.0" }
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "derivation": "/nix/store/zbrpzizl7dlh3a1frlhvhq44k4z104a2-__at__hsjobeki__slash__d-1.0.0-lib",
+      "directDependencies": [],
+      "name": "@hsjobeki/d",
+      "path": [
+        { "name": "@hsjobeki/a", "version": "1.1.2" },
+        { "name": "@hsjobeki/b", "version": "1.0.0" }
+      ],
+      "version": "1.0.0"
+    },
+    {
+      "derivation": "/nix/store/yphvvqi5vw2s0f4ph0vxd3a98npwd8c4-__at__hsjobeki__slash__b-1.0.0-lib",
+      "directDependencies": [
+        { "name": "@hsjobeki/c", "version": "1.0.0" },
+        { "name": "@hsjobeki/d", "version": "1.0.0" }
+      ],
+      "name": "@hsjobeki/b",
+      "path": [{ "name": "@hsjobeki/a", "version": "1.1.2" }],
+      "version": "1.0.0"
+    },
+    {
+      "derivation": "/nix/store/q6pyg94wv5rry22v3j9qx69y5dcam8kz-__at__hsjobeki__slash__d-2.0.0-lib",
+      "directDependencies": [],
+      "name": "@hsjobeki/d",
+      "path": [
+        { "name": "@hsjobeki/a", "version": "1.1.2" },
+        { "name": "@hsjobeki/c", "version": "2.0.1" }
+      ],
+      "version": "2.0.0"
+    },
+    {
+      "derivation": "/nix/store/d2i4jjnfziqsfnhjnhy5rfzk7sd2fv06-__at__hsjobeki__slash__c-2.0.1-lib",
+      "directDependencies": [{ "name": "@hsjobeki/d", "version": "2.0.0" }],
+      "name": "@hsjobeki/c",
+      "path": [{ "name": "@hsjobeki/a", "version": "1.1.2" }],
+      "version": "2.0.1"
+    },
+    {
+      "derivation": "/nix/store/fhd2qpmdlbryciq3byz2rwcga234cw4y-__at__hsjobeki__slash__d-3.0.0-lib",
+      "directDependencies": [],
+      "name": "@hsjobeki/d",
+      "path": [{ "name": "@hsjobeki/a", "version": "1.1.2" }],
+      "version": "3.0.0"
+    },
+    {
+      "derivation": "/nix/store/h70mch6mvzcbk6s93w0cqg67ykpgrbbw-__at__hsjobeki__slash__a-1.1.2-lib",
+      "directDependencies": [
+        { "name": "@hsjobeki/b", "version": "1.0.0" },
+        { "name": "@hsjobeki/c", "version": "2.0.1" },
+        { "name": "@hsjobeki/d", "version": "3.0.0" }
+      ],
+      "name": "@hsjobeki/a",
+      "path": [],
+      "version": "1.1.2"
+    },
+    {
+      "derivation": "/nix/store/slakn7i7x4yc9zydj7xvf7z6agiw5iv7-__at__hsjobeki__slash__c-1.0.0-lib",
+      "directDependencies": [],
+      "name": "@hsjobeki/c",
+      "nodePath": "/node_modules",
+      "path": [],
+      "version": "1.0.0"
+    }
+  ],
+  "name": "@hsjobeki/d",
+  "parent": { "name": "", "version": "" },
+  "version": "1.0.0"
+}

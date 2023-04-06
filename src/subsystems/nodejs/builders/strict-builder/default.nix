@@ -27,7 +27,7 @@
     # where versions is a list of version strings
     # type:
     #   packageVersions :: {
-    #    ${pname} :: [ ${version} ]
+    #    ${pname} :: [ version@String ]
     # }
     packageVersions,
     # function which applies overrides to a package
@@ -97,7 +97,7 @@
 
       inherit
         (import ./lib/node-modules-tree.nix {
-          inherit pkgs lib getDependencies packageVersions name version;
+          inherit pkgs lib getDependencies name version;
           nodeModulesBuilder = "${nodejsBuilder}/bin/d2nNodeModules";
         })
         mkNodeModules
@@ -106,10 +106,10 @@
       inherit
         (import ./lib/dependencies.nix {
           inherit lib getDependencies allPackages;
-          deps = directDeps;
         })
-        depsTree
+        getDepsTree
         ;
+      depsTree = getDepsTree directDeps;
 
       # path of the current package.json
       # needed to check if a package has 'pre-/post-/install-scripts'
@@ -121,18 +121,26 @@
       # build flag shows if package has the pre-pos-install scripts.
       # only sub-packages with those scripts need their own node_modules derivation
       hasScripts = !(packageInfo ? scripts) || (l.any (script: l.any (q: script == q) ["install" "preinstall" "postinstall"]) (b.attrNames packageInfo.scripts));
-      needNodeModules = hasScripts || isMain;
+      needNodeModules = hasScripts || isMain || true;
 
       # type: devShellNodeModules :: Derivation
       devShellNodeModules = mkNodeModules {
         isMain = true;
         installMethod = "copy";
         inherit pname version depsTree packageJSON;
+        fixedRootPackages =
+          if isMain
+          then packageVersions
+          else {};
       };
       # type: nodeModules :: Derivation
       nodeModules = mkNodeModules {
         inherit installMethod;
         inherit isMain;
+        fixedRootPackages =
+          if isMain
+          then packageVersions
+          else {};
         inherit pname version depsTree packageJSON;
       };
 
@@ -236,6 +244,7 @@
                 npm --production --offline --nodedir=$nodeSources run install
               fi
               if [ "$(jq '.scripts.postinstall' ./package.json)" != "null" ]; then
+                ls -la ./node_modules
                 npm --production --offline --nodedir=$nodeSources run postinstall
               fi
             fi

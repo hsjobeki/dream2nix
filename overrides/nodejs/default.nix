@@ -28,6 +28,17 @@
   '';
 in
   ## OVERRIDES
+  /*
+  #comment-remarkType:
+  Type:
+    foo :: Int
+    builtins
+    true
+    false
+
+  Example:
+
+  */
   {
     atom = {
       build = {

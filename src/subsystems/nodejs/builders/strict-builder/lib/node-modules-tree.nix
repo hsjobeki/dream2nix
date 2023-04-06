@@ -1,16 +1,15 @@
 {
   lib,
   getDependencies,
-  packageVersions,
   name,
   version,
-  # resolveChildren,
   pkgs,
   nodeModulesBuilder,
 }: let
   l = lib // builtins;
   b = builtins;
 
+  debug = msg: val: (l.trace "${msg}: ${(l.toJSON val)}" val);
   /*
   Function that resolves local vs global dependencies.
   We copy dependencies into the global node_modules scope, if they don't have
@@ -39,7 +38,9 @@
     version,
     ancestorCandidates,
   }: let
-    directDeps = getDependencies name version;
+    directDeps =
+      getDependencies name version;
+
     /*
     Determine if a dependency needs to be installed as a local dep.
     Node modules automatically inherits all ancestors and their siblings as
@@ -74,21 +75,21 @@
   in
     dependencies;
 
-  # in case of a conflict pick the highest semantic version as root. All other version must then be private if used.
-  # TODO: pick the version that minimizes the tree
-  pickVersion = name: versions: directDepsAttrs.${name} or (l.head (l.sort (a: b: l.compareVersions a b == 1) versions));
-  rootPackages = l.mapAttrs (name: versions: pickVersion name versions) packageVersions;
-
-  # direct dependencies are all direct dependencies parsed from the lockfile at root level.
-  directDeps = getDependencies name version;
-
-  # type: { ${name} :: String } # e.g  { "prettier" = "1.2.3"; }
-  # set with all direct dependencies contains every 'root' package with only one version
-  directDepsAttrs = l.listToAttrs (b.map (dep: l.nameValuePair dep.name dep.version) directDeps);
-
   # build the node_modules tree from all known rootPackages
-  # type: NodeModulesTree :: { ${name} :: { version :: String, dependencies :: NodeModulesTree } }
-  nodeModulesTree =
+  # type: NodeModulesTree :: { ${pname} :: version@String } -> { ${name} :: { version :: String, dependencies :: NodeModulesTree } }
+  nodeModulesTree = packageVersions: let
+    # in case of a conflict pick the highest semantic version as root. All other version must then be private if used.
+    # TODO: pick the version that minimizes the tree
+    pickVersion = name: versions: directDepsAttrs.${name} or (l.head (l.sort (a: b: l.compareVersions a b == 1) versions));
+    rootPackages = l.mapAttrs (name: versions: pickVersion name versions) packageVersions;
+
+    # direct dependencies are all direct dependencies parsed from the lockfile at root level.
+    directDeps = getDependencies name version;
+
+    # type: { ${name} :: String } # e.g  { "prettier" = "1.2.3"; }
+    # set with all direct dependencies contains every 'root' package with only one version
+    directDepsAttrs = l.listToAttrs (b.map (dep: l.nameValuePair dep.name dep.version) directDeps);
+  in
     l.mapAttrs (
       name: version: let
         dependencies = resolveChildren {
@@ -108,7 +109,11 @@
       pname :: String,
       version :: String,
       isMain :: Bool,
-      installMethod :: "copy" | "symlink",
+      installMethod :: "copy" | "symlink"
+      # optional constraints for building node_modules
+      # e.g. when npm-lockfile has already resolved all packages of the main package,
+      # otherwise this should be empty to create independent thus reusable leaf derivations
+      fixedRootPackages :: { ${pname} :: String },
       depsTree :: DependencyTree,
       nodeModulesTree :: NodeModulesTree,
       packageJSON :: Path
@@ -121,20 +126,28 @@
     version,
     depsTree,
     packageJSON,
-  }:
-  # dependency tree as JSON needed to build node_modules
-  let
+    fixedRootPackages ? {},
+  }: let
     depsTreeJSON = b.toJSON depsTree;
-    nmTreeJSON = b.toJSON nodeModulesTree;
+    rootPackagesJson = b.toJSON fixedRootPackages;
+    dependencies = import ./lib.nix {
+      inherit lib;
+      tree = depsTree;
+    };
+    inherit (dependencies) packageVersions resolved;
+    packageVersionsJson = b.toJSON packageVersions;
+    resolvedJson = b.toJSON resolved;
+    nmTreeJSON = b.toJSON (nodeModulesTree packageVersions);
   in
-    pkgs.runCommandLocal "node-modules" {
+    pkgs.runCommandLocal "node-modules-${pname}" {
       pname = "node_modules-${pname}";
       inherit version;
 
+      inherit rootPackagesJson packageVersionsJson resolvedJson;
       buildInputs = with pkgs; [python3];
 
       inherit nmTreeJSON depsTreeJSON;
-      passAsFile = ["nmTreeJSON" "depsTreeJSON"];
+      passAsFile = ["nmTreeJSON" "depsTreeJSON" "hoistedJson" "rootPackagesJson" "packageVersionsJson" "resolvedJson"];
     } ''
 
       export isMain=${b.toString isMain}
@@ -147,6 +160,13 @@
       if [ ! -d "$out" ]; then
         mkdir -p $out
       fi
+      echo "Build node_modules for $pname-$version > $out"
+
+      cp $resolvedJsonPath $out/resolved.json
+      cp $rootPackagesJsonPath $out/rootPackages.json
+      cp $packageVersionsJsonPath $out/packageVersions.json
+      cp $depsTreeJSONPath $out/depsTree.json
+      cp $nmTreeJSONPath $out/nmTree.json
     '';
 in {
   inherit mkNodeModules;
