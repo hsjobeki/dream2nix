@@ -5,8 +5,10 @@
         <meta charset="UTF-8">
         <title>dream2nix documentation</title>
         <meta name="robots" content="noindex" />
+
+
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -17,25 +19,29 @@
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
         <link rel="stylesheet" href="css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -51,7 +57,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -63,12 +69,14 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -76,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Guides</li><li class="chapter-item expanded "><a href="guides/getting-started-python.html"><strong aria-hidden="true">2.</strong> Python: getting started in 10 minutes</a></li><li class="chapter-item expanded "><a href="guides/getting-started-nodejs.html"><strong aria-hidden="true">3.</strong> Node.js: quickstart</a></li><li class="chapter-item expanded affix "><li class="part-title">Subsystems</li><li class="chapter-item expanded "><a href="subsystems/rust.html"><strong aria-hidden="true">4.</strong> Rust</a></li><li class="chapter-item expanded "><a href="subsystems/python.html"><strong aria-hidden="true">5.</strong> Python</a></li><li class="chapter-item expanded "><a href="subsystems/node.html"><strong aria-hidden="true">6.</strong> Node.js</a></li><li class="chapter-item expanded "><a href="subsystems/haskell.html"><strong aria-hidden="true">7.</strong> Haskell</a></li><li class="chapter-item expanded "><a href="subsystems/php.html"><strong aria-hidden="true">8.</strong> PHP</a></li><li class="chapter-item expanded affix "><li class="part-title">Concepts / API</li><li class="chapter-item expanded "><a href="intro/architecture.html"><strong aria-hidden="true">9.</strong> Architecture</a></li><li class="chapter-item expanded "><a href="intro/translators.html"><strong aria-hidden="true">10.</strong> Translators</a></li><li class="chapter-item expanded "><a href="api/generic-lock.html"><strong aria-hidden="true">11.</strong> Generic Lockfile</a></li><li class="chapter-item expanded "><a href="intro/indexers.html"><strong aria-hidden="true">12.</strong> Indexers</a></li><li class="chapter-item expanded "><a href="intro/fetchers.html"><strong aria-hidden="true">13.</strong> Fetchers</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">14.</strong> Builders</div></li><li class="chapter-item expanded "><a href="intro/override-system.html"><strong aria-hidden="true">15.</strong> Override system</a></li><li class="chapter-item expanded affix "><li class="part-title">Correlation with nixpkgs</li><li class="chapter-item expanded "><a href="intro/nixpkgs-improvements.html"><strong aria-hidden="true">16.</strong> Nixpkgs improvements</a></li><li class="chapter-item expanded affix "><li class="part-title">Contributing</li><li class="chapter-item expanded "><a href="extending-dream2nix.html"><strong aria-hidden="true">17.</strong> Extending dream2nix</a></li><li class="chapter-item expanded "><a href="contributing/contributing.html"><strong aria-hidden="true">18.</strong> Contributing</a></li><li class="chapter-item expanded affix "><li class="part-title">Development Roundups</li><li class="chapter-item expanded "><a href="development-roundups/2022-april-june.html"><strong aria-hidden="true">19.</strong> April - June 2022</a></li><li class="chapter-item expanded "><a href="development-roundups/2022-july-september.html"><strong aria-hidden="true">20.</strong> July - September 2022</a></li><li class="chapter-item expanded affix "><li class="part-title">WIP</li><li class="chapter-item expanded "><a href="v1-api/summary.html"><strong aria-hidden="true">21.</strong> v1 API</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="v1-api/problems.html"><strong aria-hidden="true">21.1.</strong> problems of the current dream2nix</a></li><li class="chapter-item expanded "><a href="v1-api/users.html"><strong aria-hidden="true">21.2.</strong> users of dream2nix</a></li><li class="chapter-item expanded "><a href="v1-api/packaging/nodejs-init-project.html"><strong aria-hidden="true">21.3.</strong> v1 packaging: project initialization</a></li><li class="chapter-item expanded "><a href="v1-api/packaging/nodejs-workspaces.html"><strong aria-hidden="true">21.4.</strong> v1 packaging: workspaces</a></li><li class="chapter-item expanded "><a href="v1-api/packaging/nodejs-multiple-repos.html"><strong aria-hidden="true">21.5.</strong> v1 packaging: multiple repos</a></li><li class="chapter-item expanded "><a href="v1-api/packaging/monorepo.html"><strong aria-hidden="true">21.6.</strong> v1 packaging: monorepo</a></li><li class="chapter-item expanded "><a href="v1-api/consuming/inspect-options.html"><strong aria-hidden="true">21.7.</strong> v1 consuming: inspect package options</a></li><li class="chapter-item expanded "><a href="v1-api/consuming/override.html"><strong aria-hidden="true">21.8.</strong> v1 consuming: override packages</a></li><li class="chapter-item expanded "><a href="v1-api/integrating/integrate-lang2nix-pure.html"><strong aria-hidden="true">21.9.</strong> v1 integrating: lang2nix tool (pure)</a></li><li class="chapter-item expanded "><a href="v1-api/integrating/integrate-lang2nix-impure.html"><strong aria-hidden="true">21.10.</strong> v1 integrating: lang2nix tool (code-gen/impure)</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Examples</li><li class="chapter-item expanded "><a href="examples.html"><strong aria-hidden="true">2.</strong> dream2nix examples</a></li><li class="chapter-item expanded affix "><li class="part-title">Concepts</li><li class="chapter-item expanded "><a href="modules.html"><strong aria-hidden="true">3.</strong> dream2nix modules</a></li><li class="chapter-item expanded affix "><li class="part-title">Development Roundups</li><li class="chapter-item expanded "><a href="development-roundups/2022-april-june.html"><strong aria-hidden="true">4.</strong> April - June 2022</a></li><li class="chapter-item expanded "><a href="development-roundups/2022-july-september.html"><strong aria-hidden="true">5.</strong> July - September 2022</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -84,7 +92,7 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
+                                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -94,7 +102,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -111,6 +119,7 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+
                     </div>
                 </div>
 
@@ -124,8 +133,9 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -135,1680 +145,133 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="dream2nix"><a class="header" href="#dream2nix">dream2nix</a></h1>
-<p>Automate reproducible packaging for various language ecosystems</p>
+                        <p align="center">
+  <picture>
+    <source width="600" media="(prefers-color-scheme: dark)" srcset="https://gist.githubusercontent.com/DavHau/755fed3774e89c0b9b8953a0a25309fa/raw/0312cc4f785de36212f4303d23298f07c13549dc/dream2nix-dark.png">
+    <source width="600" media="(prefers-color-scheme: light)" srcset="https://gist.githubusercontent.com/DavHau/755fed3774e89c0b9b8953a0a25309fa/raw/e2a12a60ae49aa5eb11b42775abdd1652dbe63c0/dream2nix-01.png">
+    <img width="600" alt="dream2nix - A framework for automated nix packaging" src="https://gist.githubusercontent.com/DavHau/755fed3774e89c0b9b8953a0a25309fa/raw/e2a12a60ae49aa5eb11b42775abdd1652dbe63c0/dream2nix-01.png">
+  </picture>
+  <br>
+  Automate reproducible packaging for various language ecosystems
+  <br>
+  <a href="https://nix-community.github.io/dream2nix/">Documentation</a> |
+  <a href="https://github.com/nix-community/dream2nix/tree/main/examples/dream2nix-repo">Example Repo</a> |
+  <a href="https://github.com/nix-community/dream2nix/tree/main/examples">Example Packages</a>
+</p>
 <p>!!! Warning: dream2nix is unstable software. While simple UX is one of our main focus points, the APIs  are still under development. Do expect changes that will break your setup.</p>
-<p>This project was funded by <a href="https://nlnet.nl/">NLnet</a>, which is a great way to get your open source project funded. <strong>Applications are still open, you can <a href="https://nlnet.nl/propose">apply today</a></strong>.
-For more information about dream2nix' funding, please refer to the <a href="https://github.com/nix-community/dream2nix#funding">funding section of the readme</a></p>
+<h3 id="legacy-dream2nix"><a class="header" href="#legacy-dream2nix">legacy dream2nix</a></h3>
+<p>Dream2nix is currently in the process of being refactored to make use of drv-parts. Not all features and subsystems are migrated yet. If you prefer continue using the <code>makeFlakeOutputs</code> interface, please refer to the <a href="https://github.com/nix-community/dream2nix/tree/legacy">legacy branch</a> of dream2nix.</p>
+<h3 id="funding"><a class="header" href="#funding">Funding</a></h3>
+<p>This project was funded through the <a href="https://nlnet.nl/assure">NGI Assure</a> Fund, a fund established by <a href="https://nlnet.nl/">NLnet</a> with financial support from the European Commission's <a href="https://ngi.eu/">Next Generation Internet</a> programme, under the aegis of DG Communications Networks, Content and Technology under grant agreement No 957073. <strong>Applications are still open, you can <a href="https://nlnet.nl/propose">apply today</a></strong>.</p>
+<p>If your organization wants to support the project with extra funding in order to add support for more languages or new features, please contact one of the maintainers.</p>
+<h3 id="documentation"><a class="header" href="#documentation">Documentation</a></h3>
+<p><a href="https://nix-community.github.io/dream2nix">👉 To the docs</a></p>
+<h3 id="presentations"><a class="header" href="#presentations">Presentations</a></h3>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=AsCvRZukX0E">👉 2023: dream2nix based on drv-parts</a></li>
+<li><a href="https://www.youtube.com/watch?v=jqCfHMvCsfQ">👉 2021: Original dream2nix presentation</a> (Examples are outdated)</li>
+</ul>
+<h3 id="get-in-touch"><a class="header" href="#get-in-touch">Get in touch</a></h3>
+<p><a href="https://matrix.to/#/#dream2nix:nixos.org">👉 matrix chat room</a></p>
+<h3 id="contribute"><a class="header" href="#contribute">Contribute</a></h3>
+<p><a href="https://github.com/nix-community/dream2nix">👉 GitHub repo</a></p>
+<p><a href="https://github.com/nix-community/dream2nix/issues">👉 issues</a></p>
+<h3 id="goals"><a class="header" href="#goals">Goals</a></h3>
 <p>dream2nix focuses on the following aspects:</p>
 <ul>
 <li>Modularity</li>
 <li>Customizability</li>
 <li>Maintainability</li>
-<li>Nixpkgs Compatibility, by not enforcing <a href="https://nixos.wiki/wiki/Glossary" title="glossary">IFD (import from derivation)</a></li>
-<li>Code de-duplication across 2nix converters</li>
-<li>Code de-duplication in nixpkgs</li>
-<li>Risk-free opt-in aggregated fetching (larger <a href="https://nixos.wiki/wiki/Glossary" title="glossary">FODs</a>, less checksums)</li>
-<li>Common UI across 2nix converters</li>
+<li>Code de-duplication across 2nix solutions</li>
+<li>Common UI across 2nix solutions</li>
 <li>Reduce effort to develop new 2nix solutions</li>
 <li>Exploration and adoption of new nix features</li>
 <li>Simplified updating of packages</li>
 </ul>
 <p>The goal of this project is to create a standardized, generic, modular framework for automated packaging solutions, aiming for better flexibility, maintainability and usability.</p>
 <p>The intention is to integrate many existing 2nix converters into this framework, thereby improving many of the previously named aspects and providing a unified UX for all 2nix solutions.</p>
-<h3 id="modularity"><a class="header" href="#modularity">Modularity:</a></h3>
-<p>The following phases which are generic to basically all existing 2nix solutions:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="examples-for-dream2nix"><a class="header" href="#examples-for-dream2nix">Examples for dream2nix</a></h1>
 <ul>
-<li>parsing project metadata</li>
-<li>resolving/locking dependencies (not always required)</li>
-<li>fetching sources</li>
-<li>building/installing packages</li>
-</ul>
-<p>... should be separated from each other with well defined interfaces.</p>
-<p>This will allow for free composition of different approaches for these phases.
-The user should be able to freely choose between:</p>
+<li><a href="https://github.com/nix-community/dream2nix/tree/main/examples/dream2nix-repo">👉 example repository</a></li>
+<li><a href="https://github.com/nix-community/dream2nix/tree/main/examples/packages">👉 example packages</a>
 <ul>
-<li>input metadata formats (eg. lock file formats)</li>
-<li>metadata fetching/translation strategies: IFD vs. in-tree</li>
-<li>source fetching strategies: granular fetching vs fetching via single large FOD to minimize expression file size</li>
-<li>installation strategies: build dependencies individually vs inside a single derivation.</li>
+<li><a href="https://github.com/nix-community/dream2nix/tree/main/examples/packages/basics">👉 basics</a></li>
+<li><a href="https://github.com/nix-community/dream2nix/tree/main/examples/packages/single-language">👉 single-language</a></li>
+<li><a href="https://github.com/nix-community/dream2nix/tree/main/examples/packages/multi-lanuage">👉 multi-language</a></li>
 </ul>
-<h3 id="customizability"><a class="header" href="#customizability">Customizability</a></h3>
-<p>Every Phase mentioned in the previous section should be customizable at a high degree via override functions. Practical examples:</p>
-<ul>
-<li>Inject extra requirements/dependencies</li>
-<li>fetch sources from alternative locations</li>
-<li>replace or modify sources</li>
-<li>customize the build/installation procedure</li>
+</li>
 </ul>
-<h3 id="maintainability"><a class="header" href="#maintainability">Maintainability</a></h3>
-<p>Due to the modular architecture with strict interfaces, contributors can add support for new lock-file formats or new strategies for fetching, building, installing more easily.</p>
-<h3 id="compatibility"><a class="header" href="#compatibility">Compatibility</a></h3>
-<p>Depending on where the nix code is used, different approaches are desired or discouraged. While IFD might be desired for some out of tree projects to achieve simplified UX, it is strictly prohibited in nixpkgs due to nix/hydra limitations.
-All solutions which follow the dream2nix specification will be compatible with both approaches without having to re-invent the tool.</p>
-<h3 id="code-de-duplication"><a class="header" href="#code-de-duplication">Code de-duplication</a></h3>
-<p>Common problems that apply to many 2nix solutions can be solved once by the framework. Examples:</p>
-<ul>
-<li>handling cyclic dependencies</li>
-<li>handling sources from various origins (http, git, local, ...)</li>
-<li>generate nixpkgs/hydra friendly output (no IFD)</li>
-<li>good user interface</li>
-</ul>
-<h3 id="code-de-duplication-in-nixpkgs"><a class="header" href="#code-de-duplication-in-nixpkgs">Code de-duplication in nixpkgs</a></h3>
-<p>Essential components like package update scripts or fetching and override logic are provided by the dream2nix framework and are stored only once in the source tree instead of several times.</p>
-<h3 id="risk-free-opt-in-fod-fetching"><a class="header" href="#risk-free-opt-in-fod-fetching">Risk free opt-in FOD fetching</a></h3>
-<p>Optionally, to save more storage space, individual hashes for source can be omitted and a single large FOD used instead.
-Due to a unified minimalistic fetching layer the risk of FOD hash breakages should be very low.</p>
-<h3 id="common-ui-across-many-2nix-solutions"><a class="header" href="#common-ui-across-many-2nix-solutions">Common UI across many 2nix solutions</a></h3>
-<p>2nix solutions which follow the dream2nix framework will have a unified UI for workflows like project initialization or code generation. This will allow quicker onboarding of new users by providing familiar workflows across different build systems.</p>
-<h3 id="reduced-effort-to-develop-new-2nix-solutions"><a class="header" href="#reduced-effort-to-develop-new-2nix-solutions">Reduced effort to develop new 2nix solutions</a></h3>
-<p>Since the framework already solves common problems and provides an interface for integrating new build systems, developers will have an easier time creating their next 2nix solution.</p>
-<h3 id="further-reading"><a class="header" href="#further-reading">Further reading</a></h3>
-<ul>
-<li><a href="./intro/architecture.html">Architectural Considerations</a></li>
-<li><a href="./intro/nixpkgs-improvements.html">Potential impact on nixpkgs</a></li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="build-your-python-project-with-nix-in-10-minutes"><a class="header" href="#build-your-python-project-with-nix-in-10-minutes">Build your python project with nix in 10 minutes</a></h1>
-<p>!!! Warning: dream2nix is unstable software. While simple UX is one of our main focus points, the APIs  are still under development. Do expect changes that will break your setup.</p>
-<p>This guide walks you through the process of setting up nix for your project using dream2nix. This will allow your project's build and dev-environment to be reproduced by machines of other developers or CI systems with high accuracy.</p>
-<h2 id="outline"><a class="header" href="#outline">Outline</a></h2>
-<ol start="0">
-<li>Install nix</li>
-<li>Navigate to your python project</li>
-<li>Initialize the dream2nix flake</li>
-<li>Define target platform(s)</li>
-<li>List the available packages</li>
-<li>Build the project</li>
-<li>Create a development shell</li>
-<li>Resolve impurities</li>
-</ol>
-<h2 id="install-nix"><a class="header" href="#install-nix">Install nix</a></h2>
-<p>If you don't have nix already, check out <a href="https://nixos.org/download.html">nixos.org/download.html</a> on how to install it.</p>
-<h3 id="enable-the-nix-flakes-feature"><a class="header" href="#enable-the-nix-flakes-feature">Enable the nix flakes feature</a></h3>
-<p>For internal dependency management dream2nix requires the experimental nix feature <code>flakes</code> being enabled.</p>
-<pre><code>export NIX_CONFIG=&quot;extras-experimental-features = flakes nix-command&quot;
-</code></pre>
-<p>If you find yourself using dream2nix regularly, you can permanently save these settings by adding the following line to your <code>/etc/nix/nix.conf</code>:</p>
-<pre><code>experimental-features = flakes nix-command
-</code></pre>
-<h2 id="navigate-to-your-python-project"><a class="header" href="#navigate-to-your-python-project">Navigate to your python project</a></h2>
-<p>In this example I will clone the python project <a href="https://github.com/httpie/httpie"><code>httpie</code></a> to <code>/tmp/my_project</code> as an example.</p>
-<pre><code class="language-command">&gt; git clone https://github.com/httpie/httpie /tmp/my_project
-&gt; cd /tmp/my_project
-</code></pre>
-<h2 id="initialize-the-dream2nix-flakenix"><a class="header" href="#initialize-the-dream2nix-flakenix">Initialize the dream2nix flake.nix</a></h2>
-<pre><code class="language-command">&gt; nix flake init -t github:nix-community/dream2nix#simple
-wrote: /tmp/my_project/flake.nix
-</code></pre>
-<p>Great, this created a new file <code>flake.nix</code> which is like a recipe that tells nix how to build our python project or how to assemble a development environment for it.
-By modifying this file, we can tweak settings and change the way our package gets built by nix. But for now we just go with the defaults.</p>
-<h2 id="define-target-platforms"><a class="header" href="#define-target-platforms">Define target platform(s)</a></h2>
-<p>We have the flake setup, now we need to define the supported systems,
-this is necessary because nix can do multi platform and cross-platform
-builds so we need to tell it what can be built and where.</p>
-<p>There are 2 ways to do this, either with a <code>nix_systems</code> file,
-or we can write the target platforms inline to our <code>flake.nix</code>.</p>
-<h3 id="nix_systems"><a class="header" href="#nix_systems">nix_systems</a></h3>
-<p>We can create a <code>nix_systems</code> file with the current system:</p>
-<pre><code class="language-command">&gt; nix eval --impure --raw --expr 'builtins.currentSystem' &gt; ./nix_systems
-&gt; git add ./nix_systems
-</code></pre>
-<p>The <code>nix_systems</code> file is simply a list of the supported systems, for example:</p>
-<pre><code>x86_64-linux
-</code></pre>
-<p>Remember to add the file <code>./nix_systems</code> to git, or it won't be picked up by nix.
-If you want to support more platforms later, just add more lines to that file.</p>
-<h3 id="inline"><a class="header" href="#inline">inline</a></h3>
-<p>Alternatively, we can define the targets in the <code>flake.nix</code> like so:</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="why-modules"><a class="header" href="#why-modules">Why Modules?</a></h1>
+<p>Declaring derivations as modules solves a number of issues.
+For more details on the problems, visit <a href="https://github.com/DavHau/pkgs-modules">DavHau/pkgs-modules</a>.
+Also I recommend watching @edolstra 's <a href="https://www.youtube.com/watch?v=dTd499Y31ig">talk about this topic</a>.</p>
+<h1 id="benefits"><a class="header" href="#benefits">Benefits</a></h1>
+<h2 id="deprecate-override-functions"><a class="header" href="#deprecate-override-functions">Deprecate override functions</a></h2>
+<p>Changing options of packages in nixpkgs can require chaining different override functions like this:</p>
 <pre><code class="language-nix">{
-  inputs.dream2nix.url = &quot;github:nix-community/dream2nix&quot;;
-  outputs = inp:
-    inp.dream2nix.lib.makeFlakeOutputs {
-      systems = [&quot;x86_64-linux&quot;];         # &lt;- This line.
-      config.projectRoot = ./.;
-      source = ./.;
-      projects = ./projects.toml;
-    };
+  htop-mod = let
+    htop-overridden = pkgs.htop.overrideAttrs (old: {
+      pname = &quot;htop-mod&quot;;
+    });
+  in
+    htop-overridden.override (old: {
+      sensorsSupport = false;
+    });
 }
 </code></pre>
-<p>This has the advantage of keeping all the configuration in a single file.</p>
-<h2 id="populating-projectstoml"><a class="header" href="#populating-projectstoml">Populating projects.toml</a></h2>
-<p>dream2nix also needs to know things about the project(s) at hand. 
-In the <code>flake.nix</code> file you can see it's expecting a <code>./projects.toml</code>. 
-The easiest way to create and populate this <code>./projects.toml</code> is with the helper function </p>
-<pre><code class="language-command">nix run github:nix-community/dream2nix#detect-projects . &gt; projects.toml
-git add projects.toml
-</code></pre>
-<h2 id="list-the-available-packages"><a class="header" href="#list-the-available-packages">List the available packages</a></h2>
-<p>Let's get an overview of what the <code>flake.nix</code> allows us to do with our project.</p>
-<pre><code class="language-command">&gt; nix flake show
-warning: Git tree '/tmp/my_project' is dirty
-warning: creating lock file '/tmp/my_project/flake.lock'
-warning: Git tree '/tmp/my_project' is dirty
-git+file:///tmp/my_project
-└───packages
-    └───x86_64-linux
-        ├───main: package 'main'
-        └───resolveImpure: package 'resolve'
-</code></pre>
-<p>What we can observe here:</p>
-<ol>
-<li>
-<p><code>warning: Git tree '/tmp/my_project' is dirty</code>
-Nix warns us that the current git repo has uncommited changes. Thats fine, because we like to experiment for now. This warning will go away as soon as we commit our changes.</p>
-</li>
-<li>
-<p><code>warning: creating lock file '/tmp/my_project/flake.lock'</code>
-Our flake.nix imported external libraries. The versions of these libraries have now been locked inside a new file <code>flake.lock</code>. We should later commit this file to the repo, in order to allow others to reproduce our build exactly.</p>
-</li>
-<li>
-<pre><code>  git+file:///tmp/my_project
-  └───packages
-      └───x86_64-linux
-          ├───main: package 'main'
-          └───resolveImpure: package 'resolve'
-</code></pre>
-<p>Similar like a .json file defines a structure of data, our flake.nix defines a structure of <code>nix attributes</code> which are things that we can build or run with nix.
-We can see that it contains packages for my current platform <code>x86_64-linux</code>.</p>
-<p>The packages which we can see here is my python package and a package called <code>resolveImpure</code>, which is a special package provided by dream2nix which we will learn more about later.</p>
-</li>
-</ol>
-<h2 id="build-the-project"><a class="header" href="#build-the-project">Build the project</a></h2>
-<p>Let's try building our project.
-If you get an error about <code>unresolved impurities</code>, see <a href="guides/getting-started-python.html#resolve-impurities">Resolve Impurities</a></p>
-<pre><code class="language-command">&gt; nix build .#main
-</code></pre>
-<p>Congratulations, your build artifacts will now be accessible via the <code>./result</code> directory. If your project contains executables, you can run these via <code>./result/bin/executable-name</code>.
-If you want to develop on your python project, see <a href="guides/getting-started-python.html#create-a-development-shell">Create a development shell</a></p>
-<h2 id="create-a-development-shell"><a class="header" href="#create-a-development-shell">Create a development shell</a></h2>
-<p>Nix can provide you with a development shell containing all your project's dependencies.
-First, ensure that your project <a href="guides/getting-started-python.html#resolve-impurities">is resolved</a>, then execute the following command.</p>
-<pre><code class="language-command">&gt; nix develop -c $SHELL
-</code></pre>
-<p>The <code>-c $SHELL</code> part is only necessary if you use a different shell than bash and would like to bring that shell with you into the dev environment.</p>
-<h2 id="resolve-impurities"><a class="header" href="#resolve-impurities">Resolve impurities</a></h2>
-<p>If you try to build, you might run into the following error.</p>
-<pre><code class="language-command">&gt; nix build .#main
-error: The python package main contains unresolved impurities.
-       Resolve by running the .resolve attribute of this derivation
-       or by resolving all impure projects by running the `resolveImpure` package
-</code></pre>
-<p>Oops. It seems like our project does not contain enough information for dream2nix to construct a reproducible build. But this is not a problem as we can fix this by using the <code>resolveImpure</code> package that dream2nix provides.</p>
-<pre><code class="language-command">&gt; nix run .#resolveImpure
-...
-adding file to git: dream2nix-packages/main/dream-lock.json
-</code></pre>
-<p>Fine, that created a new file <code>dream-lock.json</code> which is a lock file specifically for our python project. If we later add any dependencies, we will have to re-run <code>resolveImpure</code> to update this lock file.</p>
-<p>Now everything should be ready to <a href="guides/getting-started-python.html#build-the-project">Build the Project</a></p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="build-your-nodejs-project-with-nix-in-10-minutes-or-less"><a class="header" href="#build-your-nodejs-project-with-nix-in-10-minutes-or-less">Build your nodejs project with nix in 10 minutes or less</a></h1>
-<p>!!! Warning: dream2nix is unstable software. While simple UX is one of our main focus points, the APIs  are still under development. Do expect changes that will break your setup.</p>
-<p>This guide takes you step-by-step through setting up a nodejs
-reproducible build and development environment using nix (the build
-system) and dream2nix (bridge between external package managers and nix).</p>
-<p>This setup will allow for the same environment to be reproduced on
-different machines and CI systems with high accuracy - thus avoiding
-many pitfalls of distributed software development.</p>
-<h2 id="outline-1"><a class="header" href="#outline-1">Outline</a></h2>
-<ol start="0">
-<li>Install nix with flakes enabled</li>
-<li>Navigate to your nodejs project</li>
-<li>Initialize the dream2nix flake</li>
-<li>Define target platform(s)</li>
-<li>Explore the outputs</li>
-<li>Build the project</li>
-<li>Development shell</li>
-<li>FAQ</li>
-</ol>
-<h2 id="install-nix-1"><a class="header" href="#install-nix-1">Install nix</a></h2>
-<p>If you don't have nix already, check out <a href="https://nixos.org/download.html">nixos.org/download.html</a> on how to install it.</p>
-<h3 id="enable-the-nix-flakes-feature-1"><a class="header" href="#enable-the-nix-flakes-feature-1">Enable the nix flakes feature</a></h3>
-<p>For internal dependency management dream2nix requires the experimental nix feature <code>flakes</code> being enabled.</p>
-<pre><code>export NIX_CONFIG=&quot;extras-experimental-features = flakes nix-command&quot;
-</code></pre>
-<p>If you find yourself using dream2nix regularly, you can permanently save these settings by adding the following line to your <code>/etc/nix/nix.conf</code>:</p>
-<pre><code>experimental-features = flakes nix-command
-</code></pre>
-<h2 id="navigate-to-your-nodejs-project"><a class="header" href="#navigate-to-your-nodejs-project">Navigate to your nodejs project</a></h2>
-<p>For this guide we will use the fun
-<a href="https://github.com/piuccio/cowsay"><code>cowsay</code></a> nodejs project.
-It is simply a talking cow for your console. This project is a nodejs
-port from the original perl version.
-Feel free to use any other project, if you do and hit a roadblock,
-please consult the <a href="guides/getting-started-nodejs.html#FAQ">FAQ</a> at the end of this article for solutions
-to some common issues.</p>
-<p>We start by cloning the project:</p>
-<pre><code class="language-command">&gt; git clone https://github.com/piuccio/cowsay /tmp/my_project
-&gt; cd /tmp/my_project
-</code></pre>
-<h2 id="initialize-the-dream2nix-flake"><a class="header" href="#initialize-the-dream2nix-flake">Initialize the dream2nix flake</a></h2>
-<p>We have our repository cloned and ready. Now we will create the flake.</p>
-<p>The flake is a standalone description of the project, it will define the
-inputs and outputs of our project, the build steps - in this case
-handled by dream2nix, and the development environment.
-The flake is a fully standalone and complete configuration for nix to
-build a software package.</p>
-<p>We use a dream2nix flake template:</p>
-<pre><code class="language-command">&gt; nix flake init -t github:nix-community/dream2nix#simple
-wrote: /tmp/my_project/flake.nix
-</code></pre>
-<p>to create a <code>flake.nix</code>:</p>
+<p>... while doing the same using <code>dream2nix</code> looks like this:</p>
 <pre><code class="language-nix">{
-  inputs.dream2nix.url = &quot;github:nix-community/dream2nix&quot;;
-  outputs = inp:
-    inp.dream2nix.lib.makeFlakeOutputs {
-      systemsFromFile = ./nix_systems;
-      config.projectRoot = ./.;
-      source = ./.;
-      projects = ./projects.toml;
-    };
-}
-</code></pre>
-<p>This file configures our build and development environment using the
-dream2nix framework to bridge the nodejs ecosystem into nix. This let's
-nix read and understand <code>package.json</code> and how to install and link
-nodejs packages - to avoid duplication of dependency definitions and
-build steps.</p>
-<h2 id="define-target-platforms-1"><a class="header" href="#define-target-platforms-1">Define target platform(s)</a></h2>
-<p>We have the flake setup, now we need to define the supported systems,
-this is necessary because nix can do multi platform and cross-platform
-builds so we need to tell it what can be built and where.</p>
-<p>There are 2 ways to do this, either with a <code>nix_systems</code> file,
-or we can write the target platforms inline to our <code>flake.nix</code>.</p>
-<h3 id="nix_systems-1"><a class="header" href="#nix_systems-1">nix_systems</a></h3>
-<p>We can create a <code>nix_systems</code> file with the current system:</p>
-<pre><code class="language-command">&gt; nix eval --impure --raw --expr 'builtins.currentSystem' &gt; ./nix_systems
-&gt; git add ./nix_systems
-</code></pre>
-<p>The <code>nix_systems</code> file is simply a list of the supported systems, for example:</p>
-<pre><code>x86_64-linux
-</code></pre>
-<p>Remember to add the file <code>./nix_systems</code> to git, or it won't be picked up by nix.
-If you want to support more platforms later, just add more lines to that file.</p>
-<h3 id="inline-1"><a class="header" href="#inline-1">inline</a></h3>
-<p>Alternatively, we can define the targets in the <code>flake.nix</code> like so:</p>
-<pre><code class="language-nix">{
-  inputs.dream2nix.url = &quot;github:nix-community/dream2nix&quot;;
-  outputs = inp:
-    inp.dream2nix.lib.makeFlakeOutputs {
-      systems = [&quot;x86_64-linux&quot;];         # &lt;- This line.
-      config.projectRoot = ./.;
-      source = ./.;
-      projects = ./projects.toml;
-    };
-}
-</code></pre>
-<p>This has the advantage of keeping all the configuration in a single file.</p>
-<h2 id="populating-projectstoml-1"><a class="header" href="#populating-projectstoml-1">Populating projects.toml</a></h2>
-<p>dream2nix also needs to know things about the project(s) at hand. 
-In the <code>flake.nix</code> file you can see it's expecting a <code>./projects.toml</code>. 
-The easiest way to create and populate this <code>./projects.toml</code> is with the helper function </p>
-<pre><code class="language-command">nix run github:nix-community/dream2nix#detect-projects . &gt; projects.toml
-git add projects.toml
-</code></pre>
-<h2 id="explore-the-outputs"><a class="header" href="#explore-the-outputs">Explore the outputs</a></h2>
-<p>We have setup the flake, defined our target system(s), now we are ready
-to use it. Let's start by listing out what is available to us (actual
-output may be different, this is a shortened version):</p>
-<pre><code class="language-command">&gt; nix flake show
-warning: Git tree '/tmp/my_project' is dirty
-warning: creating lock file '/tmp/my_project/flake.lock'
-warning: Git tree '/tmp/my_project' is dirty
-git+file:///tmp/my_project
-├───devShell
-│   └───x86_64-linux: development environment 'nix-shell'
-├───devShells
-│   └───x86_64-linux
-│       ├───cowsay: development environment 'nix-shell'
-│       └───default: development environment 'nix-shell'
-└───packages
-    └───x86_64-linux
-        ├───cowsay: package 'cowsay-1.5.0'
-        ├───default: package 'cowsay-1.5.0'
-        └───resolveImpure: package 'resolve'
-</code></pre>
-<p>We can see that:</p>
-<ol>
-<li><code>warning: Git tree '/tmp/my_project' is dirty</code>
-Our repository has uncommitted changes.
-Nix uses git commit hashes to version build artifacts,
-so this can result in some extra rebuilds.
-Since we are just setting up the project now, this is alright.</li>
-<li><code>warning: creating lock file '/tmp/my_project/flake.lock'</code>
-Our flake itself has an input (external dependency), the <code>dream2nix</code>
-framework. When we first use the flake, like we just did, nix created a
-lock file with the exact version of the input (and its inputs). Commit
-this file to version control to ensure reproducible builds.</li>
-<li>Finally, we see the outputs of our flake.
-We see it outputs <code>packages</code> for the <code>x86_64-linux</code> systems:
-the <code>cowsay</code> package (our nodejs project) and a <code>resolveImpure</code> package
-(more about that in the next section). It also sets out <code>cowsay</code> package
-as the <code>default</code> package of this flake.</li>
-</ol>
-<h2 id="build-the-project-1"><a class="header" href="#build-the-project-1">Build the project</a></h2>
-<p>We have setup our flake for the nodejs project and identified the
-output we want to build.</p>
-<p>To build the output, we run:</p>
-<pre><code class="language-command">&gt; nix build .#cowsay
-</code></pre>
-<p>(The <code>.</code> means the flake in the current directory, <code>#</code> is a special
-character separating the flake name and the package name, and <code>cowsay</code> is
-the name of the package we want to build. Since we want to <code>build</code>, nix
-will look under <code>packages</code> first, and it knows our current platform
-(<code>x86_64-linux</code> in this case), so it will actually build the output
-<code>.#packages.x86_64-linux.cowsay</code>.)</p>
-<p>Since, <code>cowsay</code> is the <code>default</code> package, we could also simply run:</p>
-<pre><code class="language-command">&gt; nix build
-</code></pre>
-<p>To build the <code>.#packages.x86_64-linux.default</code> output. (In our case
-these are the same.)</p>
-<p>This creates our <code>./result</code> directory with all our final build
-artifacts.</p>
-<pre><code class="language-command">&gt; ./result/bin/cowsay 'hello dream2nix'
- _________________
-&lt; hello dream2nix &gt;
- -----------------
-        \   ^__^
-         \  (oo)\_______
-            (__)\       )\/\
-                ||----w |
-                ||     ||
-</code></pre>
-<p>Nix was able to build this project, because it has a <code>package-lock.json</code>
-file pinning the exact dependency versions. If we did not have this
-file, the <code>nix build</code> would fail with <code>error: unresolved impurities</code>.</p>
-<pre><code class="language-command">&gt; git rm package-lock.json
-&gt; nix build .#cowsay
-warning: Git tree '/tmp/my_project' is dirty
-error: The nodejs package cowsay contains unresolved impurities.
-       Resolve by running the .resolve attribute of this derivation
-       or by resolving all impure projects by running the `resolveImpure` package
-</code></pre>
-<p>We can fix this by generating a language specific lockfile
-(<code>package-lock.json</code> or <code>yarn.lock</code> for nodejs), or let dream2nix
-generate a universal <code>dream-lock.json</code>.</p>
-<pre><code class="language-command">&gt; nix run .#resolveImpure
-warning: Git tree '/tmp/my_project' is dirty
-Resolving:: Name: cowsay; Subsystem: nodejs; relPath:
-translating in temp dir: /tmp/tmp.SwBFt0WcH4
-
-up to date, audited 172 packages in 9s
-
-57 packages are looking for funding
-  run `npm fund` for details
-
-3 high severity vulnerabilities
-
-To address all issues (including breaking changes), run:
-  npm audit fix --force
-
-Run `npm audit` for details.
-===[SUCCESS]===(dream2nix-packages/cowsay/dream-lock.json)===
-adding file to git: dream2nix-packages/cowsay/dream-lock.json
-</code></pre>
-<p>This runs <code>npm</code> behind the scenes and resolves dependencies for all
-packages inside the flake.</p>
-<p>There is no difference between using an external lockfile or
-<code>dream-lock.json</code>, all they do is pin dependency version and are
-completely interchangeable.</p>
-<h2 id="development-shell"><a class="header" href="#development-shell">Development shell</a></h2>
-<p>We were able to build our nodejs project with nix, however our build
-artifacts under <code>./result</code> are read-only and we do not have <code>node</code> and
-<code>npm</code> in <code>PATH</code>. To be able to work in this project we will need those.</p>
-<p>Nix provides us with <code>devShells</code> for exactly this.</p>
-<pre><code class="language-command">&gt; nix flake show
-warning: Git tree '/tmp/my_project' is dirty
-warning: creating lock file '/tmp/my_project/flake.lock'
-warning: Git tree '/tmp/my_project' is dirty
-git+file:///tmp/my_project
-├───devShell
-│   └───x86_64-linux: development environment 'nix-shell'
-├───devShells
-│   └───x86_64-linux
-│       ├───cowsay: development environment 'nix-shell'
-│       └───default: development environment 'nix-shell'
-└───packages
-    └───x86_64-linux
-        ├───cowsay: package 'cowsay-1.5.0'
-        ├───default: package 'cowsay-1.5.0'
-        └───resolveImpure: package 'resolve'
-</code></pre>
-<p>When we enter the <code>cowsay</code> development shell, we will get <code>node</code> in our
-<code>PATH</code>, together with all the binaries from our dependencies packages.
-And nix will copy over <code>node_modules</code> for us to save us from having to
-<code>npm install</code> everything over again.
-To get in the shell, simply run:</p>
-<pre><code class="language-command">&gt; nix develop -c $SHELL
-</code></pre>
-<p>(The <code>-c $SHELL</code> part is only necessary if you use a different shell than bash
-and would like to bring that shell with you into the dev environment.)</p>
-<p>From here on it's the same as using a normal installation of nodejs.
-However, if we do imperative changes to <code>node_modules</code> and later
-re-enter the nix development shell, nix will overwrite the
-<code>node_modules</code> with the pinned versions of the dependencies from our
-lockfile.</p>
-<h2 id="faq"><a class="header" href="#faq">FAQ</a></h2>
-<h3 id="refusing-to-overwrite-existing-file-on-flake-init"><a class="header" href="#refusing-to-overwrite-existing-file-on-flake-init">Refusing to overwrite existing file on <code>flake init</code>.</a></h3>
-<p>When initializing a flake it needs to write some files, if these already
-exists, the initialization will fail. Since our repository is under
-version control, we can delete the conflicting files, let <code>flake init</code>
-create them and then check the diff and merge the changes manually.</p>
-<h3 id="getting-status-of-flakenix-no-such-file-or-directory"><a class="header" href="#getting-status-of-flakenix-no-such-file-or-directory">Getting status of <code>flake.nix</code>: no such file or directory.</a></h3>
-<p>The flake build does not happen inside the directory. Nix copies your
-repository to a temporary location and builds there; only files under
-version control are used. To resolve this run <code>git add flake.nix</code> and
-all other missing files.</p>
-<h3 id="warning-git-tree-is-dirty"><a class="header" href="#warning-git-tree-is-dirty">Warning: Git tree is dirty</a></h3>
-<p>This is just a warning, nix is using the git revision for build artifact
-versioning. Having a dirty git tree - meaning uncommitted changes - can
-lead to some extra rebuilds, for simple projects this should not be a
-major concern.</p>
-<h3 id="error-the-package-contains-unresolved-impurities-resolve-all-impure-projects-by-running-the-resolveimpure-package"><a class="header" href="#error-the-package-contains-unresolved-impurities-resolve-all-impure-projects-by-running-the-resolveimpure-package">error: The package contains unresolved impurities. Resolve all impure projects by running the <code>resolveImpure</code> package.</a></h3>
-<p>This happens when dream2nix cannot resolve exact package versions. We
-can define a dependency like <code>something@^2.1</code>, but it is not obvious if
-we actually want <code>2.1.1</code> or <code>2.1.2</code> or maybe <code>2.1.1-alpha</code>.
-There are 2 ways to resolve this error: either by running
-<code>nix run .#resolveImpure</code> and letting dream2nix resolve the most
-up-to-date versions of all dependencies, or using an external package
-manager to generate a lock file, which can be later read by dream2nix.
-(In case of Node.js, both <code>package-lock.json</code> and <code>yarn.lock</code> are
-supported.)</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="rust-subsystem"><a class="header" href="#rust-subsystem">Rust subsystem</a></h1>
-<p>This section documents the Rust subsystem.</p>
-<h2 id="translators"><a class="header" href="#translators">Translators</a></h2>
-<h3 id="cargo-lock-pure"><a class="header" href="#cargo-lock-pure">cargo-lock (pure)</a></h3>
-<p>Translates a <code>Cargo.lock</code> file to a dream2nix lockfile.</p>
-<h3 id="cargo-toml-impure"><a class="header" href="#cargo-toml-impure">cargo-toml (impure)</a></h3>
-<p>Translates a <code>Cargo.toml</code> file to a dream2nix lockfile by generating a <code>Cargo.lock</code> file first and then using <code>cargo-lock</code> translator on the generated lockfile.</p>
-<h2 id="builders"><a class="header" href="#builders">Builders</a></h2>
-<h3 id="build-rust-package-pure"><a class="header" href="#build-rust-package-pure">build-rust-package (pure)</a></h3>
-<p>Builds a package using <code>buildRustPackage</code> from <code>nixpkgs</code>.</p>
-<h3 id="crane-ifd-default"><a class="header" href="#crane-ifd-default">crane (ifd) (default)</a></h3>
-<p>Builds a package using <a href="https://github.com/ipetkov/crane"><code>crane</code></a>.
-This builder builds two separate derivations, one for dependencies and the other for your crate.
-The dependencies derivation will be named <code>&lt;crate&gt;-deps</code> where <code>&lt;crate&gt;</code> is the name of the crate you are building.</p>
-<h4 id="setting-profile-and-cargo-flags"><a class="header" href="#setting-profile-and-cargo-flags">Setting profile and Cargo flags</a></h4>
-<p>This can be done via setting environment variables:</p>
-<ul>
-<li><code>cargoTestFlags</code> and <code>cargoBuildFlags</code> are passed to <code>cargo</code> invocations for <code>checkPhase</code> and <code>buildPhase</code> respectively.</li>
-<li><code>cargoTestProfile</code> and <code>cargoBuildProfile</code> are used as profiles while compiling for <code>checkPhase</code> and <code>buildPhase</code> respectively.</li>
-</ul>
-<h4 id="override-gotchas"><a class="header" href="#override-gotchas">Override gotchas</a></h4>
-<p>This builder builds two separate derivations, one for your crate's dependencies and another for your crate.
-This means that if you want to override stuff for the dependencies you need to use the <code>&lt;crate-name&gt;-deps</code> key for your override where <code>&lt;crate-name&gt;</code> is the name of the crate you are building.</p>
-<pre><code class="language-nix">{
-  # ...
-  packageOverrides = {
-    # this will apply to your crate
-    crate.my-overrides = { /* ... */ };
-    # this will apply to your crate's dependencies
-    crate-deps.my-overrides = { /* ... */ };
+  htop-mod = {
+    imports = [./htop.nix];
+    name = lib.mkForce &quot;htop-mod&quot;;
+    flags.sensorsSupport = false;
   };
-  # ...
 }
 </code></pre>
-<h4 id="on-the-ifd-marking"><a class="header" href="#on-the-ifd-marking">On the IFD marking</a></h4>
-<p>The <code>crane</code> builder utilizes IFD to clean the source your crates reside in.
-This is needed to not rebuild the dependency only derivation everytime the source for your crates is changed.</p>
-<p>However this does not mean that the IFD will always be triggered.
-If you are passing dream2nix a path source or a flake source, then IFD won't be triggered as these sources are already realized.
-But if you are passing the result of a <code>pkgs.fetchFromGitHub</code> for example, this will trigger IFD since it is not already realized.</p>
-<h3 id="specifying-the-rust-toolchain"><a class="header" href="#specifying-the-rust-toolchain">Specifying the Rust toolchain</a></h3>
-<p>Specify an override for all packages that override the Rust toolchain used.
-This can be done like so:</p>
-<pre><code class="language-nix">{
+<p>See htop module definition <a href="https://github.com/nix-community/dream2nix/blob/main/examples/dream2nix-packages-simple/htop-with-flags/default.nix">here</a>.</p>
+<h2 id="type-safety"><a class="header" href="#type-safety">Type safety</a></h2>
+<p>The following code in nixpkgs mkDerivation mysteriously skips the patches:</p>
+<pre><code class="language-nix">mkDerivation {
   # ...
-  packageOverrides = {
+  dontPatch = &quot;false&quot;;
+}
+</code></pre>
+<p>... while doing the same using <code>dream2nix</code> raises an informative type error:</p>
+<pre><code>A definition for option `[...].dontPatch' is not of type `boolean' [...]
+</code></pre>
+<h2 id="catch-typos"><a class="header" href="#catch-typos">Catch typos</a></h2>
+<p>The following code in nixpkgs mkDerivation builds <strong>without</strong> openssl_3.</p>
+<pre><code class="language-nix">mkDerivation {
+  # ...
+  nativBuildInputs = [openssl_3];
+}
+</code></pre>
+<p>... while doing the same using <code>dream2nix</code> raises an informative error:</p>
+<pre><code>The option `[...].nativBuildInputs' does not exist
+</code></pre>
+<h2 id="environment-variables-clearly-defined"><a class="header" href="#environment-variables-clearly-defined">Environment variables clearly defined</a></h2>
+<p><code>dream2nix</code> requires a clear distinction between known parameters and user-defined variables.
+Defining <code>SOME_VARIABLE</code> at the top-level, would raise:</p>
+<pre><code>The option `[...].SOME_VARIABLE' does not exist
+</code></pre>
+<p>Instead it has to be defined under <code>env.</code>:</p>
+<pre><code class="language-nix">{
+  my-package = {
     # ...
-    &quot;^.*&quot;.set-toolchain.overrideRustToolchain = old: {
-      inherit (pkgs) cargo rustc;
-    };
-    # ...
-  };
-  # ...
-}
-</code></pre>
-<p>You can also of course override the toolchain for only certain crates:</p>
-<pre><code class="language-nix">{
-  # ...
-  packageOverrides = {
-    # ...
-    crate-name.set-toolchain.overrideRustToolchain = old: {
-      inherit (pkgs) cargo rustc;
-    };
-    # ...
-  };
-  # ...
-}
-</code></pre>
-<h4 id="crane-notes"><a class="header" href="#crane-notes"><code>crane</code> notes</a></h4>
-<p>If cross-compiling, keep in mind that it also takes <code>cargo</code> packages like so:</p>
-<pre><code class="language-nix">{
-  cargoHostTarget = cargo-package;
-  cargoBuildBuild = other-cargo-package;
-}
-</code></pre>
-<p>where <code>cargoHostTarget</code> has the same meaning as coming from a <code>pkgsHostTarget</code>.
-And <code>cargoBuildBuild</code> has the same meaning as coming from a <code>pkgsBuildBuild</code>.</p>
-<p>To override the toolchain for a specific package, you will need to set an override for both the dependencies and the main package derivation:</p>
-<pre><code class="language-nix">let
-  toolchainOverride = old: { /* ... */ };
-in
-{
-  # ...
-  packageOverrides = {
-    # ...
-    crate-name.set-toolchain.overrideRustToolchain = toolchainOverride;
-    crate-name-deps.set-toolchain.overrideRustToolchain = toolchainOverride;
-    # ...
-  };
-  # ...
-}
-</code></pre>
-<h4 id="examples"><a class="header" href="#examples">Examples</a></h4>
-<ul>
-<li>Usage with <a href="https://github.com/nix-community/fenix">fenix</a>:</li>
-</ul>
-<pre><code class="language-nix">let
-  # ...
-  # we use the full toolchain derivation here as using
-  # only the cargo / rustc derivation *does not* work.
-  toolchain = fenix.packages.${system}.minimal.toolchain;
-  # ...
-in
-{
-  # ...
-  packageOverrides = {
-    # for crane builder
-    &quot;^.*&quot;.set-toolchain.overrideRustToolchain = old: {cargo = toolchain;};
-    # for build-rust-package builder
-    &quot;^.*&quot;.set-toolchain.overrideRustToolchain = old: {
-      cargo = toolchain;
-      rustc = toolchain;
-    };
-  };
-  # ...
-}
-</code></pre>
-<ul>
-<li>Usage with <a href="https://github.com/oxalica/rust-overlay">oxalica's rust-overlay</a>:</li>
-</ul>
-<pre><code class="language-nix">let
-  # ...
-  toolchain = rust-overlay.packages.${system}.rust;
-  # ...
-in
-{
-  # ...
-  packageOverrides = {
-    # for crane builder
-    &quot;^.*&quot;.set-toolchain.overrideRustToolchain = old: {cargo = toolchain};
-    # for build-rust-package builder
-    &quot;^.*&quot;.set-toolchain.overrideRustToolchain = old: {
-      cargo = toolchain;
-      rustc = toolchain;
-    };
-  };
-  # ...
-}
-</code></pre>
-<h3 id="specifying-the-stdenv"><a class="header" href="#specifying-the-stdenv">Specifying the <code>stdenv</code></a></h3>
-<p><code>crane</code> supports specifying the <code>stdenv</code> like so:</p>
-<pre><code class="language-nix">{
-  # ...
-  packageOverrides = {
-    # change all derivations' stdenv to clangStdenv
-    &quot;^.*&quot;.set-stdenv.override = old: {stdenv = pkgs.clangStdenv;};
-  };
-  # ...
-}
-</code></pre>
-<p><code>build-rust-package</code> builder does not support specifying the <code>stdenv</code>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="python-subsystem"><a class="header" href="#python-subsystem">Python subsystem</a></h1>
-<p>This section documents the Python subsystem.</p>
-<h2 id="examples-1"><a class="header" href="#examples-1">Examples</a></h2>
-<p>flake.nix</p>
-<pre><code class="language-nix">{
-  inputs = {
-    dream2nix.url = &quot;github:nix-community/dream2nix&quot;;
-    src.url = &quot;https://files.pythonhosted.org/packages/5a/86/5f63de7a202550269a617a5d57859a2961f3396ecd1739a70b92224766bc/aiohttp-3.8.1.tar.gz&quot;;
-    src.flake = false;
-  };
-
-  outputs = {
-    self,
-    dream2nix,
-    src,
-  } @ inp:
-    (dream2nix.lib.makeFlakeOutputs {
-      systems = [&quot;x86_64-linux&quot;];
-      config.projectRoot = ./.;
-      source = src;
-      projects = ./projects.toml;
-    })
-    // {
-      checks.x86_64-linux = self.packages.x86_64-linux;
-    };
-}
-</code></pre>
-<h2 id="translators-1"><a class="header" href="#translators-1">Translators</a></h2>
-<h3 id="pip-impure"><a class="header" href="#pip-impure">pip (impure)</a></h3>
-<p>Can translate all pip compatible python projects, including projects managed with poetry or other tool-chains which integrate via <code>pyproject.toml</code>.</p>
-<p>This translator simply executes <code>pip download</code> on the given source and observes which sources are downloaded by pip.
-The downside of this approach is, that this translator cannot be used with a granular builder. It does not understand the exact relation between the dependencies, and therefore it only allows to build all dependencies in one large derivation.</p>
-<h4 id="pip-optional-translator-arguments"><a class="header" href="#pip-optional-translator-arguments"><strong>pip</strong> optional translator arguments</a></h4>
-<pre><code class="language-nix">{
-  pythonVersion = {
-    description = &quot;python version to translate for&quot;;
-    default = &quot;3.10&quot;;
-    examples = [
-      &quot;3.8&quot;
-      &quot;3.9&quot;
-      &quot;3.10&quot;
-    ];
-    type = &quot;argument&quot;;
-  };
-
-  extraSetupDeps = {
-    description = ''
-      a list of extra setup reqirements to install before executing 'pip download'
-    '';
-    default = [];
-    examples = [
-      &quot;cython&quot;
-      &quot;numpy&quot;
-    ];
-    type = &quot;argument&quot;;
+    env.SOME_VARIABLE = &quot;example&quot;;
   };
 }
 </code></pre>
-<h2 id="builders-1"><a class="header" href="#builders-1">Builders</a></h2>
-<h3 id="simple-builder-pure-default"><a class="header" href="#simple-builder-pure-default">simple-builder (pure) (default)</a></h3>
-<p>Builds a package including all its dependencies in a single derivation.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="nodejs-subsystem"><a class="header" href="#nodejs-subsystem">Node.js subsystem</a></h1>
-<p>This section documents the Node.js subsystem.</p>
-<h2 id="example"><a class="header" href="#example">Example</a></h2>
-<blockquote>
-<p>./flake.nix</p>
-</blockquote>
-<pre><code class="language-nix">{
-  inputs = {
-    dream2nix.url = &quot;github:nix-community/dream2nix&quot;;
-    src.url = &quot;https://registry.npmjs.org/eslint/-/eslint-8.4.1.tgz&quot;;
-    src.flake = false;
-  };
-
-  outputs = {
-    self,
-    dream2nix,
-    src,
-  } @ inp:
-    (dream2nix.lib.makeFlakeOutputs {
-      systems = [&quot;x86_64-linux&quot;];
-      config.projectRoot = ./.;
-      source = src;
-      projects = ./projects.toml;
-    })
-    // {
-      # checks = self.packages;
-    };
-}
-</code></pre>
-<blockquote>
-<p>./projects.toml</p>
-</blockquote>
-<pre><code class="language-toml"># To re-generate this file, run:
-#   nix run github:nix-community/dream2nix#detect-projects $source
-# ... where `$source` points to the source of your project.
-
-[eslint]
-name = &quot;eslint&quot;
-relPath = &quot;&quot;
-subsystem = &quot;nodejs&quot;
-translator = &quot;package-json&quot;
-translators = [&quot;package-json&quot;]
-
-[eslint.subsystemInfo]
-noDev = true
-nodejs = 18
-</code></pre>
-<h2 id="translators-2"><a class="header" href="#translators-2">Translators</a></h2>
-<h3 id="package-lock-pure"><a class="header" href="#package-lock-pure">package-lock (pure)</a></h3>
-<p>Translates <code>package-lock.json</code> into a dream2nix lockfile.</p>
-<h3 id="package-json-impure"><a class="header" href="#package-json-impure">package-json (impure)</a></h3>
-<p>Resolves dependencies from <code>package.json</code> using <code>npm</code> to generate a
-<code>package-lock.json</code>, then uses <code>package-lock</code> translator to generate the
-dream2nix lockfile.</p>
-<h3 id="yarn-lock-pure"><a class="header" href="#yarn-lock-pure">yarn-lock (pure)</a></h3>
-<p>Translates <code>yarn.lock</code> into a dream2nix lockfile.</p>
-<h2 id="builders-2"><a class="header" href="#builders-2">Builders</a></h2>
-<h3 id="granular-pure-default"><a class="header" href="#granular-pure-default">granular (pure) (default)</a></h3>
-<p>Builds all the dependencies in isolation, moving upwards to the top
-package.
-At the end copies over all dependencies into <code>node_modules</code> and writes
-symlinks for the bins into <code>node_modules/.bin</code>.</p>
-<h3 id="strict-pure--best-compatibility-experimental"><a class="header" href="#strict-pure--best-compatibility-experimental">strict (pure + best compatibility) (experimental)</a></h3>
-<p>Works almost the same as the granular builder. Not bulletproof stable yet.
-Recommended: Try it out, it should work better than the current default builder, but is not yet released as default.</p>
-<p>Features 🌈</p>
-<ul>
-<li>Fully npm compatible</li>
-<li>No Patches / Overrides required (if &quot;installMethod = copy&quot;)
-<ul>
-<li>(Most) Complex building of node_modules is fully implemented as python application, because it requires a lot of control flow.</li>
-<li>Multiple outputs <code>[&quot;out&quot; &quot;lib&quot;]</code> (explained below)</li>
-</ul>
-</li>
-<li>Dedicated flattening of node_modules:
-<ul>
-<li>Conflicts are resolved during flattening the node_modules folder in favor of the highest semver)</li>
-<li>Creates node_modules tree directly from package-lock.json informations. (Through the translator)</li>
-<li>Creates node_modules tree with other lock files (such as yarn-lock) most optimal.</li>
-</ul>
-</li>
-<li>consume itself:
-<ul>
-<li>lets you override/inject a package into your dream2nix project which is built with dream2nix.</li>
-</ul>
-</li>
-</ul>
-<h4 id="usage"><a class="header" href="#usage">Usage</a></h4>
-<p>in <code>projects.toml</code> set the <code>builder</code> attribute to <code>'strict-builder'</code></p>
-<blockquote>
-<p>./projects.toml</p>
-</blockquote>
-<pre><code class="language-toml"># To re-generate this file, run:
-#   nix run github:nix-community/dream2nix#detect-projects $source
-# ... where `$source` points to the source of your project.
-
-[prettier]
-name = &quot;prettier&quot;
-relPath = &quot;&quot;
-subsystem = &quot;nodejs&quot;
-translator = &quot;yarn-lock&quot;
-builder = &quot;strict-builder&quot;
-</code></pre>
-<h4 id="multiple-outputs"><a class="header" href="#multiple-outputs">Multiple outputs</a></h4>
-<h5 id="lib---package"><a class="header" href="#lib---package"><code>lib</code> - package</a></h5>
-<ul>
-<li>consumable as bare package</li>
-<li>containing all files from the <code>source</code> ( <em>install-scripts</em> already executed )</li>
-</ul>
-<pre><code class="language-bash">    $lib
-    /nix/store/...-pname-1.0.0-lib
-    ├── cli.js
-    ├── ...
-    └── package.json
-</code></pre>
-<p><em>install-scripts</em> declared in <code>package.json</code> run in the following order:</p>
-<blockquote>
-<p>preinstall -&gt;  install -&gt; postinstall</p>
-<p>isolated from other packages</p>
-<p>if the isolation during installScript is causing you problems, let us know.</p>
-</blockquote>
-<h5 id="out---standard-composition"><a class="header" href="#out---standard-composition"><code>out</code> - standard composition</a></h5>
-<ul>
-<li>consumable by most users</li>
-<li><code>{pname}/bin/...</code> contains all executables of this package</li>
-</ul>
-<pre><code class="language-bash">    $out:
-    /nix/store/...-pname-1.0.0
-    ├── bin
-    │   └── cli -&gt; ../lib/cli.js
-    └── lib
-        ├── cli.js 
-        ├── ...
-        ├── package.json 
-        └── node_modules 
-</code></pre>
-<h4 id="devshell---passthrudevshell"><a class="header" href="#devshell---passthrudevshell">DevShell - passthru.devShell</a></h4>
-<p>Dedicated devShell with node_modules decoupled from the package.</p>
-<h5 id="the-problem"><a class="header" href="#the-problem">The Problem</a></h5>
-<p>As you change lines in your codebase the input of the package changes.
-Which then could lead to a change in the <code>hash</code> of the <code>node_modules</code> even if the <code>packages</code> of your project didn't change.
-This basically means your nix shell / direnv could reload the shell every time you type.</p>
-<h5 id="the-solution"><a class="header" href="#the-solution">The Solution</a></h5>
-<p>Decoupled <code>node_modules</code> from the inputs, dependending only on the current dependencies of the project and not on the source itself.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="haskell-subsystem"><a class="header" href="#haskell-subsystem">Haskell subsystem</a></h1>
-<p>This section documents the Haskell subsystem.</p>
-<p>Get involved:</p>
-<ul>
-<li><a href="subsystems/../intro/architectural-considerations.html#architecture">understand dream2nix architecture</a></li>
-<li><a href="subsystems/../intro/translators.html">understand dream2nix translator types</a></li>
-<li><a href="https://github.com/nix-community/dream2nix/tree/main/examples">try out examples</a></li>
-<li><a href="https://github.com/nix-community/dream2nix/issues?q=is%3Aissue+is%3Aopen+label%3Ahaskell">find Issues</a></li>
-<li><a href="https://sourcegraph.com/search?q=context:global+repo:%5Egithub%5C.com/nix-community/dream2nix%24+file:haskell/+TODO&amp;patternType=literal">find TODOs</a></li>
-</ul>
-<h2 id="status"><a class="header" href="#status">Status</a></h2>
-<p>The Haskell subsystems is currently work in progress.
-It is in a state where it can be used, but will potentially fail on many projects, because some important features are missing.
-Currently we have a builder for haskell and several translators (see table below).</p>
-<p>The main elements which are missing:</p>
-<ul>
-<li>a pure translator for cabal.project.freeze</li>
-<li>an impure cabal translator, that works with any cabal based project by generating a cabal.project.freeze file. This should be fairly simple. Once we have the pure cabal.project.freeze translator, the impure translator can just execute <code>cabal freeze</code> and then call out to the existing pure translator.</li>
-<li>detecting which GHC version must be used for a project</li>
-<li>source different GHC versions. For now we should probably just support all ghc versions from nixpkgs because those are cached on nixos.org. If the translated project requires a different ghc version, the user should be allowed to override this, or pick a different nixpkgs.</li>
-<li>add an indexer for stackage/hackage. That should allow us to build a repository with the most common haskell libraries equivalent to dream2nix-crates-io or dream2nix-npm. This will allow us to improve our builders and translators based on the errors we get.</li>
-</ul>
-<h2 id="examples-2"><a class="header" href="#examples-2">Examples</a></h2>
-<p>flake.nix</p>
-<pre><code class="language-nix">{
-  inputs = {
-    dream2nix.url = &quot;github:nix-community/dream2nix&quot;;
-    src.url = &quot;github:NorfairKing/cabal2json&quot;;
-    src.flake = false;
-  };
-
-  outputs = {
-    self,
-    dream2nix,
-    src,
-  } @ inp:
-    (dream2nix.lib.makeFlakeOutputs {
-      pkgs = dream2nix.inputs.nixpkgs.legacyPackages.x86_64-linux;
-      source = src;
-      config.projectRoot = ./.;
-      projects = ./projects.toml;
-    })
-    // {
-      # checks = self.packages;
-    };
-}
-</code></pre>
-<p>see more examples under: <a href="https://github.com/nix-community/dream2nix/tree/main/examples">/examples</a></p>
-<h2 id="translators-3"><a class="header" href="#translators-3">Translators</a></h2>
-<p>The source code of the implementations can be found <a href="https://github.com/nix-community/dream2nix/tree/main/src/subsystems/haskell/translators">here</a>.</p>
-<div class="table-wrapper"><table><thead><tr><th><strong>translator</strong></th><th>stack-lock</th><th>cabal-plan</th><th>cabal-freeze</th></tr></thead><tbody>
-<tr><td><strong>file name</strong></td><td>stack.yaml.lock</td><td>plan.json</td><td>cabal.project.freeze</td></tr>
-<tr><td><strong>status</strong></td><td>implemented</td><td>implemented</td><td>missing</td></tr>
-</tbody></table>
-</div><div style="break-before: page; page-break-before: always;"></div><h1 id="php-subsystem"><a class="header" href="#php-subsystem">PHP subsystem</a></h1>
-<blockquote>
-<p>!!! PHP support is experimental. <br />
-!!! You can track the progress in
-<a href="https://github.com/nix-community/dream2nix/issues/240">nix-community/dream2nix#240</a>.</p>
-</blockquote>
-<p>This section documents the PHP subsystem.</p>
-<h2 id="example-1"><a class="header" href="#example-1">Example</a></h2>
-<p>An example of building <a href="https://github.com/composer/composer">composer</a> using dream2nix.</p>
-<pre><code class="language-nix">{
-  inputs = {
-    dream2nix.url = &quot;github:nix-community/dream2nix&quot;;
-    src.url = &quot;github:Gipetto/CowSay&quot;;
-    src.flake = false;
-  };
-
-  outputs = {
-    self,
-    dream2nix,
-    src,
-  } @ inp:
-    (dream2nix.lib.makeFlakeOutputs {
-      systems = [&quot;x86_64-linux&quot;];
-      config.projectRoot = ./.;
-      source = src;
-      projects = ./projects.toml;
-    })
-    // {
-      # checks = self.packages;
-    };
-}
-</code></pre>
-<h2 id="translators-4"><a class="header" href="#translators-4">Translators</a></h2>
-<h3 id="composer-lock-pure"><a class="header" href="#composer-lock-pure">composer-lock (pure)</a></h3>
-<p>Translates <code>composer.lock</code> into a dream2nix lockfile.</p>
-<h3 id="composer-json-impure"><a class="header" href="#composer-json-impure">composer-json (impure)</a></h3>
-<p>Resolves dependencies in <code>composer.json</code> using <code>composer</code> to generate a
-<code>composer.lock</code> lockfile, then invokes the <code>composer-lock</code> translator to
-generate a dream2nix lockfile.</p>
-<h3 id="packagist-impure"><a class="header" href="#packagist-impure">packagist (impure)</a></h3>
-<p>Downloads a package version from <a href="https://packagist.org/">Packagist</a>.
-Then uses <code>composer-lock</code> if a <code>composer.lock</code> file is present,
-or <code>composer-json</code> otherwise to translate the package.</p>
-<h2 id="builders-3"><a class="header" href="#builders-3">Builders</a></h2>
-<h3 id="granular-pure-default-1"><a class="header" href="#granular-pure-default-1">granular (pure) (default)</a></h3>
-<p>Builds all dependencies in isolation, moving upwards to the top-level package.</p>
-<h3 id="simple-pure"><a class="header" href="#simple-pure">simple (pure)</a></h3>
-<p>Builds the package including all its dependencies in a single derivation.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="architecture"><a class="header" href="#architecture">Architecture</a></h1>
-<p>The general architecture should consist of these components:<br />
-<code>Input -&gt; Translation -&gt; Generic Lock -&gt; Fetching -&gt; Building</code></p>
-<pre><code>┌───────┐
-│ Input │◄── Arbitrary
-└────┬──┘                 URLs + Metadata containing Build instructions
-     │   ┌──────────┐     in standardized minimalistic form (json)
-     └──►│Translator│        │
-         └───────┬──┘        ▼
-           ▲     │   ┌────────────┐
-           │     └──►│Generic Lock│
-           │         └─────────┬──┘
-  - pure-nix                   │   ┌────────┐
-  - IFD / recursive-nix        ├──►│Fetcher │◄── Same across all
-  - impure (external)          │   └────────┘    languages/frameworks
-                               │       ▼
-                               │   ┌────────┐
-                               └──►│Builder │◄── Reads extra metadata
-                                   └────────┘    from generic lock
-</code></pre>
-<p>Input:</p>
-<ul>
-<li>can consist of:
-<ul>
-<li>requirement constraints</li>
-<li>requirement files</li>
-<li>lock-files</li>
-<li>project's source tree</li>
-</ul>
-</li>
-</ul>
-<p>Translator:</p>
-<ul>
-<li>read input and generate generic lock format containing:
-<ul>
-<li>URLs + hashes of sources</li>
-<li>metadata for building</li>
-</ul>
-</li>
-<li>different strategies can be used:
-<ul>
-<li><code>pure-nix</code>: translate input by using the nix language only</li>
-<li><code>IFD/recursive</code>: translate using a nix build</li>
-<li><code>external</code>: translate using an external tool which resolves against an online package index</li>
-</ul>
-</li>
-<li>for more information about translators and how nixpkgs compatibility is guaranteed, check <a href="intro/./translators.html">Translators</a></li>
-</ul>
-<p>Generic Lock (standardized format):</p>
-<ul>
-<li>Produced by <code>Translator</code>. Contains URLs + hashes for sources and metadata relevant for building.</li>
-<li>The contained format for sources and dependency relations is independent of the build system. Fetching works always the same.</li>
-<li>The metadata also contains build system specific attributes as individual approaches are required here. A specific builder for the individual build system will later read this metadata and transform it into nix derivations.</li>
-<li>It is not relevant which steps/strategies have been taken to create this lock. From this point on, there are no impurities. This format will contain everything necessary for a fully reproducible build.</li>
-<li>This format can always be put into nixpkgs, not requiring any IFD (given the nix code for the builder exists within nixpkgs).</li>
-<li>In case of a pure-nix translator, the generic lock data can be generated on the fly and passed directly to the builder, preventing unnecessary usage of IFD.</li>
-</ul>
-<p>Fetcher:</p>
-<ul>
-<li>Since a generic lock was produced in the previous step, the fetching layer can be the same across all build systems.</li>
-</ul>
-<p>Builder:</p>
-<ul>
-<li>Receives sources from fetcher and metadata produced by the translator.</li>
-<li>The builder transforms the metadata into nix derivation(s).</li>
-<li>Strictly separating the builder from previous phases allows:
-<ul>
-<li>switching between different build strategies or upgrading the builder without having to re-run the translator each time.</li>
-<li>reducing code duplication if a project contains multiple packages built via dream2nix.</li>
-</ul>
-</li>
-</ul>
-<h3 id="example-walk-through-the-phases"><a class="header" href="#example-walk-through-the-phases">Example (walk through the phases)</a></h3>
-<h4 id="python-project-with-poetrylock"><a class="header" href="#python-project-with-poetrylock">python project with poetry.lock</a></h4>
-<p>As an example we package a python project that uses poetry for dependency management.
-Poetry uses <code>pyproject.toml</code> and <code>poetry.lock</code> to lock dependencies</p>
-<ul>
-<li>Input: pyproject.toml, poetry.lock (toml)</li>
-<li>Translator: written in pure nix, reading the toml input and generating the generic lock format</li>
-<li>Generic Lock (for explanatory purposes dumped to json and commented):
-<pre><code class="language-json">{
-  // generic lock format version
-  &quot;version&quot;: 1,
-
-  // format for sources is always the same (not specific to python)
-  &quot;sources&quot;: {
-    &quot;requests&quot;: {
-      &quot;type&quot;: &quot;tarball&quot;,
-      &quot;url&quot;: &quot;https://download.pypi.org/requests/2.28.0&quot;,
-      &quot;hash&quot;: &quot;deadbeefdeadbeefdeadbeefdeadbeefdeadbeef&quot;,
-    },
-    &quot;certifi&quot;: {
-      &quot;type&quot;: &quot;github&quot;,
-      &quot;owner&quot;: &quot;certifi&quot;,
-      &quot;repo&quot;: &quot;python-certifi&quot;,
-      &quot;hash&quot;: &quot;deadbeefdeadbeefdeadbeefdeadbeefdeadbeef&quot;
-    }
-  },
-
-  // generic metadata (not specific to python)
-  &quot;_generic&quot;: {
-
-    // this indicates which builder must be used
-    &quot;subsystem&quot;: &quot;python&quot;,
-
-    // translator which generated this file
-    // (not relevant for building)
-    &quot;producedBy&quot;: &quot;translator-poetry-1&quot;,
-
-    // dependency graph of the packages
-    &quot;dependencies&quot;: {
-      &quot;requests&quot;: [
-        &quot;certifi&quot;
-      ]
-    }
-  },
-
-  // all fields inside 'subsystem' are specific to
-  // the selected subsystem (python)
-  &quot;_subsystem&quot;: {
-
-    // tell the python builder how the inputs must be handled
-    &quot;sourceFormats&quot;: {
-      &quot;requests&quot;: &quot;sdist&quot;,  // triggers build instructions for sdist
-      &quot;certifi&quot;: &quot;wheel&quot;    // triggers build instructions for wheel
-    }
-  }
-}
-</code></pre>
-</li>
-<li>This lock data can now either:
-<ul>
-<li>be dumped to a .json file and committed to a repo</li>
-<li>passed directly to the fetching/building layer</li>
-</ul>
-</li>
-<li>the fetcher will only read the sources section and translate it to standard fetcher calls.</li>
-<li>the building layer will read the &quot;subsystem&quot; attribute and select the python builder for building.</li>
-<li>the python builder will read all information from &quot;subsystem&quot; and translate the data to a final derivation.</li>
-</ul>
-<p>Notes on IFD, FOD and code generation:</p>
-<ul>
-<li>No matter which type of translator is used, it is always possible to export the generic lock to a file, which can later be evaluated without using IFD or FOD, similar to current nix code generators, just with a standardized format.</li>
-<li>If the translator supports IFD or is written in pure nix, it is optional to the user to skip exporting the generic lock and instead evaluate everything on the fly.</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="translators-5"><a class="header" href="#translators-5">Translators</a></h1>
-<p>This document classifies different methods for translating requirement/lock
-files to the generic lock format and describes how the resulting packages
-can be integrated into nix builds inside and outside of nixpkgs.</p>
-<h2 id="pure-nix-preferred"><a class="header" href="#pure-nix-preferred">pure-nix (preferred)</a></h2>
-<p>Suitable if:</p>
-<ul>
-<li>the input contains information like URLs and hashes</li>
-<li>nix supports the hashing algorithm</li>
-<li>the input can be processed with the nix language directly</li>
-</ul>
-<p>Usage outside of nixpkgs:</p>
-<ul>
-<li>The input + translator are enough, not requiring any pre-processing.</li>
-</ul>
-<p>Usage inside nixpkgs:</p>
-<ul>
-<li>The input + translator are enough, not requiring any pre-processing.</li>
-</ul>
-<h2 id="ifdrecursive-compatible-with-import-from-derivation-or-recursive-nix"><a class="header" href="#ifdrecursive-compatible-with-import-from-derivation-or-recursive-nix">IFD/recursive (compatible with import from derivation or recursive nix)</a></h2>
-<p>Suitable if:</p>
-<ul>
-<li>the input contains information like URLs and hashes</li>
-<li>nix understands the hashing algorithm</li>
-<li>to process the input, a nix build is required, because for example:
-<ul>
-<li>the format cannot be parsed with the nix language (yaml etc.)</li>
-<li>processing the input is too complex and therefore inefficient in nix language</li>
-</ul>
-</li>
-</ul>
-<p>Usage outside of nixpkgs:</p>
-<ul>
-<li>The input + translator are enough. The generic lock file is generated via IFD</li>
-</ul>
-<p>Usage inside nixpkgs:</p>
-<ul>
-<li>generic lock file must be pre-generated using dream2nix cli</li>
-</ul>
-<h2 id="impure-running-outside-of-nix-build"><a class="header" href="#impure-running-outside-of-nix-build">impure (running outside of nix build)</a></h2>
-<p>Suitable if:</p>
-<ul>
-<li>the input is missing URLs or hashes</li>
-<li>the method used to process the input contains impurities, like for example:
-<ul>
-<li>queries to an online index with varying responses</li>
-<li>packages must be downloaded to discover important meta data like dependencies.</li>
-</ul>
-</li>
-</ul>
-<p>Usage outside of nixpkgs:</p>
-<ul>
-<li>generic lock file must be pre-generated using dream2nix cli</li>
-</ul>
-<p>Usage inside nixpkgs:</p>
-<ul>
-<li>generic lock file must be pre-generated using dream2nix cli</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="generic-lockfile"><a class="header" href="#generic-lockfile">Generic lockfile</a></h1>
-<p>The generic lockfile is interpreted from the fetchers and dependencies are loaded based on their type.</p>
-<p>When dream2nix reads project dependencies and translates them into
-a dream2nix lockfile, it writes down the sources for all the
-dependencies: so it can fetch them later during building.</p>
-<p>The generic lockfile is used always, either in memory or dumped to a file. </p>
-<p>Below are some examples of the sources written in the dream-lock file
-(at the end, under <code>sources</code>).</p>
-<pre><code class="language-json">&quot;symfony/process&quot;: {
-  &quot;v6.1.3&quot;: {
-    &quot;rev&quot;: &quot;a6506e99cfad7059b1ab5cab395854a0a0c21292&quot;,
-    &quot;type&quot;: &quot;git&quot;,
-    &quot;url&quot;: &quot;https://github.com/symfony/process.git&quot;
-  }
-}
-</code></pre>
-<pre><code class="language-json">&quot;fast-glob&quot;: {
-  &quot;3.2.11&quot;: {
-    &quot;hash&quot;: &quot;sha512-xrO3+1bxSo3ZVHAnqzyuewYT6aMFHRAd4Kcs92MAonjwQZLsK9d0SF1IyQ3k5PoirxTW0Oe/RqFgMQ6TcNE5Ew==&quot;,
-    &quot;type&quot;: &quot;http&quot;,
-    &quot;url&quot;: &quot;https://registry.npmjs.org/fast-glob/-/fast-glob-3.2.11.tgz&quot;
-  }
-}
-</code></pre>
-<p>The <code>type</code> field tells dream2nix what <a href="api/../intro/fetchers.html">fetchers</a> to invoke to get this
-source, the rest of the attributes are simply passed to the fetcher.</p>
-<p>You can <code>nix run</code> the <code>.resolve</code> attribute of a dream2nix package to save the generic lockfile for inspection.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="indexers"><a class="header" href="#indexers">Indexers</a></h1>
-<p>Indexers are programs that can query a package repository (think of npm, or crates.io) for package information.
-This information mainly consists of the package name, the package version, and anything extra that might be useful / needed to fetch / translate it.
-The information is stored as JSON (see below).</p>
-<h2 id="indexer-inputs"><a class="header" href="#indexer-inputs">Indexer inputs</a></h2>
-<p>Indexers take input as a path to a JSON file, which contains custom arguments for the indexer.
-A common attribute for these inputs across indexers are <code>outputFile</code>, which should be the path to output the generated index to.
-Indexers can vary in functionality, so these JSON inputs should be specified under <code>src/specifications/indexers/</code>.</p>
-<h2 id="indexer-outputs"><a class="header" href="#indexer-outputs">Indexer outputs</a></h2>
-<p>Indexers should output their generated index to where <code>outputFile</code> specifies.
-This index should simply be a list of project specifications in JSON. Example:</p>
-<pre><code class="language-json">[
-  {
-    &quot;name&quot;: &quot;execa&quot;,
-    &quot;version&quot;: &quot;6.1.0&quot;,
-    &quot;translator&quot;: [&quot;npm&quot;]
-  },
-  {
-    &quot;name&quot;: &quot;meow&quot;,
-    &quot;version&quot;: &quot;10.1.3&quot;,
-    &quot;translator&quot;: [&quot;npm&quot;]
-  },
-  {
-    &quot;name&quot;: &quot;npm-run&quot;,
-    &quot;version&quot;: &quot;5.0.1&quot;,
-    &quot;translator&quot;: [&quot;npm&quot;]
-  }
-]
-</code></pre>
-<h2 id="current-indexers"><a class="header" href="#current-indexers">Current indexers</a></h2>
-<p>Following are the current indexers implemented in dream2nix:</p>
-<ul>
-<li><strong>crates-io-simple</strong>: crates.io indexer</li>
-<li><strong>crates-io</strong>: crates.io indexer written in rust with more options</li>
-<li><strong>libraries-io</strong>: multi ecosystem indexer utilizing libraries.io (requires API key)</li>
-<li><strong>npm</strong>: simple indexer using npm's registry</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="fetchers"><a class="header" href="#fetchers">Fetchers</a></h1>
-<p>This section describes the available source code fetchers. A fetcher is responsible for loading sources defined in the generic lockfile described earlier.</p>
-<h2 id="fetcher-structure"><a class="header" href="#fetcher-structure">Fetcher structure</a></h2>
-<p>Here is the implementation of the simple <code>path</code> fetcher:</p>
-<pre><code class="language-nix">{utils, ...}: {
-  inputs = [
-    &quot;path&quot;
-  ];
-
-  outputs = {path, ...}: {
-    calcHash = algo: utils.hashPath &quot;${path}&quot;;
-
-    fetched = hash: &quot;${path}&quot;;
-  };
-}
-</code></pre>
-<p>It defines <code>inputs</code> which are the required arguments it expects to
-receive when invoked.
-Under <code>outputs</code> is a function that returns an object with <code>calcHash</code> and
-<code>fetched</code> function attributes.</p>
-<ul>
-<li><code>calcHash</code>: receives an algorithm and outputs the source hash, it
-is used while generating the dream-lock file.</li>
-<li><code>fetched</code>: receives a <code>hash</code> and returns the fetched source.</li>
-</ul>
-<p>It is important to remember that nix enforces reproducibility, to
-download something from nix we need to be sure it is exactly what we
-expect: usually enforced by comparing hashes. And you will see that
-almost all fetchers need to be supplied with a <code>hash</code> of the source being
-fetched.</p>
-<h2 id="implemented-fetchers"><a class="header" href="#implemented-fetchers">Implemented fetchers</a></h2>
-<p>The fetcher name corresponds to the source <code>type</code> used to invoke it.</p>
-<p>You can inspect the implementation of all the builders
-<a href="https://github.com/nix-community/dream2nix/tree/main/src/fetchers">here</a>.</p>
-<h3 id="path"><a class="header" href="#path">path</a></h3>
-<p>Fetches from a path. Useful when we already have the source.</p>
-<p>Inputs:</p>
-<ul>
-<li>path</li>
-</ul>
-<p><em>Does not require a <code>hash</code> since nix can check integrity of paths.</em></p>
-<h3 id="http"><a class="header" href="#http">http</a></h3>
-<p>Fetches from a http address.</p>
-<p>Inputs:</p>
-<ul>
-<li>url</li>
-<li>hash</li>
-</ul>
-<h3 id="git"><a class="header" href="#git">git</a></h3>
-<p>Fetches from a git commit.</p>
-<p>Inputs:</p>
-<ul>
-<li>url</li>
-<li>rev</li>
-</ul>
-<p><em>Does not require a <code>hash</code> since nix can use the <code>rev</code> to check for
-integrity instead.</em></p>
-<h3 id="github"><a class="header" href="#github">github</a></h3>
-<p>Fetches from a GitHub repository commit.</p>
-<p>Inputs:</p>
-<ul>
-<li>owner</li>
-<li>repo</li>
-<li>rev</li>
-<li>hash</li>
-</ul>
-<h3 id="gitlab"><a class="header" href="#gitlab">gitlab</a></h3>
-<p>Fetches from a GitLab repository commit.</p>
-<p>Inputs:</p>
-<ul>
-<li>owner</li>
-<li>repo</li>
-<li>rev</li>
-<li>hash</li>
-</ul>
-<h3 id="npm"><a class="header" href="#npm">npm</a></h3>
-<p>Fetches from npm registry.</p>
-<p>Inputs:</p>
-<ul>
-<li>pname</li>
-<li>version</li>
-<li>hash</li>
-</ul>
-<h3 id="pypi-sdist"><a class="header" href="#pypi-sdist">pypi-sdist</a></h3>
-<p>Fetches sources distributions (&quot;sdists&quot;) from pypi registry.</p>
-<p>Inputs:</p>
-<ul>
-<li>pname</li>
-<li>version</li>
-<li>hash</li>
-</ul>
-<h3 id="pypi-wheel"><a class="header" href="#pypi-wheel">pypi-wheel</a></h3>
-<p>Fetches wheels from pypi registry.</p>
-<p>Inputs:</p>
-<ul>
-<li>filename</li>
-<li>pname</li>
-<li>version</li>
-<li>hash</li>
-</ul>
-<h3 id="crates-io"><a class="header" href="#crates-io">crates-io</a></h3>
-<p>Fetches from crates.io registry.</p>
-<p>Inputs:</p>
-<ul>
-<li>pname</li>
-<li>version</li>
-<li>hash</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><p>The override system plays an important role when packaging software with dream2nix. Overrides are the only way to express package specific logic in dream2nix. This serves the purpose of strictly separating:</p>
-<pre><code>  - generic logic     (builders)
-  - specific logic    (overrides)
-  - data              (dream-lock.json)
-</code></pre>
-<p>To optimize for scalable workflows, the structure of dream2nix overrides differs from the ones seen in other projects.
-dream2nix overrides have the following properties:</p>
-<ul>
-<li><strong>referenceable</strong>: each override is assigned to a key through which it can be referenced. This allows for better inspection, selective debugging, replacing, etc.</li>
-<li><strong>conditional</strong>: each override can declare a condition, so that the override only applies when the condition evaluates positively.</li>
-<li><strong>attribute-oriented</strong>: The relevant parameters are attributes, not override functions. dream2nix will automatically figure out which underlying function (eg. override, overrideAttrs, ...) needs to be called to update each given attribute. The user is not confronted with this by default.</li>
-</ul>
-<p>Each subsystem in dream2nix like <code>nodejs</code> or <code>python</code> manages its overrides in a separate directory to avoid package name collisions.</p>
-<p>dream2nix supports packaging different versions of the same package within one repository. Therefore conditions are used to make overrides apply only to certain package versions.</p>
-<p>Currently a collection of overrides is maintained at <a href="https://github.com/nix-community/dream2nix/tree/main/overrides">dream2nix/overrides</a></p>
-<h2 id="general-override-system"><a class="header" href="#general-override-system">General override system</a></h2>
-<p>values can either be declared directly via</p>
-<pre><code class="language-nix"># &quot;${pname}&quot; = {
-#   &quot;${overrideName}&quot; = {
-#     ...
-#     `attrName` will get overriden with `newValue`
-#     ${attrName} = newValue;  
-#     ...
-#   };
-# };
-#
-</code></pre>
-<p>or via function that takes the <code>oldAttrs</code> and returns <code>newAttrs</code> depending on the old ones.</p>
-<pre><code class="language-nix">#  
-# &quot;${pname}&quot; = {
-#   &quot;${overrideName}&quot; = {
-#     ...
-#     overrideAttrs = oldAttrs: {
-#       ${attrName} = ...;
-#     };
-#     ...
-#   };
-# };
-</code></pre>
-<h2 id="overview-of-attrnames"><a class="header" href="#overview-of-attrnames">Overview of <code>attrNames</code></a></h2>
-<p>The available values depend on the subsystem
-But at least all values of <code>pkgs.mkDerivation</code> are available on every subsystem</p>
-<pre><code class="language-nix">
-# some internal attributes
-# if that attribute is true the override will apply
-# e.g. _condition = satisfiesSemver &quot;^5.0.0&quot;;
-_condition
-
-
-# attributes of the nodejs subsystem 
-dependenciesJson
-electronHeaders
-nodeDeps
-nodeSources
-packageName
-installMethod
-electronAppDir
-runBuild
-linkBins
-installDeps
-buildScript
-
-# python script to modify some metadata to support installation
-# (see comments below on d2nPatch)
-fixPackage
-
-# attibutes of mkDerivation (also found in the nix manual)
-nativeBuildInputs
-buildInputs
-src
-configurePhase 
-buildPhase 
-installPhase 
-patches
-...
-
-</code></pre>
-<h1 id="example-for-nodejs-overrides"><a class="header" href="#example-for-nodejs-overrides">Example for nodejs overrides</a></h1>
-<pre><code class="language-nix">{
-  # The name of a package.
-  # Contains all overrides which can apply to the package `enhanced-resolve`
-  enhanced-resolve = {
-
-    # first override for enhanced-resolve named `preserve-symlinks-v4`
-    preserve-symlinks-v4 = {
-
-      # override will apply for packages with major version 4
-      _condition = satisfiesSemver &quot;^4.0.0&quot;;
-
-      # this statement replaces exisiting patches
-      # (for appending see next example)
-      patches = [
-        ./enhanced-resolve/npm-preserve-symlinks-v4.patch
-      ];
-
-    };
-
-    # second override for enhanced-resolve
-    preserve-symlinks-v5 = {
-
-      # override will apply for packages with major version 5
-      _condition = satisfiesSemver &quot;^5.0.0&quot;;
-
-      # this statement adds a patch to the exsiting list of patches
-      patches = old: old ++ [
-        ./enhanced-resolve/npm-preserve-symlinks-v5.patch
-      ];
-    };
-
-  };
-
-  # another package name
-  webpack = {
-    # overrides for webpack
-  };
-}
-</code></pre>
-<h1 id="example-for-php-flake-override"><a class="header" href="#example-for-php-flake-override">Example for PHP flake override</a></h1>
-<p>This example overrides <code>prePatch</code> for the <code>ml/iri</code> package to drop the
-unsupported <code>target-dir</code> attribute from composer.json:</p>
-<pre><code>{
-  inputs.dream2nix.url = &quot;github:nix-community/dream2nix&quot;;
-
-  outputs = inp:
-    inp.dream2nix.lib.makeFlakeOutputs {
-      systems = [&quot;x86_64-linux&quot;];
-      config.projectRoot = ./.;
-      source = ./.;
-      projects = ./projects.toml;
-      packageOverrides = {
-        &quot;^ml.iri.*&quot;.updated.overrideAttrs = old: {
-          prePatch = ''
-            cat composer.json | grep -v target-dir | sponge composer.json
-          '';
-        };
-      };
-    };
-}
-</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="list-of-problems-which-currently-exist-in-nixpkgs"><a class="header" href="#list-of-problems-which-currently-exist-in-nixpkgs">List of problems which currently exist in nixpkgs</a></h2>
-<h3 id="generated-code-sizeduplication"><a class="header" href="#generated-code-sizeduplication">Generated Code Size/Duplication</a></h3>
-<h4 id="problem"><a class="header" href="#problem">Problem</a></h4>
-<ul>
-<li>large .nix files containing auto generated code for fetching sources (example: nodejs)</li>
-<li>many duplicated .nix files containing build logic</li>
-</ul>
-<h4 id="solution"><a class="header" href="#solution">Solution</a></h4>
-<ul>
-<li>
-<p>dream2nix minimizes the amount of generated nix code, as most of the logic required to build a package resides in the framework and therefore is not duplicated across individual packages.</p>
-</li>
-<li>
-<p>If the upstream lock file format can be interpreted with pure nix and is present at evaluation time, then generating any intermediary code can be omitted.</p>
-</li>
-<li>
-<p>Once any kind of recursive nix (IFD, recursive-nix, RFC-92) is enabled in nixpkgs, dream2nix will utilize it and eliminate the requirement of generating nix code or storing upsteam lock files</p>
-</li>
-</ul>
-<h3 id="update-scripts-duplicationcomplexity"><a class="header" href="#update-scripts-duplicationcomplexity">Update Scripts Duplication/Complexity</a></h3>
-<h4 id="problem-1"><a class="header" href="#problem-1">Problem</a></h4>
-<ul>
-<li>update scripts are largely duplicated</li>
-<li>update scripts are complex</li>
-</ul>
-<h4 id="solution-1"><a class="header" href="#solution-1">Solution</a></h4>
-<ul>
-<li>storing <code>update.sh</code> scripts alongside packages will not be necessary anymore. dream2nix can generate update procedures on the fly by reading the package declaration.</li>
-<li>The UI for updating packages is the same across all languages/frameworks</li>
-</ul>
-<h3 id="fetching--caching-issues-large-fods"><a class="header" href="#fetching--caching-issues-large-fods">Fetching / Caching issues (large FODs)</a></h3>
-<h4 id="problem-2"><a class="header" href="#problem-2">Problem</a></h4>
-<ul>
-<li>non-reproducible large FOD fetchers (example: rust)</li>
-<li>updating FODs is not risk free (forget to update hash)</li>
-<li>bad caching properties due to large FODs</li>
-</ul>
-<h4 id="solution-2"><a class="header" href="#solution-2">Solution</a></h4>
-<ul>
-<li>the translators of dream2nix always produce a clear list of URLs to fetch</li>
-<li>large-FOD fetching is not necessary and never enforced</li>
-<li>large-FOD fetching can be used optionally to reduce amount of hashes to be stored</li>
-<li>even if large-FOD fetching is used, it won't have any of the known reproducibility issues, since dream2nix does never make use of upstream toolchain for fetching and potentially impure operations like dependency resolution are never done inside an FOD.</li>
-<li>updating hashes of FODs is done via dream2nix CLI, which ensures that the correct hashes are in place</li>
-<li>As the use of large-FOD fetching is not necessary and therefore minimized, dependencies are cached on an individual basis and shared between packages.</li>
-</ul>
-<h3 id="update-workflows"><a class="header" href="#update-workflows">Update Workflows</a></h3>
-<h4 id="problem-3"><a class="header" href="#problem-3">Problem</a></h4>
-<ul>
-<li>package update workflows can be complicated</li>
-<li>package update workflows vary significantly depending on the language/framework</li>
-</ul>
-<h4 id="solution-3"><a class="header" href="#solution-3">Solution</a></h4>
-<ul>
-<li>the workflow for updating packages will be unified and largely independent of the underlying language/framework.</li>
-</ul>
-<h3 id="merge-conflicts-for-shared-dependencies"><a class="header" href="#merge-conflicts-for-shared-dependencies">Merge Conflicts for shared dependencies</a></h3>
-<h4 id="problem-4"><a class="header" href="#problem-4">Problem</a></h4>
-<ul>
-<li>Due to how shared dependencies are managed, merge conflicts are likely (example: global node-packages.nix)</li>
-</ul>
-<h4 id="solution-4"><a class="header" href="#solution-4">Solution</a></h4>
-<ul>
-<li>Having a central set of shared dependencies can make sense to reduce the code size of nixpkgs, load on hydra+cache.</li>
-<li>To eliminate merge conflicts, the global package set can be maintained via a two stage process. Individual package maintainers can manage their dependencies independently. Once every staging cycle, common dependencies can be found via graph analysis and moved into a global package set.</li>
-<li>The total amount of dependency versions used can also be minimized by re-running the resolver, prioritizing dependencies from the global set of common packages.</li>
-</ul>
-<h3 id="customizability--overriding"><a class="header" href="#customizability--overriding">Customizability / Overriding</a></h3>
-<h4 id="problem-5"><a class="header" href="#problem-5">Problem</a></h4>
-<ul>
-<li>Capabilities vary depending on the underlying generator/translator.</li>
-<li>UI is different depending on the underlying generator/translator.</li>
-</ul>
-<h4 id="solution-5"><a class="header" href="#solution-5">Solution</a></h4>
-<ul>
-<li>dream2nix provides good interfaces for customizability which are unified as much as possible independently from the underlying subsystems.</li>
-</ul>
-<h3 id="inefficientslow-innovation"><a class="header" href="#inefficientslow-innovation">Inefficient/Slow Innovation</a></h3>
-<h4 id="problem-6"><a class="header" href="#problem-6">Problem</a></h4>
-<ul>
-<li>Design issues (FOD-impurity, Maintainability, etc.) cannot be fixed easily and lead to long term suffering of maintainers.</li>
-<li>Innovation often happens on individual tools and are not adopted ecosystem wide</li>
-<li>New nix features will not be easily adopted as this will require updating many individual tools.</li>
-</ul>
-<h4 id="solution-6"><a class="header" href="#solution-6">Solution</a></h4>
-<ul>
-<li>Since dream2nix centrally handles many core elements of packaging like different strategies for fetching and building, it is much easier to fix problems at large scale and apply new innovations to all underlysing subsystems at once.</li>
-<li>Experimenting with and adding support for new nix features will be easier as the framework offers better abstractions than existing 2nix converters and allows adding/modifying strategies more easily.</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="extending-dream2nix-with-external-translators-builders-etc"><a class="header" href="#extending-dream2nix-with-external-translators-builders-etc">Extending dream2nix with external translators, builders etc.</a></h1>
-<p><code>dream2nix</code> uses the NixOS module system for it's internal components.
-This means you can extend it using the module system.
-This can be done while the framework is being <code>init</code>ialized.
-To do this, you need to utilize the <code>config.modules</code> option of the dream2nix config.</p>
-<h2 id="declaring-modules"><a class="header" href="#declaring-modules">Declaring <code>modules</code></a></h2>
-<p><code>config.modules</code> is a configuration option that expects paths to module files.</p>
-<pre><code class="language-nix">dream2nix.lib.init {
-  config.modules = [./nix/d2n/extras.nix];
-}
-</code></pre>
-<p>this file can look like this:</p>
-<pre><code class="language-nix">{ config, ... }:
-let
-  inherit (config) pkgs lib dlib;
-in
-{
-  translators.example-translator = {/* translator attrs */};
-  # you can declare modules using functions here
-  fetchers.ipfs = {/* fetcher attrs */};
-}
-</code></pre>
-<p>See the <a href="https://github.com/nix-community/dream2nix/tree/main/examples/_d2n-extended"><code>d2n-extended</code> example</a> for an example on how to extend existing subsystems.
-See the <a href="https://github.com/nix-community/dream2nix/tree/main/examples/_d2n-extended-new-subsystem"><code>d2n-extended-new-subsystem</code> example</a> for an example on how to implement a new subsystem.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="dream2nix-contributors-guide"><a class="header" href="#dream2nix-contributors-guide">dream2nix contributors guide</a></h1>
-<p>This guide is for you if you plan to implement support for a new subsystem in dream2nix, like for example for a new programming language.</p>
-<p>If the ecosystem you are interested in is already supported by dream2nix, but you want to add support for a new type of lock-file format, this guide is still an interesting read in order to better understand the parts a dream2nix subsystem consists of.</p>
-<h2 id="breakdown-of-a-subsystem"><a class="header" href="#breakdown-of-a-subsystem">Breakdown of a subsystem</a></h2>
-<p>A new subsystem in dream2nix is initialized by adding 3 files:</p>
-<ul>
-<li>one translator module</li>
-<li>one builder module</li>
-<li>one example flake.nix for testing the subsystem</li>
-</ul>
-<p>It's also highly recommended to implement a discoverer module, so that projects of that subsystem can be detected automatically by dream2nix. This simplifies the UX. It won't be necessary anymore for the user to understand which ecosystem and which translator must be used in order to build packages from a certain source tree.</p>
-<h2 id="translator-notes"><a class="header" href="#translator-notes">Translator Notes</a></h2>
-<p>The task of a translator is to inspect a given source tree, parse some of the files, and extract information about a projects dependencies and how it must be built.</p>
-<p>In general there are 3 different types of translators.
-No matter which type, all translators always produce the same output structure which is called <code>dream-lock</code>.<br />
-An example of this structure can be found <a href="https://github.com/nix-community/dream2nix/blob/main/src/specifications/dream-lock-example.json">here</a>.<br />
-There is also a <a href="https://github.com/nix-community/dream2nix/blob/main/src/specifications/dream-lock-schema.json">jsonschema specification</a> for it.</p>
-<h2 id="translator-types"><a class="header" href="#translator-types">Translator types</a></h2>
-<p>The different types of translators have the following properties:</p>
-<ol>
-<li>
-<p>pure translator</p>
-<ul>
-<li>returns the dream-lock as a nix attribute set</li>
-<li>translation logic is implemented in nix language only</li>
-<li>parsing of files and data extraction is all done during eval time</li>
-<li>does not invoke a build or read from any build output</li>
-</ul>
-</li>
-<li>
-<p>pure translator utilizing IFD (import from derivation)</p>
-<ul>
-<li>returns the dream-lock as a nix attribute set</li>
-<li>a nix build is used in order to parse files and extract data</li>
-<li>translation logic can be implemented in arbitrary language</li>
-<li>the result is parsed back into nix from the build output</li>
-<li>downside: performance impact on evaluation time</li>
-</ul>
-</li>
-<li>
-<p>impure translator</p>
-<ul>
-<li>returns the dream-lock by dumping a dream-lock.json file</li>
-<li>translator can be any executable program running independent of nix</li>
-<li>not constrained in any way (can do arbitrary network access etc.)</li>
-<li>downside: requires the user to run a command whenever dependencies got updated</li>
-</ul>
-</li>
-</ol>
-<h2 id="which-translator-type-to-start-with"><a class="header" href="#which-translator-type-to-start-with">Which translator type to start with?</a></h2>
-<p>When adding support for a new ecosystem/language, the following strategy usually works out:</p>
-<p>If there exists tooling within that ecosystem that can create some kind of lock file (with URLs + checksums), implement a pure translator for that lock file format first.</p>
-<p>After that, we might still need an impure translator for all the projects within that ecosystem that don't ship a lock-file. But given the fact that we already have one pure translator, all the impure translator needs to do is to run the tooling that creates the lock file and call out to the pure translator via <code>nix eval</code>.</p>
-<p>If the ecosystem does not have any kind of lock file format, then only an impure translator is needed. In this case it needs to be more complex and implement some kind of routine for retrieving all URL's and hashes of the dependencies, by, for example, downloading them all and hashing them.</p>
-<h2 id="initializing-the-subsystm"><a class="header" href="#initializing-the-subsystm">Initializing the subsystm</a></h2>
-<p>To initialize a new subsystem, we will:</p>
-<ul>
-<li>declare a few shell variables</li>
-<li>initialize a translator and a builder from templates</li>
-<li>initialize an example flake.nix to test the implementation</li>
-</ul>
-<h3 id="declare-env-variables"><a class="header" href="#declare-env-variables">declare env variables</a></h3>
-<p>Navigate to your dream2nix checkout and execute:</p>
-<pre><code class="language-bash">export dream2nix=$(realpath .)
-
-# define names for new modules (pick names matching to your subsystem)
-export subsystem=&quot;my-subsystem&quot; # example: nodejs
-export pureTranslator=&quot;my-pure-translator&quot; # example: package-lock
-export impureTranslator=&quot;my-impure-translator&quot; # example: package-json
-export builder=&quot;my-builder&quot; # pick `default` as name if not sure
-
-# define path to example flake
-export myFlake=&quot;$dream2nix/examples/$subsystem&quot;
-</code></pre>
-<h3 id="initialize-templates"><a class="header" href="#initialize-templates">initialize templates</a></h3>
-<pre><code class="language-bash"># initialize pure translator
-mkdir -p $dream2nix/src/subsystems/$subsystem/translators/$pureTranslator
-cp $dream2nix/src/templates/translators/pure.nix $dream2nix/src/subsystems/$subsystem/translators/$pureTranslator/default.nix
-
-# initialize builder
-mkdir -p $dream2nix/src/subsystems/$subsystem/builders/$builder
-cp $dream2nix/src/templates/builders/default.nix $dream2nix/src/subsystems/$subsystem/builders/$builder/default.nix
-</code></pre>
-<h3 id="initialize-example-flakenix"><a class="header" href="#initialize-example-flakenix">initialize example flake.nix</a></h3>
-<p>Initialize the flake from a template and edit it to reference the names of your subsystem correctly.</p>
-<pre><code class="language-bash"># initialize example flake
-mkdir -p $myFlake
-cp $dream2nix/tests/integration/tests/contribute/my-flake.nix $myFlake/flake.nix
-</code></pre>
-<p>Now edit the flake and ensure that <code>my-subsystem</code>, <code>my-pure-translator</code>, are replaced with the names defined earlier.</p>
-<h3 id="add-new-files-to-git"><a class="header" href="#add-new-files-to-git">add new files to git</a></h3>
-<p>This is required, otherwise nix flakes won't see the new files.</p>
-<pre><code class="language-bash">git add .
-</code></pre>
-<h3 id="test-example-flake"><a class="header" href="#test-example-flake">test example flake</a></h3>
-<p>Always pass <code>--override-input dream2nix $dream2nix</code> in order to evaluate the example flake against your local checkout of dream2nix.</p>
-<p>In the following bash snippet, arguments containing a '<code>#</code>' symbol are wrongfully highlighted as comment but are in fact required parameters.</p>
-<p>Run all of the following commands now to ensure that all templates have been initialized correctly</p>
-<pre><code class="language-bash"># inspect if your subsystem exports any package/devShell
-nix flake show $myFlake --override-input dream2nix $dream2nix --show-trace
-
-# run your translator and dump the dream-lock.json for inspection
-nix run $myFlake#default.resolve --override-input dream2nix $dream2nix --show-trace
-
-# test if the default package builds
-nix build $myFlake#default --override-input dream2nix $dream2nix --show-trace
-</code></pre>
-<h2 id="iterate-on-the-subsystem"><a class="header" href="#iterate-on-the-subsystem">Iterate on the subsystem</a></h2>
-<p>By default the templates implement a subsystem for <code>niv</code>. It reads niv's <code>./nix/sources.json</code> and builds a package for it containing the niv inputs.</p>
-<p>The output of this is not useful, but demonstrates how a dream2nix translator/builder works.</p>
-<p>You can now start modifying the builder/translator to implement the logic required by your subsystem.</p>
-<p>You can test your implementation by executing the <code>nix flake show</code>, <code>nix build</code>, <code>nix run</code> commands from the last step above.</p>
+<h2 id="documentaiton--discoverability"><a class="header" href="#documentaiton--discoverability">Documentaiton / Discoverability</a></h2>
+<p>No more digging the source code to find possible options to override.</p>
+<p>Documentation similar to <a href="https://search.nixos.org">search.nixos.org</a> can be generated for packages declared via <code>dream2nix</code>.</p>
+<p>Every package built with <code>dream2nix</code> has a <code>.docs</code> attribute that builds an html documentation describing it's options.</p>
+<h2 id="package-blueprints"><a class="header" href="#package-blueprints">Package blueprints</a></h2>
+<p>With <code>dream2nix</code>, packages don't need to be fully declared. Options can be left without defaults, requiring the consumer to complete the definition.</p>
+<p>For example, this can be useful for lang2nix tools, where <code>src</code> and <code>version</code> are dynamically provided by a lock file parser.</p>
+<h2 id="flexibility"><a class="header" href="#flexibility">Flexibility</a></h2>
+<p>The nixos module system gives maintainers more freedom over how packages are split into modules. Separation of concerns can be implemented more easily.
+For example, the dependency tree of a package set can be factored out into a separate module, allowing for simpler modification.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="development-roundup-april---june-2022"><a class="header" href="#development-roundup-april---june-2022">Development Roundup April - June 2022</a></h1>
 <p>In the period of 3 months, <a href="https://github.com/nix-community/dream2nix/pulls?page=1&amp;q=is%3Apr+sort%3Acreated-asc+merged%3A2022-06+merged%3A2022-05+merged%3A2022-04">40 pull requests were merged</a>.</p>
 <h2 id="most-notable-changes"><a class="header" href="#most-notable-changes">Most Notable Changes</a></h2>
@@ -1864,7 +327,7 @@ https://nix-community.github.io/dream2nix/</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="development-roundup-july---september-2022"><a class="header" href="#development-roundup-july---september-2022">Development Roundup July - September 2022</a></h1>
 <p>In the period of 3 months, <a href="https://github.com/nix-community/dream2nix/pulls?q=is%3Apr+sort%3Acreated-asc+merged%3A2022-09+merged%3A2022-08+merged%3A2022-07+">62 pull requests were merged</a>.</p>
 <h2 id="most-notable-changes-1"><a class="header" href="#most-notable-changes-1">Most Notable Changes</a></h2>
-<h3 id="indexers-1"><a class="header" href="#indexers-1">Indexers</a></h3>
+<h3 id="indexers"><a class="header" href="#indexers">Indexers</a></h3>
 <p>Dream2nix now offers an interface for defining <code>indexers</code>. Indexers are programs that can query a package repository (think of npm, or crates.io) for package information. Read <a href="development-roundups/../intro/indexers.html">more about indexers in our docs</a>.</p>
 <p>Indexers can be used to automatically import packages from all kinds of ecosystems into the nix domain. For example the <code>libraries-io</code> indexer can be used to query libraries.io for the 5000 most popular nodejs packages and convert them to nix packages.</p>
 <p>One nice use case for indexers is to test dream2nix by continuously building large auto generated package sets while monitoring the success rate and get useful information from build failures.</p>
@@ -1927,704 +390,48 @@ https://nix-community.github.io/dream2nix/</p>
 </ul>
 </li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="dream2nix-v1-api"><a class="header" href="#dream2nix-v1-api">dream2nix v1 API</a></h1>
-<ul>
-<li><a href="v1-api/../v1-api/problems.html">problems of the current dream2nix</a></li>
-<li><a href="v1-api/../v1-api/users.html">users of dream2nix</a></li>
-<li>v1 API examples:
-<ul>
-<li>package maintainers:
-<ul>
-<li><a href="v1-api/../v1-api/packaging/nodejs-init-project.html">project initialization</a></li>
-<li><a href="v1-api/../v1-api/packaging/nodejs-workspaces.html">workspaces</a></li>
-<li><a href="v1-api/../v1-api/packaging/nodejs-multiple-repos.html">multiple repos</a></li>
-<li><a href="v1-api/../v1-api/packaging/monorepo.html">monorepo</a></li>
-</ul>
-</li>
-<li>consumers:
-<ul>
-<li><a href="v1-api/../v1-api/consuming/inspect-options.html">inspect package options</a></li>
-<li><a href="v1-api/../v1-api/consuming/override.html">override packages</a></li>
-</ul>
-</li>
-<li>integration maintainers:
-<ul>
-<li><a href="v1-api/../v1-api/integrating/integrate-lang2nix-pure.html">integrate lang2nix tool (pure)</a></li>
-<li><a href="v1-api/../v1-api/integrating/integrate-lang2nix-impure.html">integrate lang2nix tool (code-gen/impure)</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="problems-of-the-current-dream2nix"><a class="header" href="#problems-of-the-current-dream2nix">Problems of the current dream2nix</a></h1>
-<h2 id="integration-of-existing-lang2nix-tools"><a class="header" href="#integration-of-existing-lang2nix-tools">Integration of existing lang2nix tools</a></h2>
-<p>Until now, integrating existing 2nix solutions into dream2nix was hard because dream2nix imposed standards which are not met by most existing tools.
-With v1 we want to lift most of these restrictions to make integration a no-brainer</p>
-<p>(see sections <a href="v1-api/../v1-api/integrate-lang2nix-pure.html">integrate lang2nix tool (pure)</a> and <a href="v1-api/../v1-api/integrate-lang2nix-impure.html">integrate lang2ix tool (impure)</a>.</p>
-<h2 id="tied-to-flakes"><a class="header" href="#tied-to-flakes">Tied to flakes</a></h2>
-<p>The current api is tied to flakes. The v1 API should not depend on flakes anymore.</p>
-<h2 id="composability"><a class="header" href="#composability">Composability</a></h2>
-<p>Composability with the current <code>makeFlakeOutputs</code> is bad. Flakes itself aren't nicely composable. Filtering and merging of nested attrsets isn't user friendly.</p>
-<p>The v1 api will focus on delivering individual derivations, not flakes.
-While we might provide templates, recommendations, and tools for composition, we should not enforce a specific solution onto the user.</p>
-<h2 id="overridability"><a class="header" href="#overridability">Overridability</a></h2>
-<p>The experience of overriding package- and dependency builds was a bit bumpy so far, as the overriding mechanism was built ontop of override functions provided by nixpkgs' <code>mkDerivation</code>. The v1 API will make use of the nixos module system instead to handle derivation attributes.</p>
-<h2 id="discoverability-of-package-options"><a class="header" href="#discoverability-of-package-options">Discoverability of package options</a></h2>
-<p>We want users to be able to inspect the API of an individual package. This will also be made possible by the nixos module system.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="the-users-of-dream2nix"><a class="header" href="#the-users-of-dream2nix">The users of dream2nix</a></h1>
-<p>The following groups of users are relevant regarding the v1 API design.</p>
-<h2 id="integration-maintainers-level1"><a class="header" href="#integration-maintainers-level1">Integration Maintainers (Level1)</a></h2>
-<p>People who use dream2nix to maintain language2nix integrations</p>
-<h2 id="package-maintainers-level2"><a class="header" href="#package-maintainers-level2">Package Maintainers (Level2)</a></h2>
-<p>People who use dream2nix to maintain nix derivations for packages</p>
-<h2 id="consumers-level3"><a class="header" href="#consumers-level3">Consumers (Level3)</a></h2>
-<p>People who use and customize packages created via dream2nix</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="initialize-nodejs-project--dev-shell"><a class="header" href="#initialize-nodejs-project--dev-shell">initialize nodejs project + dev shell</a></h1>
-<h2 id="load-shell-with-nodejs--npm"><a class="header" href="#load-shell-with-nodejs--npm">load shell with nodejs + npm</a></h2>
-<pre><code class="language-console tesh-session=&quot;next-app&quot; tesh-setup=&quot;setup.sh&quot;">$ nix-shell -p https://dream2nix.dev -A devShells.nodejs
-</code></pre>
-<h2 id="create-my-app"><a class="header" href="#create-my-app">create my-app</a></h2>
-<pre><code class="language-console tesh-session=&quot;next-app&quot;">npx create-next-app my-app
-</code></pre>
-<p>This creates <code>./my-app/package.json</code> and more, using <code>create-next-app</code> as a helper.</p>
-<h2 id="create-my-appnix"><a class="header" href="#create-my-appnix">create <code>my-app.nix</code></a></h2>
-<p><code>my-app.nix</code></p>
-<pre><code class="language-nix">{config, lib, dream2nix, ...}: {
-
-  imports = [
-    # default module to create a nodejs package
-    dream2nix.modules.nodejs.mkDerivation
-    # get package dependencies from package-lock
-    dream2nix.modules.nodejs.package-lock
-  ];
-
-  # Allows to manipulate dependency builds
-  overrides.local.path = ./overrides;
-
-  src = ./my-app;
-
-  # add more mkDerivation attributes here to customize...
-}
-</code></pre>
-<h2 id="create-my-app-shellnix-for-your-dev-shell"><a class="header" href="#create-my-app-shellnix-for-your-dev-shell">create <code>my-app-shell.nix</code> for your dev shell</a></h2>
-<p><code>my-app-shell.nix</code></p>
-<pre><code class="language-nix">{config, lib, dream2nix, ...}: {
-
-  imports = [
-    # the default dev shell for nodejs
-    dream2nix.modules.nodejs.mkShell
-    # adds dependencies of my-app to the dev shell
-    dream2nix.modules.nodejs.package-lock
-  ];
-
-  src = ./my-app;
-
-  # include hello from nixpkgs.
-  # `deps` is the single source of truth for inputs from the `outside world`.
-  # `deps` will later allow us to safely override any dependency.
-  deps = {nixpkgs, ...}: {
-    inherit (nixpkgs) hello;
-  };
-
-  # add hello from nixpkgs to the dev shell
-  buildInputs = [
-    config.deps.hello
-  ]
-}
-</code></pre>
-<h2 id="create-defaultnix-entry-point"><a class="header" href="#create-defaultnix-entry-point">create <code>default.nix</code> entry point</a></h2>
-<p><code>default.nix</code></p>
-<pre><code class="language-nix">{
-  nixpkgs ? import &lt;nixpkgs&gt; {},
-  dream2nix ?
-    import
-    (builtins.fetchTarball &quot;https://dream2nix.dev/tarball/1.0&quot;)
-    {inherit nixpkgs;},
-}: {
-  packages.my-app = dream2nix.eval ./my-app.nix;
-  devShells.my-app = dream2nix.eval ./my-app-shell.nix;
-}
-</code></pre>
-<h2 id="build-my-app"><a class="header" href="#build-my-app">build my-app</a></h2>
-<pre><code class="language-command">nix-build -f ./default.nix -A packages.my-app
-</code></pre>
-<h2 id="create-shellnix-used-by-nix-shell-command"><a class="header" href="#create-shellnix-used-by-nix-shell-command">create <code>shell.nix</code> (used by <code>nix-shell</code> command)</a></h2>
-<p><code>shell.nix</code></p>
-<pre><code class="language-nix">(import ./default.nix {}).devShells.my-app
-</code></pre>
-<p>Enter the dev shell:</p>
-<pre><code class="language-command">nix-shell
-</code></pre>
-<p>all dependencies of my-app are available</p>
-<h2 id="fix-build-of-dependencies-via-overrides"><a class="header" href="#fix-build-of-dependencies-via-overrides">fix build of dependencies via <code>./overrides/</code></a></h2>
-<p>Files in <code>./overrides/</code> must always be named like the package they apply to.</p>
-<p>Example: <code>./overrides/keytar.nix</code></p>
-<h2 id=""><a class="header" href="#"></a></h2>
-<pre><code class="language-nix">{config, ...}: {
-
-  # include dependencies from nixpkgs.
-  deps = {nixpkgs, ...}: {
-    inherit (nixpkgs) 
-      libsecret
-      pkg-config
-      ;
-  };
-
-  # add build time dependencies
-  nativeBuildInputs = [
-    config.deps.libsecret
-    config.deps.pkg-config
-  ];
-}
-</code></pre>
-<p>Scoped package example: <code>./overrides/@babel/core.nix</code></p>
-<h2 id="-1"><a class="header" href="#-1"></a></h2>
-<pre><code class="language-nix">{config, ...}: {
-  # ...
-}
-</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="build--develop-on-nodejs-workspaces"><a class="header" href="#build--develop-on-nodejs-workspaces">build + develop on nodejs workspaces</a></h1>
-<h2 id="assuming-a-packagejson-with-workspaces"><a class="header" href="#assuming-a-packagejson-with-workspaces">assuming a <code>package.json</code> with workspaces</a></h2>
-<p><code>package.json</code></p>
-<pre><code>{
-  &quot;name&quot;: &quot;my-workspaces&quot;,
-  &quot;workspaces&quot;: [
-    &quot;my-tool&quot;
-    &quot;my-first-app&quot;
-    &quot;my-second-app&quot;
-  ]
-}
-</code></pre>
-<h2 id="define-package-set-via-workspacesnix"><a class="header" href="#define-package-set-via-workspacesnix">define package set via <code>workspaces.nix</code></a></h2>
-<pre><code class="language-nix">{config, lib, dream2nix, ...}: {
-
-  imports = [
-    dream2nix.modules.nodejs.workspaces
-    dream2nix.modules.nodejs.package-lock
-  ];
-
-  src = ./.;
-
-  # Allows to manipulate builds of workspace members and their dependencies
-  overrides.local.path = ./overrides;
-}
-</code></pre>
-<h2 id="create-defaultnix-entry-point-1"><a class="header" href="#create-defaultnix-entry-point-1">create <code>default.nix</code> entry point</a></h2>
-<p><code>default.nix</code></p>
-<pre><code class="language-nix">{
-  nixpkgs ? import &lt;nixpkgs&gt; {},
-  dream2nix ?
-    import
-    (builtins.fetchTarball &quot;https://dream2nix.dev/tarball/1.0&quot;)
-    {inherit nixpkgs;},
-}: {
-  packages = {
-    inherit (dream2nix.lib.mkPackageSet ./workspaces.nix)
-      my-tool
-      my-first-app
-      my-second-app
-      ;
-  };
-}
-</code></pre>
-<h2 id="configure-package-builds-via-overrides"><a class="header" href="#configure-package-builds-via-overrides">configure package builds via <code>./overrides/</code></a></h2>
-<p>Files in <code>./overrides/</code> must always be named like the the package they apply to.</p>
-<p>Manipulate my-tool via <code>./overrides/my-tool.nix</code></p>
-<pre><code class="language-nix">{config, ...}: {
-
-  # include python from nixpkgs
-  deps = {nixpkgs, ...}: {
-    inherit (nixpkgs) python;
-  };
-
-  buildInputs = [
-    config.deps.python
-  ];
-}
-</code></pre>
-<p>Manipulate my-first-app via <code>./overrides/my-first-app.nix</code></p>
-<pre><code class="language-nix">{config, ...}: {
-
-  # include my-tool from the local workspace
-  deps = {workspace, ...}: {
-    inherit (workspace) my-tool;
-  };
-
-  buildInputs = [
-    config.deps.my-tool
-  ];
-}
-</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="handle-multiple-repos"><a class="header" href="#handle-multiple-repos">handle multiple repos</a></h1>
-<p>Assuming that <code>./repo1</code> and <code>./repo2</code> are separate git repositories.</p>
-<p>Both repos have a single package <code>repo1/my-app</code> and <code>repo2/my-tool</code>.</p>
-<p>In order to build <code>repo1/my-app</code> we need <code>repo2/my-tool</code> as a build time dependency.</p>
-<p>The following structure is assumed:</p>
-<pre><code>├── repo1
-│  ├── default.nix
-│  └── my-app.nix
-└── repo2
-   ├── default.nix
-   └── my-tool.nix
-</code></pre>
-<h2 id="contents-of-repo1my-appnix"><a class="header" href="#contents-of-repo1my-appnix">contents of <code>repo1/my-app.nix</code></a></h2>
-<p><code>repo1/my-app.nix</code></p>
-<pre><code class="language-nix">{config, lib, dream2nix, ...}: {
-
-  imports = [
-    dream2nix.modules.nodejs.mkDerivation
-    dream2nix.modules.nodejs.package-lock
-  ];
-
-  src = ./.;
-
-  # include my-tool from repo2
-  deps = {repo2, ...}: {
-    inherit (repo2) my-tool;
-  };
-
-  # add my-tool as build time dependency
-  nativeBuildInputs = [
-    config.deps.my-tool
-  ];
-
-  # use my-tool to build my-app
-  buildPhase = ''
-    my-tool build
-    echo &quot;done building&quot;
-  '';
-}
-</code></pre>
-<h2 id="contents-of-repo1defaultnix"><a class="header" href="#contents-of-repo1defaultnix">contents of <code>repo1/default.nix</code></a></h2>
-<p><code>repo1/default.nix</code></p>
-<pre><code class="language-nix">{
-  pkgs ? import &lt;nixpkgs&gt; {},
-  dream2nix ?
-    import
-    (builtins.fetchTarball &quot;https://dream2nix.dev/tarball/1.0&quot;)
-    {inherit pkgs;},
-}: {
-  packages.my-app = dream2nix.eval
-    {
-      packageSets.nixpkgs = pkgs;
-      
-      # fetchGit could be used here alternatively
-      packageSets.repo2 = import ../repo2/default.nix {};
-    }
-    ./my-app.nix;
-}
-</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="build-packages-in-a-monorepo"><a class="header" href="#build-packages-in-a-monorepo">build packages in a monorepo</a></h1>
-<p>The example mono repo has 3 packages: <code>nodejs-app</code>, <code>python-tool</code>, <code>rust-tool</code>.</p>
-<p>The packages <code>python-tool</code> and <code>rust-tool</code> might or might not be built with dream2nix.</p>
-<p>The package <code>nodejs-app</code> is built with dream2nix and depends on <code>python-tool</code> and <code>rust-tool</code>.</p>
-<h2 id="assuming-this-repo-structure"><a class="header" href="#assuming-this-repo-structure">Assuming this repo structure</a></h2>
-<pre><code>├── default.nix
-├── overrides
-│  ├── nodejs
-│  ├── python
-│  └── rust
-├── nodejs-app
-│  └── default.nix
-├── python-tool
-│  └── default.nix
-└── rust-tool
-   └── default.nix
-</code></pre>
-<h2 id="contents-of-nodejs-appdefaultnix"><a class="header" href="#contents-of-nodejs-appdefaultnix">Contents of <code>./nodejs-app/default.nix</code></a></h2>
-<p><code>./nodejs-app/default.nix</code></p>
-<pre><code class="language-nix">{config, lib, dream2nix, ...}: {
-
-  imports = [
-    # default module to create a nodejs package
-    dream2nix.modules.nodejs.mkDerivation
-    # get package dependencies from package-lock
-    dream2nix.modules.nodejs.package-lock
-  ];
-
-  # Overrides allow to manipulate dependency builds
-  overrides.local.path = ../overrides/nodejs;
-
-  src = ./.;
-  
-  # include dependencies from nixpkgs and the local monorepo
-  # see definition of `packageSets` in ../default.nix
-  deps = {nixpkgs, monorepo, ...} @ packageSets: {
-    inherit (nixpkgs)
-      hello
-      ;
-    inherit (monorepo)
-      python-tool
-      rust-tool
-      ;
-  };
-
-  nativeBuildInputs = [
-    config.deps.hello
-    config.deps.python-tool
-    config.deps.rust-tool
-  ];
-
-  configurePhase = ''
-    hello --version
-    python-tool --version
-    rust-tool --version
-  '';
-
-  # add more mkDerivation attributes here to customize...
-}
-</code></pre>
-<h2 id="contents-of-defaultnix"><a class="header" href="#contents-of-defaultnix">Contents of <code>./default.nix</code></a></h2>
-<p><code>./default.nix</code></p>
-<pre><code class="language-nix">{
-  nixpkgs ? import &lt;nixpkgs&gt; {},
-  dream2nix ?
-    import
-    (builtins.fetchTarball &quot;https://dream2nix.dev/tarball/1.0&quot;)
-    {inherit nixpkgs;},
-
-} @ inputs: let
-
-  makePackage = modules: dream2ix.mkDerivation
-    # Package sets available to each package's `deps` function
-    {packageSets = {inherit monorepo nixpkgs;};}
-    modules;
-
-  monorepo = {
-    nodejs-app = makePackage ./nodejs-app;
-    python-tool = makePackage ./python-tool;
-    rust-tool = makePackage ./rust-tool;
-  };
-
-in {
-  packages = monorepo;
-}
-</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="inspect-the-api-of-a-package"><a class="header" href="#inspect-the-api-of-a-package">Inspect the API of a package</a></h1>
-<p>Downstream users can inspect the api of any consumed package as well as raw package modules</p>
-<h2 id="load-the-dream2nix-shell"><a class="header" href="#load-the-dream2nix-shell">Load the dream2nix shell</a></h2>
-<pre><code class="language-shell">nix-shell https://dream2nix.dev -A devShells.default
-</code></pre>
-<h2 id="get-manual-of-package-module"><a class="header" href="#get-manual-of-package-module">Get manual of package module</a></h2>
-<p>Assuming a package module in <code>./upstream/my-package.nix</code></p>
-<pre><code class="language-shell">$ dream2nix man ./upstream/my-package.nix
-</code></pre>
-<h2 id="get-manual-of-derivation"><a class="header" href="#get-manual-of-derivation">Get manual of derivation</a></h2>
-<p>Assuming derivations defined via <code>./upstream/default.nix</code></p>
-<pre><code class="language-shell">dream2nix man ./upstream/default.nix -A packages.my-package
-</code></pre>
-<h2 id="get-manual-of-flake-attribute"><a class="header" href="#get-manual-of-flake-attribute">Get manual of flake attribute</a></h2>
-<p>Assuming derivations defined via a flake on github</p>
-<pre><code class="language-shell">dream2nix man github:user/repo#some-package
-</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="consume-and-modify-dream2nix-packages"><a class="header" href="#consume-and-modify-dream2nix-packages">Consume and modify dream2nix packages</a></h1>
-<h2 id="given-the-following-package"><a class="header" href="#given-the-following-package">Given the following package</a></h2>
-<p><code>upstream/my-package.nix</code></p>
-<pre><code class="language-nix">{config, lib, dream2nix, ...}: {
-
-  imports = [
-    dream2nix.modules.nodejs.mkDerivation
-    dream2nix.modules.nodejs.package-lock
-  ];
-
-  pname = &quot;my-package&quot;;
-  version = &quot;2.0.0&quot;;
-
-  src = {
-    type = github;
-    owner = &quot;my-user&quot;;
-    repo = &quot;my-repo&quot;;
-    ref = config.version;
-    hash = &quot;sha256-mia90VYv/YTdWNhKpvwvFW9RfbXZJSWhJ+yva6EnLE8=&quot;;
-  };
-
-  # declare dependency on python3
-  deps = {nixpkgs, ...}: {
-    python3 = nixpkgs.python39;
-  };
-
-  nativeBuildInputs = [
-    config.deps.python3
-  ];
-
-  configurePhase = ''
-    python3 --version
-  '';
-
-  buildPhase = ''
-    python3 -c 'print(&quot;Hello World!&quot;)' &gt; $out
-  '';
-}
-</code></pre>
-<p><code>upstream/default.nix</code></p>
-<pre><code class="language-nix">{
-  nixpkgs ? import &lt;nixpkgs&gt; {},
-  dream2nix ?
-    import
-    (builtins.fetchTarball &quot;https://dream2nix.dev/tarball/1.0&quot;)
-    {inherit nixpkgs;},
-}: {
-  packages.my-package = dream2nix.eval ./my-package.nix;
-}
-</code></pre>
-<h2 id="1-override-using-modules"><a class="header" href="#1-override-using-modules">1. Override using modules</a></h2>
-<h3 id="11-define-a-module-for-the-override"><a class="header" href="#11-define-a-module-for-the-override">1.1 Define a module for the override</a></h3>
-<p><code>my-package-override.nix</code></p>
-<pre><code class="language-nix">{config, lib, ... }: {
-
-  version = &quot;2.1.0&quot;;
-
-  # No need to re-define other fetcher attributes.
-  # The module system updates them for us.
-  src.hash = &quot;sha256-LM5GDNjLcmgZVQEeANWAOO09KppwGaYEzJBjYmuSwys=&quot;;
-
-  deps = {nixpkgs, ...}: {
-
-    # change the python version
-    python3 = lib.mkForce nixpkgs.python310;
-
-    # add a dependency on hello  
-    hello = nixpkgs.hello;
-  };
-
-  # add hello to nativeBuildInputs
-  # (`oldAttrs.nativeBuildInputs + ...` not needed here)
-  nativeBuildInputs = [
-    config.deps.hello
-  ];
-
-  # add lines to configurePhase
-  postConfigure = ''
-    hello --version
-  '';
-
-  # replace the build phase via mkForce
-  buildPhase = lib.mkForce &quot;
-    hello &gt; $out
-  &quot;;
-}
-</code></pre>
-<h3 id="12-apply-my-package-overridenix-via-extendmodules"><a class="header" href="#12-apply-my-package-overridenix-via-extendmodules">1.2 Apply <code>my-package-override.nix</code> via extendModules</a></h3>
-<p>Using <code>extendModules</code> is simple.
-It allows to extend an existing package with another module.
-This doesn't require knowledge about the original modules that went into the package.</p>
-<p><code>./default.nix</code></p>
-<pre><code class="language-nix">let
-  nixpkgs = import &lt;nixpkgs&gt; {};
-  upstream = import ./upstream {inherit nixpkgs;};
-  my-package = upstream.packages.my-package;
-
-  # The recommended way of modifying a package is using extendModules,
-  #    which uses the module systems merge logic to apply changes.
-  my-package-extended = my-package.extendModules {
-    modules = [./my-package-override.nix];
-  };
-
-in {
-  inherit my-package-extended;
-}
-</code></pre>
-<h3 id="13-or-apply-my-package-overridenix-via-dream2nixeval"><a class="header" href="#13-or-apply-my-package-overridenix-via-dream2nixeval">1.3 Or apply <code>my-package-override.nix</code> via dream2nix.eval</a></h3>
-<p>This approach is a bit cleaner.
-It doesn't introduce a chain of extendModules function calls.
-This style also makes it obvious which modules went into the package.
-Though, this requires access to the original <code>my-package.nix</code> module and knowledge about the <code>packageSets</code> that went into it.</p>
-<p><code>default.nix</code></p>
-<pre><code class="language-nix">{
-  nixpkgs ? import &lt;nixpkgs&gt; {},
-  dream2nix ?
-    import
-    (builtins.fetchTarball &quot;https://dream2nix.dev/tarball/1.0&quot;)
-    {inherit nixpkgs;},
-
-}: let
-
-  my-package-extended = dream2nix.eval
-    {packagetSets = {inherit nixpkgs;};}
-    [
-      ./upstream/my-package.nix
-      ./my-package-override.nix
-    ];
-
-in {
-  my-package-extended
-}
-</code></pre>
-<h2 id="2-override-package-via-overrideattrs-functions"><a class="header" href="#2-override-package-via-overrideattrs-functions">2. Override package via <code>override[Attrs]</code> functions</a></h2>
-<p>It is recommended to use modules for overriding, like described above, but for backward compatibility, <code>overrideAttrs</code> and <code>override</code> are still supported.</p>
-<pre><code class="language-nix">let
-  nixpkgs = import &lt;nixpkgs&gt; {};
-  upstream = import ./upstream {inherit nixpkgs;};
-  my-package = upstream.packages.my-package;
-
-  # Override the package via `override` and `overrideAttrs`
-  my-package-overridden' = my-package.override
-    (oldAttrs: {
-
-      # change the python version
-      python3 = nixpkgs.python310;
-    });
-
-  my-package-overridden = my-package-overridden'.overrideAttrs
-    (oldAttrs: rec {
-
-      version = &quot;2.1.0&quot;;
-
-      src = nixpkgs.fetchFromGithub {
-        owner = &quot;my-owner&quot;;
-        repo = &quot;my-repo&quot;;
-        ref = version;
-        hash = &quot;sha256-LM5GDNjLcmgZVQEeANWAOO09KppwGaYEzJBjYmuSwys=&quot;;
-      };
-
-      # add hello to nativeBuildInputs
-      nativeBuildInputs = [
-        nixpkgs.hello
-      ];
-
-      # add lines to configurePhase
-      postConfigure = ''
-        hello --version
-      '';
-
-      # replace the build phase
-      buildPhase = ''
-        hello &gt; $out
-      '';
-    });
-
-in {
-  inherit my-package-overridden;
-}
-</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="integrate-lang2nix-tool-pure"><a class="header" href="#integrate-lang2nix-tool-pure">Integrate lang2nix tool (pure)</a></h1>
-<p>We use <a href="https://crane.dev">crane</a> as an example here to demonstrate creating a dream2nix integration</p>
-<p><code>dream2nix/modules/rust.crane-buildPackage.nix</code></p>
-<pre><code class="language-nix">{config, lib, dream2nix, system, ...}: rec {
-
-  imports = [
-    # import generic mkDerivation interface, which will add options like:
-    #   - buildInputs
-    #   - nativeBuildInputs
-    #   - ...
-    dream2nix.modules.mkDerivation-interfaces
-  ];
-
-  options = {
-    buildPhaseCargoCommand = lib.mkOption {
-      description = &quot;A command to run during the derivation's build phase. Pre and post build hooks will automatically be run.&quot;;
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-    };
-    cargoArtifacts = lib.mkOption {
-      description = &quot;A path (or derivation) which contains an existing cargo target directory, which will be reused at the start of the derivation. Useful for caching incremental cargo builds.&quot;;
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-    };
-    cargoBuildCommand = lib.mkOption {
-      description = &quot;A cargo invocation to run during the derivation's build phase&quot;;
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-    }
-
-    # ... more options of crane's buildPackage
-  };
-
-  config = {
-    # signal that all options should be passed to the final derivation function
-    argsForward = l.mapAttrs (_: _: true) options;
-
-    # the final derivation is built by calling crane.buildPackage
-    config.final.derivation =
-      dream2nix.inputs.crane.lib.${system}.buildPackage
-      config.final.derivation-args;
-  };
-}
-</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="integrate-lang2nix-tool-impurecode-gen"><a class="header" href="#integrate-lang2nix-tool-impurecode-gen">Integrate lang2nix tool (impure/code-gen)</a></h1>
-<p>We use <a href="https://github.com/nix-community/gomod2nix">gomod2nix</a> as an example here to demonstrate creating a dream2nix integration.</p>
-<p>Gomod2nix is a nix code generator that requires network access, a great example for an impure dream2nix integration.</p>
-<p><code>dream2nix/modules/go.gomod2nix.nix</code></p>
-<pre><code class="language-nix">{config, lib, dream2nix, system, ...}: rec {
-
-  imports = [
-
-    # import generic mkDerivation interface, which will add options like:
-    #   - buildInputs
-    #   - nativeBuildInputs
-    #   - ...
-    dream2nix.modules.mkDerivation-interfaces
-
-    # Generic interface for impure lang2nix tools (code generators)
-    #   This provides options like `generateBin` (see below)
-    dream2nix.modules.integrations.impure
-  ];
-
-  options = {
-    modules = lib.mkOption {
-      description = &quot;The path to the gomod2nix.toml&quot;;
-      type = lib.types.str;
-      default = &quot;${config.dream2nix.artifactsLocation}/gomod2nix.toml&quot; ;
-    };
-
-  };
-
-  config = {
-    # Generated code will end up in:
-    #   {repo}/dream2nix/artifacts/{engineName}/{package_identifier}
-    dream2nix.engineName = &quot;gomod2nix&quot;;
-
-    # An executable that generates nix code for the given `src`
-    dream2nix.generateBin = dream2nix.utils.writePureShellScript &quot;gomod2nix-generate.sh&quot;
-      [
-        # add gomod2nix tool to PATH
-        dream2nix.inputs.gomod2nix.packages.${system}.gomod2nix
-      ]
-      ''
-        targetDir=$1
-        gomod2nix --dir &quot;${config.src}&quot; --outdir &quot;$targetDir&quot;
-      '';
-
-    # signal that all options should be passed to the final derivation function
-    argsForward = l.mapAttrs (_: _: true) options;
-
-    # the final derivation is built by calling gomod2nix.buildGoApplication
-    config.final.derivation =
-      dream2nix.inputs.gomod2nix.lib.${system}.buildGoApplication
-      config.final.derivation-args;
-  };
-}
-</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
             </nav>
 
         </div>
 
-        <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
-        <script type="text/javascript">
+
+        <script>
         window.addEventListener('load', function() {
             window.setTimeout(window.print, 100);
         });
         </script>
+
+    </div>
     </body>
 </html>

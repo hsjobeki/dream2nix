@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>April - June 2022 - dream2nix documentation</title>
+        <title>dream2nix modules - dream2nix documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -12,21 +12,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="icon" href="../favicon.svg">
-        <link rel="shortcut icon" href="../favicon.png">
-        <link rel="stylesheet" href="../css/variables.css">
-        <link rel="stylesheet" href="../css/general.css">
-        <link rel="stylesheet" href="../css/chrome.css">
-        <link rel="stylesheet" href="../css/print.css" media="print">
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="../fonts/fonts.css">
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="../highlight.css">
-        <link rel="stylesheet" href="../tomorrow-night.css">
-        <link rel="stylesheet" href="../ayu-highlight.css">
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -35,7 +35,7 @@
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
-            var path_to_root = "../";
+            var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Examples</li><li class="chapter-item expanded "><a href="../examples.html"><strong aria-hidden="true">2.</strong> dream2nix examples</a></li><li class="chapter-item expanded affix "><li class="part-title">Concepts</li><li class="chapter-item expanded "><a href="../modules.html"><strong aria-hidden="true">3.</strong> dream2nix modules</a></li><li class="chapter-item expanded affix "><li class="part-title">Development Roundups</li><li class="chapter-item expanded "><a href="../development-roundups/2022-april-june.html" class="active"><strong aria-hidden="true">4.</strong> April - June 2022</a></li><li class="chapter-item expanded "><a href="../development-roundups/2022-july-september.html"><strong aria-hidden="true">5.</strong> July - September 2022</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Examples</li><li class="chapter-item expanded "><a href="examples.html"><strong aria-hidden="true">2.</strong> dream2nix examples</a></li><li class="chapter-item expanded affix "><li class="part-title">Concepts</li><li class="chapter-item expanded "><a href="modules.html" class="active"><strong aria-hidden="true">3.</strong> dream2nix modules</a></li><li class="chapter-item expanded affix "><li class="part-title">Development Roundups</li><li class="chapter-item expanded "><a href="development-roundups/2022-april-june.html"><strong aria-hidden="true">4.</strong> April - June 2022</a></li><li class="chapter-item expanded "><a href="development-roundups/2022-july-september.html"><strong aria-hidden="true">5.</strong> July - September 2022</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -115,7 +115,7 @@
                     <h1 class="menu-title">dream2nix documentation</h1>
 
                     <div class="right-buttons">
-                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
 
@@ -144,68 +144,87 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="development-roundup-april---june-2022"><a class="header" href="#development-roundup-april---june-2022">Development Roundup April - June 2022</a></h1>
-<p>In the period of 3 months, <a href="https://github.com/nix-community/dream2nix/pulls?page=1&amp;q=is%3Apr+sort%3Acreated-asc+merged%3A2022-06+merged%3A2022-05+merged%3A2022-04">40 pull requests were merged</a>.</p>
-<h2 id="most-notable-changes"><a class="header" href="#most-notable-changes">Most Notable Changes</a></h2>
-<h3 id="extension-interface-for-subsystem-modules"><a class="header" href="#extension-interface-for-subsystem-modules">Extension Interface for subsystem modules</a></h3>
-<p>Dream2nix now has an extension interface which allows users to add support for other ecosystems and lock file formats out of tree. This allows people to maintain private dream2nix extensions or publish their extensions on their own repositories. For the future it is planned to go one step further and use the nixos module system for dream2nix.</p>
-<h3 id="improved-handling-of-mono-repo-projects"><a class="header" href="#improved-handling-of-mono-repo-projects">Improved handling of mono-repo projects</a></h3>
-<p>Many software projects in the wild consist of several sub-project. The sub-projects could be of the same ecosystem, like a nodejs project managed by npm, declaring several workspaces, or they could be of completely different ecosystems, like a nodejs project, containing a rust and a go module within the same source tree. A goal for dream2nix is to handle all these constellations well, to provide the user with decent automation and interfaces in order to simplify working with these complex software projects as much as possible. Therefore a discovery mechanism has been established and improved over time to tackle mono-repo scenarios, detecting sub-projects of arbitrary type within a larger source tree, splitting the detected projects into reasonable chunks of work that can be processed by many different translator modules of dream2nix.</p>
-<h3 id="unit-tests-for-pure-translators"><a class="header" href="#unit-tests-for-pure-translators">Unit tests for pure translators</a></h3>
-<p>Pure translators are the parts of dream2nix which are able to read upstream lock files and other metadata and convert this data to the dream2nix internal dream-lock format. All of this in done in pure nix without calling to external programs. For example the cargo-lock translator allows dream2nix to just build any rust project on-the-fly, given just the source code of the project.
-In order for dream2nix to extend its support onto many more ecosystems, we rely on the community contributions adding pure translators. For this reason we want to make such contributions as simple as possible.
-This is why we established a unit testing suit for pure translators. This is realized by using python + pytest to define the unit tests which then call out to nix via our python nix-ffi. This allows people to implement new translators step by step while getting constant feedback if they are on the right track.</p>
-<h2 id="more-changes"><a class="header" href="#more-changes">More Changes</a></h2>
-<ul>
-<li>
-<p>Reorganized internal code structure of <code>dream2nix</code> (<code>builders</code>, <code>translators</code>, <code>discoverers</code> moved to <code>subsystems</code>)</p>
-</li>
-<li>
-<p>New community overrides to fix some nodejs packages</p>
-</li>
-<li>
-<p>Improved usage examples in readme</p>
-</li>
-<li>
-<p>Improvements on several subsystems including nodejs and rust</p>
-</li>
-<li>
-<p>New documentation website:
-https://nix-community.github.io/dream2nix/</p>
-</li>
-<li>
-<p>Added subsystems:</p>
-<ul>
-<li>python</li>
-<li>haskell</li>
-</ul>
-</li>
-<li>
-<p>Added support for translating formats:</p>
-<ul>
-<li>python: setup.py</li>
-<li>haskell: stack.yaml.lock (stack)</li>
-<li>haskell: plan.json (cabal)</li>
-<li>rust: Cargo.toml, Cargo.lock</li>
-</ul>
-</li>
-<li>
-<p>Added builders for:</p>
-<ul>
-<li>haskell: <code>default</code></li>
-</ul>
-</li>
-</ul>
+                        <h1 id="why-modules"><a class="header" href="#why-modules">Why Modules?</a></h1>
+<p>Declaring derivations as modules solves a number of issues.
+For more details on the problems, visit <a href="https://github.com/DavHau/pkgs-modules">DavHau/pkgs-modules</a>.
+Also I recommend watching @edolstra 's <a href="https://www.youtube.com/watch?v=dTd499Y31ig">talk about this topic</a>.</p>
+<h1 id="benefits"><a class="header" href="#benefits">Benefits</a></h1>
+<h2 id="deprecate-override-functions"><a class="header" href="#deprecate-override-functions">Deprecate override functions</a></h2>
+<p>Changing options of packages in nixpkgs can require chaining different override functions like this:</p>
+<pre><code class="language-nix">{
+  htop-mod = let
+    htop-overridden = pkgs.htop.overrideAttrs (old: {
+      pname = &quot;htop-mod&quot;;
+    });
+  in
+    htop-overridden.override (old: {
+      sensorsSupport = false;
+    });
+}
+</code></pre>
+<p>... while doing the same using <code>dream2nix</code> looks like this:</p>
+<pre><code class="language-nix">{
+  htop-mod = {
+    imports = [./htop.nix];
+    name = lib.mkForce &quot;htop-mod&quot;;
+    flags.sensorsSupport = false;
+  };
+}
+</code></pre>
+<p>See htop module definition <a href="https://github.com/nix-community/dream2nix/blob/main/examples/dream2nix-packages-simple/htop-with-flags/default.nix">here</a>.</p>
+<h2 id="type-safety"><a class="header" href="#type-safety">Type safety</a></h2>
+<p>The following code in nixpkgs mkDerivation mysteriously skips the patches:</p>
+<pre><code class="language-nix">mkDerivation {
+  # ...
+  dontPatch = &quot;false&quot;;
+}
+</code></pre>
+<p>... while doing the same using <code>dream2nix</code> raises an informative type error:</p>
+<pre><code>A definition for option `[...].dontPatch' is not of type `boolean' [...]
+</code></pre>
+<h2 id="catch-typos"><a class="header" href="#catch-typos">Catch typos</a></h2>
+<p>The following code in nixpkgs mkDerivation builds <strong>without</strong> openssl_3.</p>
+<pre><code class="language-nix">mkDerivation {
+  # ...
+  nativBuildInputs = [openssl_3];
+}
+</code></pre>
+<p>... while doing the same using <code>dream2nix</code> raises an informative error:</p>
+<pre><code>The option `[...].nativBuildInputs' does not exist
+</code></pre>
+<h2 id="environment-variables-clearly-defined"><a class="header" href="#environment-variables-clearly-defined">Environment variables clearly defined</a></h2>
+<p><code>dream2nix</code> requires a clear distinction between known parameters and user-defined variables.
+Defining <code>SOME_VARIABLE</code> at the top-level, would raise:</p>
+<pre><code>The option `[...].SOME_VARIABLE' does not exist
+</code></pre>
+<p>Instead it has to be defined under <code>env.</code>:</p>
+<pre><code class="language-nix">{
+  my-package = {
+    # ...
+    env.SOME_VARIABLE = &quot;example&quot;;
+  };
+}
+</code></pre>
+<h2 id="documentaiton--discoverability"><a class="header" href="#documentaiton--discoverability">Documentaiton / Discoverability</a></h2>
+<p>No more digging the source code to find possible options to override.</p>
+<p>Documentation similar to <a href="https://search.nixos.org">search.nixos.org</a> can be generated for packages declared via <code>dream2nix</code>.</p>
+<p>Every package built with <code>dream2nix</code> has a <code>.docs</code> attribute that builds an html documentation describing it's options.</p>
+<h2 id="package-blueprints"><a class="header" href="#package-blueprints">Package blueprints</a></h2>
+<p>With <code>dream2nix</code>, packages don't need to be fully declared. Options can be left without defaults, requiring the consumer to complete the definition.</p>
+<p>For example, this can be useful for lang2nix tools, where <code>src</code> and <code>version</code> are dynamically provided by a lock file parser.</p>
+<h2 id="flexibility"><a class="header" href="#flexibility">Flexibility</a></h2>
+<p>The nixos module system gives maintainers more freedom over how packages are split into modules. Separation of concerns can be implemented more easily.
+For example, the dependency tree of a package set can be factored out into a separate module, allowing for simpler modification.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../modules.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="examples.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../development-roundups/2022-july-september.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="development-roundups/2022-april-june.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -215,11 +234,11 @@ https://nix-community.github.io/dream2nix/</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../modules.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="examples.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../development-roundups/2022-july-september.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="development-roundups/2022-april-june.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
@@ -234,13 +253,13 @@ https://nix-community.github.io/dream2nix/</p>
         </script>
 
 
-        <script src="../elasticlunr.min.js"></script>
-        <script src="../mark.min.js"></script>
-        <script src="../searcher.js"></script>
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
 
-        <script src="../clipboard.min.js"></script>
-        <script src="../highlight.js"></script>
-        <script src="../book.js"></script>
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
 
